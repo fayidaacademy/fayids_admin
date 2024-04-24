@@ -1,0 +1,43 @@
+GET http://localhost:5000/sections/
+
+###
+
+GET http://localhost:5000/sections/7a53f9c9-f418-479f-a083-c864527f5b8b
+
+###
+
+POST http://localhost:5000/questions/
+Content-Type: application/json
+
+{
+  
+       
+        "questionIndex": "1",
+        
+      
+        "assesmentId": "52a33dfd-e3fc-4ab2-ba70-7924a75c78e4",
+        "choiseA": "test1",
+        "choiseB": "test2",
+        "choiseC": "test3",
+        "choiseD": "test4",
+        "correctChoice": "K",
+        "question": "my q"
+    
+}
+
+###
+
+PATCH  http://localhost:5000/packages/048008c-1e9b-48cb-89a0-2c4a1f0a1fbf
+Content-Type: application/json
+
+
+{
+  
+  "courses": {
+    "connect": {"id": "6e1e8ea1-216d-41e7-a056-dcde825c3fbf"}}
+
+}
+
+###
+
+DELETE http://localhost:5000/sections/bcf3950a-29fd-480f-82b8-f42bf6f95480

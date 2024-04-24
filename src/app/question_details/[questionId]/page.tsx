@@ -1,0 +1,174 @@
+"use client";
+import { apiUrl } from "@/api_config";
+import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import EditCellDialog from "@/my_components/edit_cell_dialog";
+import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+
+export default function QuestionDetails({ params }: any) {
+  const QuestionId = params.questionId;
+
+  const [data, setData] = useState({
+    questionIndex: "",
+    question: "",
+    choiseA: "",
+    choiseB: "",
+    choiseC: "",
+    choiseD: "",
+    correctChoice: "",
+    createdAt: "",
+    correction: "",
+    assesment: {
+      assesmentTitle: "",
+      materialId: "",
+    },
+  });
+
+  useEffect(() => {
+    const getMaterial = async () => {
+      const res = await fetch(`${apiUrl}/questions/${QuestionId}`, {
+        next: {
+          revalidate: 0,
+        },
+        credentials: "include",
+      });
+      const material = await res.json();
+      setData(material);
+    };
+
+    getMaterial();
+  }, []);
+
+  function formatTextToHTML(text: any) {
+    if (!text) {
+      return ""; // Return an empty string if text is null or undefined
+    }
+    const formattedText = text
+      .replace(/\^(.*?)\^/g, "<sup>$1</sup>") // Matches ^^superscript^^
+      .replace(/\*\*\*(.*?)\*\*\*/g, "<sub>$1</sub>") // Matches ***subscript***
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Matches **bold**
+      .replace(/\*(.*?)\*/g, "<em>$1</em>") // Matches *italic*
+      .replace(/_(.*?)_/g, "<u>$1</u>"); // Matches _underline_
+
+    const renderedHTML = (
+      <div dangerouslySetInnerHTML={{ __html: formattedText }} />
+    );
+    return renderedHTML;
+  }
+
+  const QuestionIndex = data?.questionIndex;
+  const Question = data?.question;
+  const QuestionStyled = formatTextToHTML(Question);
+
+  const ChoiceA = data?.choiseA;
+  const ChoiceAStyled = formatTextToHTML(ChoiceA);
+  const ChoiceB = data?.choiseB;
+  const ChoiceBStyled = formatTextToHTML(ChoiceB);
+  const ChoiceC = data?.choiseC;
+  const ChoiceCStyled = formatTextToHTML(ChoiceC);
+  const ChoiceD = data?.choiseD;
+  const ChoiceDStyled = formatTextToHTML(ChoiceD);
+  const CorrectChoice = data?.correctChoice;
+  const Correction = data?.correction;
+  const CorrectionStyled = formatTextToHTML(Correction);
+  const CreatedAt = data?.createdAt;
+  const AssesmentTitle = data?.assesment.assesmentTitle;
+  const AssessmentId = data?.assesment.materialId;
+
+  return (
+    <div className="space-y-3 mx-10">
+      <LoadProfileAuth />
+      <Link href={`/assesment/${AssessmentId}`}>Back to Assessment</Link>
+      <h1>Edit question</h1>
+      <h1>
+        {AssesmentTitle}/Question{QuestionIndex}
+      </h1>
+      <div className="flex space-x-5">
+        <h2>Question Index : {QuestionIndex}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="questionIndex"
+          content={QuestionIndex}
+          dataType="number"
+        />
+      </div>
+      <div className="flex space-x-5">
+        {/* <h2>Question: {Question}</h2> */}
+
+        <h2>Question Styled: {QuestionStyled}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="question"
+          content={Question}
+          dataType="text"
+        />
+      </div>
+
+      <div className="flex space-x-5">
+        <h2>A: {ChoiceAStyled}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="choiseA"
+          content={ChoiceA}
+          dataType="text"
+        />
+      </div>
+
+      <div className="flex space-x-5">
+        <h2>B: {ChoiceBStyled}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="choiseB"
+          content={ChoiceB}
+          dataType="text"
+        />
+      </div>
+      <div className="flex space-x-5">
+        <h2>C: {ChoiceCStyled}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="choiseC"
+          content={ChoiceC}
+          dataType="text"
+        />
+      </div>
+      <div className="flex space-x-5">
+        <h2>D: {ChoiceDStyled}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="choiseD"
+          content={ChoiceD}
+          dataType="text"
+        />
+      </div>
+      <div className="flex space-x-5">
+        <h2>Correct Choice: {CorrectChoice}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="correctChoice"
+          content={CorrectChoice}
+          dataType="text"
+        />
+      </div>
+
+      <div className="flex space-x-5">
+        <h2>Explanation: {CorrectionStyled}</h2>
+        <EditCellDialog
+          type="questions"
+          id={QuestionId}
+          field="correction"
+          content={Correction}
+          dataType="text"
+        />
+      </div>
+    </div>
+  );
+}

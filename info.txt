@@ -1,0 +1,1 @@
+apiUrl is manually set in packages[packagesId]/page.tsx image upload form;
