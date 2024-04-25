@@ -2,7 +2,7 @@ import xlsx, { IJsonSheet } from "json-as-xlsx";
 
 import { apiUrl } from "@/api_config";
 
-import { Purchase } from "@/app/purchase_list/columns";
+import { Purchase } from "@/app/purchaselist_managment/purchase_list/columns";
 
 async function getData(): Promise<Purchase[]> {
   // Fetch data from  API .
