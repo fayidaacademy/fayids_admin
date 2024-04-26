@@ -126,7 +126,7 @@ export default function SelectEditCellDialog({
           <DialogHeader>
             <DialogTitle>Edit from {RecivedType}</DialogTitle>
             <DialogDescription>
-              Make changes here. Click save when you're done.
+              Make changes here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
 

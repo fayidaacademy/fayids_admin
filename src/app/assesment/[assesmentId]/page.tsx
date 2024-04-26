@@ -200,9 +200,9 @@ export default function AssesmentDetails({ params }: any) {
           </span>{" "}
           {AssesmentTitle}{" "}
         </h1>
-        {fetchedData?.assementId?.question?.map((q: any) => {
+        {fetchedData?.assementId?.question?.map((q: any, index: number) => {
           return (
-            <div className="py-5">
+            <div className="py-5" key={index}>
               <div className="flex space-x-3">
                 <h2>{q.questionIndex}.</h2>
                 <h2>{q.question}</h2>

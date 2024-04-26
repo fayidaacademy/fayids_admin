@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Courses, columns } from "./columns";
+import { Courses, Columns } from "./columns";
 import DataTableGenerator from "@/main_components/data-table";
 import { apiUrl } from "@/api_config";
 import axios from "axios";
@@ -32,7 +32,7 @@ export default function CoursesList() {
         Courses List
       </h1>
       <DataTableGenerator
-        columns={columns}
+        columns={Columns}
         data={data}
         filterBy="courseName"
         type="course"

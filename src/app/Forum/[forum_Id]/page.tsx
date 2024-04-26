@@ -149,9 +149,9 @@ export default function ForumDetail({ params }: any) {
       </div>
 
       <div>
-        {data?.conversation?.map((conv: any) => {
+        {data?.conversation?.map((conv: any, index: number) => {
           return (
-            <div>
+            <div key={index}>
               <div className="mx-5 my-2 bg-gray-100 rounded  ">
                 <div className="flex space-x-3  px-5 py-3">
                   <div className="space-x-2 flex font-semibold ">

@@ -194,9 +194,9 @@ export default async function ExamDetails({ params }: any) {
           </span>{" "}
           {AssesmentTitle}{" "}
         </h1>
-        {question_data?.map((q: any) => {
+        {question_data?.map((q: any, index: number) => {
           return (
-            <div className="py-5">
+            <div className="py-5" key={index}>
               <div className="flex space-x-3">
                 <h2>{q.questionIndex}.</h2>
 
