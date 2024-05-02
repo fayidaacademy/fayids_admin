@@ -27,7 +27,7 @@ export default async function ExamDetails({ params }: any) {
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Matches **bold**
       .replace(/\*(.*?)\*/g, "<em>$1</em>") // Matches *italic*
       .replace(/_(.*?)_/g, "<u>$1</u>")
-      .replace(/\&\&(.*?)pi/g, "<sup>$1π</sup>");
+      .replace(/&&.*?pi/g, "π");
 
     const renderedHTML = (
       <div dangerouslySetInnerHTML={{ __html: formattedText }} />
