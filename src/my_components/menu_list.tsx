@@ -101,9 +101,9 @@ export function AccordionMenu() {
           <AccordionContent>
             <Link href="/exams/createexam">Create Exam</Link>
           </AccordionContent>
-          <AccordionContent>
+          {/* <AccordionContent>
             <Link href="/exams/examtakers">Exam Takers</Link>
-          </AccordionContent>
+          </AccordionContent> */}
         </AccordionItem>
 
         <AccordionItem value="item-4">
