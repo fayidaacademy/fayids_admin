@@ -1,3 +1,3 @@
-export const apiUrl = "http://localhost:5000";
-export const localUrl = "http://localhost:3000";
-export const adminId = "c1bb4725-64f7-4142-ac09-42c672ef6af5";
+export const apiUrl = "https://api.fayidaacademy.com";
+export const localUrl = "https://fayidaacademy.com";
+export const adminId = "9ed083a6-6cfb-4748-a72d-fa6e3ed1f4d2";
