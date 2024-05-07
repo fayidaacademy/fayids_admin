@@ -43,7 +43,9 @@ export default function CreteExamForm() {
 
   const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
   const formSchema = z.object({
-    assesmentIndex: z.string().min(1, { message: "Index cannot be empty!" }),
+    assesmentIndex: z.coerce
+      .number()
+      .min(1, { message: "Index cannot be empty!" }),
 
     assesmentTitle: z.string().min(1, { message: "Title cannot be empty!" }),
     assesmentDescription: z.string(),
@@ -60,7 +62,7 @@ export default function CreteExamForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      assesmentIndex: "0",
+      assesmentIndex: 0,
       assesmentTitle: "Exam",
       assesmentDescription: "",
       assesmentPoints: "0",
