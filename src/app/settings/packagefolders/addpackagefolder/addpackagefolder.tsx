@@ -41,7 +41,7 @@ const formSchema = z.object({
     }),
   type: z.string(),
   layer: z.string(),
-  index: z.string(),
+  index: z.coerce.number(),
 });
 
 /// api call to post
@@ -63,7 +63,7 @@ export default function AddCityForm() {
       folderName: "",
       type: "",
       layer: "",
-      index: "",
+      index: 0,
     },
   });
 
