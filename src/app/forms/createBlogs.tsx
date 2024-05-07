@@ -22,12 +22,10 @@ import LoadProfileAuth from "@/main_components/loadProfileAuth";
 
 const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
 const formSchema = z.object({
-  blogIndex: z
-    .string()
-    .min(1, { message: "Index cannot be empty!" })
-    .refine((value) => noSymbolsRegex.test(value), {
-      message: "Index can not contain symbols!",
-    }),
+  blogIndex: z.coerce.number().min(1, { message: "Index cannot be empty!" }),
+  // .refine((value) => noSymbolsRegex.test(value), {
+  //   message: "Index can not contain symbols!",
+  // }),
 
   title: z.string().min(1, { message: "Title cannot be empty!" }),
   subTitle: z.string().min(1, { message: "SubTitle cannot be empty!" }),
@@ -47,7 +45,7 @@ export default function AddBlogForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      blogIndex: "",
+      blogIndex: 1,
       title: "",
       subTitle: "",
       writtenBy: "",
@@ -57,9 +55,10 @@ export default function AddBlogForm() {
 
   /// api call to post
   const handleSectionPost = async (formData: any) => {
+    console.log("Form Data: " + JSON.stringify(formData));
     try {
       const response = await fetch(`${apiUrl}/blogs/`, {
-        method: "post",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
