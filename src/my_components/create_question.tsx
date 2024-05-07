@@ -25,7 +25,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
   //this is to manually close the dialog box
   const [open, setOpen] = useState(false);
   type FormData = {
-    questionIndex: string;
+    questionIndex: number;
     question: string;
     choiseA: string;
     choiseB: string;
@@ -36,7 +36,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
     correction: String;
   };
   const schema: ZodType<FormData> = z.object({
-    questionIndex: z.string(),
+    questionIndex: z.coerce.number(),
     question: z.string(),
     choiseA: z.string(),
     choiseB: z.string(),
