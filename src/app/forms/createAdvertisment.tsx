@@ -22,12 +22,12 @@ import LoadProfileAuth from "@/main_components/loadProfileAuth";
 
 const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
 const formSchema = z.object({
-  advertisementIndex: z
-    .string()
-    .min(1, { message: "Index cannot be empty!" })
-    .refine((value) => noSymbolsRegex.test(value), {
-      message: "Index can not contain symbols!",
-    }),
+  advertisementIndex: z.coerce
+    .number()
+    .min(1, { message: "Index cannot be empty!" }),
+  // .refine((value) => noSymbolsRegex.test(value), {
+  //   message: "Index can not contain symbols!",
+  // }),
 
   title: z.string().min(1, { message: "Title cannot be empty!" }),
   subtitle: z.string(),
@@ -49,7 +49,7 @@ export default function AddAdvertismentForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      advertisementIndex: "",
+      //advertisementIndex: ,
       title: "",
       subtitle: "",
       subtext: "",

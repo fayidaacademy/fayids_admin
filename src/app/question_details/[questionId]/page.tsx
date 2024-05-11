@@ -50,7 +50,17 @@ export default function QuestionDetails({ params }: any) {
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Matches **bold**
       .replace(/\*(.*?)\*/g, "<em>$1</em>") // Matches *italic*
       .replace(/_(.*?)_/g, "<u>$1</u>")
-      .replace(/&&.*?pi/g, "π"); // Matches _underline_
+      .replace(/&&8/g, "∞") // &&8  // infinity
+      .replace(/&&f/g, "ƒ")
+      .replace(/&&arf/g, "→")
+      .replace(/&&arb/g, "←")
+      .replace(/&&aru/g, "↑")
+      .replace(/&&ard/g, "↓") // &&f   // function f
+      .replace(/&&.*?pi/g, "π")
+      .replace(
+        /(\d+)\/(\d+)/g,
+        '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
+      ); // Matches _underline_
 
     const renderedHTML = (
       <div dangerouslySetInnerHTML={{ __html: formattedText }} />
@@ -87,6 +97,7 @@ export default function QuestionDetails({ params }: any) {
       </h1>
       <div className="flex space-x-5">
         <h2>Question Index : {QuestionIndex}</h2>
+
         <EditCellDialog
           type="questions"
           id={QuestionId}
