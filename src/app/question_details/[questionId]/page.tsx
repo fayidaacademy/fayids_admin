@@ -44,6 +44,7 @@ export default function QuestionDetails({ params }: any) {
     if (!text) {
       return ""; // Return an empty string if text is null or undefined
     }
+
     const formattedText = text
       .replace(/\^(.*?)\^/g, "<sup>$1</sup>") // Matches ^^superscript^^
       .replace(/\*\*\*(.*?)\*\*\*/g, "<sub>$1</sub>") // Matches ***subscript***
@@ -57,10 +58,25 @@ export default function QuestionDetails({ params }: any) {
       .replace(/&&aru/g, "↑")
       .replace(/&&ard/g, "↓") // &&f   // function f
       .replace(/&&.*?pi/g, "π")
+      .replace(/&&sqrt/g, "√")
+      .replace(/&&noteq/g, "≠")
+      .replace(/&&empty/g, "∅")
+      .replace(/&&integ/g, "∫")
+      .replace(/&&triangle/g, "△")
+      .replace(/&&imp/g, "⇒")
+      .replace(/&&bimp/g, "⇔")
+      .replace(/&&invv/g, "∧")
+      .replace(/&&rarw&([^&]*)&&/g, function (_: any, text: any) {
+        return text + " \u2192";
+      })
       .replace(
         /(\d+)\/(\d+)/g,
         '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
-      ); // Matches _underline_
+      ) // Matches _underline_
+
+      .replace(/&&st(\d+)&&end(\d+)/g, function (_: any, start: any, end: any) {
+        return start + "<sub>" + end + "</sub>";
+      });
 
     const renderedHTML = (
       <div dangerouslySetInnerHTML={{ __html: formattedText }} />
@@ -98,12 +114,19 @@ export default function QuestionDetails({ params }: any) {
       <div className="flex space-x-5">
         <h2>Question Index : {QuestionIndex}</h2>
 
-        <EditCellDialog
+        {/* <EditCellDialog
           type="questions"
           id={QuestionId}
           field="questionIndex"
           content={QuestionIndex}
           dataType="number"
+        />
+      */}
+        <EditNumberCellDialog
+          content={QuestionIndex}
+          field="questionIndex"
+          id={QuestionId}
+          type="questions"
         />
       </div>
       <div className="flex space-x-5">

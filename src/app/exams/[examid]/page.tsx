@@ -21,13 +21,39 @@ export default async function ExamDetails({ params }: any) {
     if (!text) {
       return ""; // Return an empty string if text is null or undefined
     }
+
     const formattedText = text
       .replace(/\^(.*?)\^/g, "<sup>$1</sup>") // Matches ^^superscript^^
       .replace(/\*\*\*(.*?)\*\*\*/g, "<sub>$1</sub>") // Matches ***subscript***
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Matches **bold**
       .replace(/\*(.*?)\*/g, "<em>$1</em>") // Matches *italic*
       .replace(/_(.*?)_/g, "<u>$1</u>")
-      .replace(/&&.*?pi/g, "π");
+      .replace(/&&8/g, "∞") // &&8  // infinity
+      .replace(/&&f/g, "ƒ")
+      .replace(/&&arf/g, "→")
+      .replace(/&&arb/g, "←")
+      .replace(/&&aru/g, "↑")
+      .replace(/&&ard/g, "↓") // &&f   // function f
+      .replace(/&&.*?pi/g, "π")
+      .replace(/&&sqrt/g, "√")
+      .replace(/&&noteq/g, "≠")
+      .replace(/&&empty/g, "∅")
+      .replace(/&&integ/g, "∫")
+      .replace(/&&triangle/g, "△")
+      .replace(/&&imp/g, "⇒")
+      .replace(/&&bimp/g, "⇔")
+      .replace(/&&invv/g, "∧")
+      .replace(/&&rarw&([^&]*)&&/g, function (_: any, text: any) {
+        return text + " \u2192";
+      })
+      .replace(
+        /(\d+)\/(\d+)/g,
+        '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
+      ) // Matches _underline_
+
+      .replace(/&&st(\d+)&&end(\d+)/g, function (_: any, start: any, end: any) {
+        return start + "<sub>" + end + "</sub>";
+      });
 
     const renderedHTML = (
       <div dangerouslySetInnerHTML={{ __html: formattedText }} />
