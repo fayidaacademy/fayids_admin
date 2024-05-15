@@ -3,11 +3,12 @@ import React from "react";
 import { Language, columns } from "./columns";
 import Link from "next/link";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import { apiUrl } from "@/api_config";
 
 async function getData(): Promise<Language[]> {
   // Fetch data from your API here.
-  const api_address = process.env.REACT_APP_API_ADDRESS;
-  const res = await fetch(`${api_address}/languages`, {
+  //const api_address = process.env.REACT_APP_API_ADDRESS;
+  const res = await fetch(`${apiUrl}/languages`, {
     next: {
       revalidate: 0,
     },

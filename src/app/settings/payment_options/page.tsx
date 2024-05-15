@@ -2,11 +2,12 @@ import DataTableGenerator from "@/main_components/data-table";
 import React from "react";
 import { PaymentMethods, columns } from "./columns";
 import Link from "next/link";
+import { apiUrl } from "@/api_config";
 
 async function getData(): Promise<PaymentMethods[]> {
   // Fetch data from your API here.
   const api_address = process.env.REACT_APP_API_ADDRESS;
-  const res = await fetch(`${api_address}/paymentmethods`, {
+  const res = await fetch(`${apiUrl}/paymentmethods`, {
     next: {
       revalidate: 0,
     },

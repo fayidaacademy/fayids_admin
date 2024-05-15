@@ -6,7 +6,7 @@ This component takes courseId and MaterialId from the store and creates a video 
  in the materials table.
  If the page is refreshed, the fetched data will be zero so it automatically redirects to 'courses list' page
 */
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 
 //import useStore from "@/store/createMaterialprops.js";
 import useStore from "../../store/createMaterialprops";
@@ -37,9 +37,15 @@ export default function CreteAssesmentForm() {
 
   //this conditon checks if the page is refreshed (if so the state is lost and it will redirect to courses page)
   const { push } = useRouter();
-  if (courseId == "0") {
-    push("/courses");
-  }
+  // if (courseId == "0") {
+  //   push("/courses");
+  // }
+  useEffect(() => {
+    if (courseId == "0") {
+      //router.push('/signin');
+      push("/courses");
+    }
+  }, []);
 
   const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
   const formSchema = z.object({
