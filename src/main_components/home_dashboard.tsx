@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 
 export default function HomeDashboard() {
   const [studnets, setStudents] = useState<any>([]);
+  const [examTaker, setExamtakers] = useState<any>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notificationData, setNotificationData] = useState<any[]>([]);
 
@@ -59,7 +60,29 @@ export default function HomeDashboard() {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetchData = () => {
+      fetch(`${apiUrl}/examtaker`, { credentials: "include" })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setExamtakers(data);
+          //  console.log("data: " + data.length);
+        })
+        .catch((error) => {
+          //    setError(error.message);
+        })
+        .finally(() => {
+          //   setIsLoading(false);
+        });
+    };
 
+    fetchData();
+  }, []);
   const handleNotificationClick = (notificationId: any) => {
     fetch(`${apiUrl}/notifications/notification_admin_read/${notificationId}`, {
       method: "get",
@@ -110,10 +133,10 @@ export default function HomeDashboard() {
       </div>
 
       <div className="grid grid-cols-3 gap-5 m-10">
-        <div className="border-2   w-full h-full py-3 bg-blue-700 text-white  border-gray-200 rounded-2xl">
+        <div className="border-2   w-full h-full py-3 bg-primaryColor text-white  border-gray-200 rounded-2xl">
           <h1 className="text-3xl text-center">{currentTime.toUTCString()}</h1>
         </div>
-        <div className="border-2   w-full h-full py-3 bg-blue-700 text-white  border-gray-200 rounded-2xl">
+        <div className="border-2   w-full h-full py-3 bg-primaryColor text-white  border-gray-200 rounded-2xl">
           <h1 className="text-3xl text-center">
             Date:{" "}
             {new Date(currentTime).toLocaleDateString("en-GB", {
@@ -123,11 +146,17 @@ export default function HomeDashboard() {
             })}
           </h1>
         </div>
-        <div className="border-2   w-full h-full py-3 bg-blue-700 text-white  border-gray-200 rounded-2xl">
-          <h1 className="text-3xl  text-center">
+        <div className="border-2   w-full h-full py-3 bg-primaryColor text-white  border-gray-200 rounded-2xl">
+          <h1 className="text-xl  text-center">
             Total Students:{" "}
-            <span className="text-white underline font-semibold">
-              {studnets?.length}
+            <span className="text-white  font-semibold">
+              {studnets?.length - 1}
+            </span>
+          </h1>
+          <h1 className="text-xl  text-center">
+            Total Exam Takers:{" "}
+            <span className="text-white  font-semibold">
+              {examTaker?.length}
             </span>
           </h1>
         </div>
@@ -145,7 +174,7 @@ export default function HomeDashboard() {
         </div>
       </div>
 
-      <div className="w-3/4 mx-auto bg-blue-500 text-gray-200 p-4 rounded">
+      <div className="w-3/4 mx-auto bg-navBarColor bg-opacity-60 text-gray-200 p-4 rounded">
         <div>
           <h1>Recent Notifications</h1>
         </div>
@@ -159,7 +188,7 @@ export default function HomeDashboard() {
                       handleNotificationClick(notification?.notiId)
                     }
                     // className="mx-4 bg-primaryColor bg-opacity-80 my-2 px-2 text-white "
-                    className={`mx-4 my-2 px-2 text-green ${
+                    className={`mx-4 my-2 px-2 text-green rounded-lg ${
                       notification?.status == "0"
                         ? "bg-secondaryColor"
                         : "bg-primaryColor"
