@@ -103,9 +103,9 @@ export default function UploadQuestionImage(params: any) {
         >
           <label
             htmlFor={QuestionId}
-            className="px-3 bg-yellow-300 cursor-pointer"
+            className="px-3 bg-primaryColor cursor-pointer hover:bg-green-800"
           >
-            <span className="text-blue-900 font-semibold">
+            <span className="text-gray-200 font-semibold gap-3">
               Add Question Image
             </span>
           </label>
@@ -115,7 +115,10 @@ export default function UploadQuestionImage(params: any) {
             name={QuestionId}
             className="hidden"
           />
-          <input type="submit" />
+          <input
+            className="bg-primaryColor text-white p-2 rounded-xl cursor-pointer hover:bg-green-800"
+            type="submit"
+          />
         </form>
       )}
       {/* <h1>QuestionId: {QuestionId}</h1> */}

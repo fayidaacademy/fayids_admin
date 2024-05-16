@@ -49,8 +49,10 @@ export const columns: ColumnDef<Exam>[] = [
                     console.log(ExamId);
                   }}
                 >
-                  <User className="mr-2 h-4 w-4" />
-                  <Link href={`/exams/${ExamId}`}>Details</Link>
+                  {/* <User className="mr-2 h-4 w-4" /> */}
+                  <Link className=" w-full py-2" href={`/exams/${ExamId}`}>
+                    Details
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

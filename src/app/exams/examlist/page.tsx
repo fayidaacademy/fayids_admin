@@ -23,7 +23,7 @@ export default async function ExamList() {
   return (
     <div>
       <LoadProfileAuth />
-      <h1>Exams List</h1>
+      <h1 className="text-primaryColor font-semibold underline">Exams List</h1>
       <DataTableGenerator
         columns={columns}
         data={data}

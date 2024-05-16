@@ -140,7 +140,7 @@ export function DataTableGenerator<TData, TValue>({
           <h1>Search: </h1>
           <input
             type="text"
-            className="border-b-2 border-blue-800"
+            className="border-b-2 border-primaryColor"
             //`Filter by ${filterBy}`
             placeholder={`Filter by ${filterBytoDisplay}`}
             value={
@@ -153,7 +153,7 @@ export function DataTableGenerator<TData, TValue>({
         </div>
         <div>
           <button onClick={() => exportManage(filterBy)}>
-            <h1 className="bg-blue-800 text-white px-1 rounded hover:bg-blue-900">
+            <h1 className="bg-primaryColor text-white px-1 rounded hover:bg-green-600">
               {" "}
               Export to Excel
             </h1>
@@ -169,7 +169,7 @@ export function DataTableGenerator<TData, TValue>({
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} className="text-blue-800">
+                      <TableHead key={header.id} className="text-primaryColor">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -221,7 +221,7 @@ export function DataTableGenerator<TData, TValue>({
                 table.previousPage();
               }}
               disabled={!table.getCanPreviousPage()}
-              className="bg-blue-800"
+              className="bg-primaryColor"
             >
               {" "}
               Prev
@@ -234,7 +234,7 @@ export function DataTableGenerator<TData, TValue>({
                 table.nextPage();
               }}
               disabled={!table.getCanNextPage()}
-              className="bg-blue-800"
+              className="bg-primaryColor"
             >
               Next
             </Button>

@@ -96,9 +96,9 @@ export default function UploadCorrectionImage(params: any) {
       >
         <label
           htmlFor={"x" + QuestionId}
-          className="px-3 bg-yellow-300 cursor-pointer"
+          className="px-3 bg-primaryColor cursor-pointer hover:bg-green-800"
         >
-          <span className="text-blue-900 font-semibold">
+          <span className="text-gray-200 font-semibold gap-3">
             Add an Explanation Image
           </span>
         </label>
@@ -108,7 +108,10 @@ export default function UploadCorrectionImage(params: any) {
           id={"x" + QuestionId}
           name={"x" + QuestionId}
         />
-        <input type="submit" />
+        <input
+          className="bg-primaryColor text-white p-2 rounded-xl cursor-pointer hover:bg-green-800"
+          type="submit"
+        />
       </form>
     </div>
   );
