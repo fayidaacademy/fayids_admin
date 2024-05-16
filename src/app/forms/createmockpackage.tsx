@@ -46,7 +46,7 @@ export default function CreateMockExamPackageForm() {
 
     price: z.coerce
       .number()
-      .min(1, { message: "Price cannot be empty!" })
+
       .transform((val) => val.toString()),
     description: z.string(),
   });
