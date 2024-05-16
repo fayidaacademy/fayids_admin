@@ -46,10 +46,10 @@ export default async function ExamDetails({ params }: any) {
       .replace(/&&rarw&([^&]*)&&/g, function (_: any, text: any) {
         return text + " \u2192";
       })
-      .replace(
-        /(\d+)\/(\d+)/g,
-        '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
-      ) // Matches _underline_
+      // .replace(
+      //   /(\d+)\/(\d+)/g,
+      //   '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
+      // ) // Matches _underline_
 
       .replace(/&&st(\d+)&&end(\d+)/g, function (_: any, start: any, end: any) {
         return start + "<sub>" + end + "</sub>";
@@ -108,9 +108,9 @@ export default async function ExamDetails({ params }: any) {
     // Add additional properties as needed
   }
 
-  const runthis = () => {
-    console.log(res_questions);
-  };
+  //  const runthis = () => {
+  //     console.log(res_questions);
+  //   };
 
   console.log("this is data" + data);
   // questions/accessquestions/:id  - where id is assesment id
@@ -119,17 +119,20 @@ export default async function ExamDetails({ params }: any) {
   return (
     <div className="space-y-3 mx-5">
       <LoadProfileAuth />
-      <h1 className="text-blue-800 font-semibold underline w-fit">
+      <h1 className="text-primaryColor font-semibold underline w-fit">
         Exam Details
       </h1>
-      <Link href={`/exams/examslist`}>
-        <span className=""> To Exams</span>
-        <h1>ExamId: {ExamId}</h1>
-      </Link>
-
+      <div className="w-fit border-2 px-3">
+        <Link href={`/exams/examlist`}>
+          <span className=""> To Exams</span>
+          {/* <h1>ExamId: {ExamId}</h1> */}
+        </Link>
+      </div>
       <div className="flex space-x-3">
         <h1>
-          <span className="text-blue-800 font-semibold">Assessment Index:</span>{" "}
+          <span className="text-primaryColor font-semibold">
+            Assessment Index:
+          </span>{" "}
           {AssesmentIndex}
         </h1>
         <EditCellDialog
@@ -143,7 +146,9 @@ export default async function ExamDetails({ params }: any) {
 
       <div className="flex space-x-3">
         <h1>
-          <span className="text-blue-800 font-semibold">Assessment Title:</span>{" "}
+          <span className="text-primaryColor font-semibold">
+            Assessment Title:
+          </span>{" "}
           {AssesmentTitle}
         </h1>
         <EditCellDialog
@@ -156,7 +161,7 @@ export default async function ExamDetails({ params }: any) {
       </div>
       <div className="flex space-x-3">
         <h1>
-          <span className="text-blue-800 font-semibold">
+          <span className="text-primaryColor font-semibold">
             Assessment Description:
           </span>{" "}
           {AssesmentDescription}
@@ -171,7 +176,7 @@ export default async function ExamDetails({ params }: any) {
       </div>
       <div className="flex space-x-6">
         <h1>
-          <span className="text-blue-800 font-semibold">
+          <span className="text-primaryColor font-semibold">
             Assessment Points{" "}
           </span>{" "}
           {AssesmentPoints}
@@ -186,7 +191,7 @@ export default async function ExamDetails({ params }: any) {
       </div>
       <div className="flex space-x-6">
         <h1>
-          <span className="text-blue-800 font-semibold">
+          <span className="text-primaryColor font-semibold">
             Assessment Points in minutes
           </span>{" "}
           {AssesmentDuration}
@@ -212,11 +217,14 @@ export default async function ExamDetails({ params }: any) {
         id={ExamId}
         type="assesments"
       />
-      <CreateQuestion assesmentId={ExamId} />
+      <div className="my-4">
+        {" "}
+        <CreateQuestion assesmentId={ExamId} />
+      </div>
 
       <div>
         <h1>
-          <span className="text-blue-800 font-semibold">
+          <span className="text-primaryColor font-semibold">
             Questions in assesment:
           </span>{" "}
           {AssesmentTitle}{" "}
@@ -241,21 +249,22 @@ export default async function ExamDetails({ params }: any) {
                 </div>
                 <div className=" space-x-6">
                   <Link href={`/question_details/${q.id}`}>
-                    <button className="bg-primary-color text-white px-2 ">
+                    <button className="bg-primaryColor text-white px-2 ">
                       Edit
                     </button>
                   </Link>
-                  <div className="w-full">
-                    <h1>Images</h1>
+                  <div className="w-full border-2 border-lime-700 p-2 my-3">
                     <div className="grid grid-cols-2 w-full  gap-4">
                       <div className="col-span-1">
                         <div>
                           {/* <h1>Url: {q?.questionImgUrl}</h1>
                           <h1>Exam Id:{ExamId}</h1> */}
-                          <img
-                            //  src={`${apiUrl}/upload_assets/images/question_images/${q?.questionImage}`}
-                            src={q?.questionImgUrl}
-                          />
+                          {q?.questionImage != null && (
+                            <img
+                              //  src={`${apiUrl}/upload_assets/images/question_images/${q?.questionImage}`}
+                              src={q?.questionImgUrl}
+                            />
+                          )}
                         </div>
 
                         <div>
@@ -265,11 +274,13 @@ export default async function ExamDetails({ params }: any) {
 
                       <div className="col-span-1">
                         <div>
-                          <img
-                            //   src={`${apiUrl}/upload_assets/images/correction_images/${q?.correctionImage}`}
-                            src={q?.correctionImageUrl}
-                            alt="Explanation Image"
-                          />
+                          {q?.correctionImage != null && (
+                            <img
+                              //   src={`${apiUrl}/upload_assets/images/correction_images/${q?.correctionImage}`}
+                              src={q?.correctionImageUrl}
+                              alt="Explanation Image"
+                            />
+                          )}
                         </div>
 
                         <div>

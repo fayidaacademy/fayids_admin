@@ -50,12 +50,18 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        "custom-blue": "#3182ce",
+        "custom-blue": "#1F5109",
 
-        "primary-color": "#090966",
+        // "primary-color": "#090966",
 
-        "secondary-color": "#dea82a",
-        "third-color": "#202091",
+        // "secondary-color": "#dea82a",
+        // "third-color": "#202091",
+
+        primaryColor: "#07705d",
+        secondaryColor: "#4088db",
+        navBarColor: "#1F5109",
+        thirdColor: "#c7cc3f",
+        fourthColor: "#bf8c13",
       },
       borderRadius: {
         lg: "var(--radius)",

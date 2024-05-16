@@ -87,7 +87,7 @@ export default function EditNumberCellDialog({
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <h1 className="bg-blue-700 px-1 rounded cursor-pointer text-white">
+          <h1 className="bg-primaryColor px-1 rounded cursor-pointer text-white">
             Edit
           </h1>
         </DialogTrigger>

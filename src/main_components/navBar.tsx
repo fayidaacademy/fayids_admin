@@ -48,7 +48,7 @@ export default function NavBar() {
   }, []);
 
   return (
-    <div className="fixed w-full bg-third-color text-white z-50">
+    <div className="fixed w-full bg-navBarColor text-white z-50">
       <div className="flex justify-between px-10 my-2">
         <h1 className="text-lg font-semibold">Fayida Acadamy</h1>
 

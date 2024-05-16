@@ -33,7 +33,7 @@ export default function RootLayout({
           <NavBar />
         </div>
         <div className="grid grid-cols-5   mr-5">
-          <div className="col-span-1 pt-9 px-3 bg-blue-600 text-white">
+          <div className="col-span-1 pt-9 px-3 bg-primaryColor text-gray-300">
             <MenuBar />
           </div>
           <div className="pt-9  px-5 col-span-4">{children} </div>

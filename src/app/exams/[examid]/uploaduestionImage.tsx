@@ -118,7 +118,7 @@ export default function UploadQuestionImage(params: any) {
           <input type="submit" />
         </form>
       )}
-      <h1>QuestionId: {QuestionId}</h1>
+      {/* <h1>QuestionId: {QuestionId}</h1> */}
     </div>
   );
 }

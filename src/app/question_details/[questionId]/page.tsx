@@ -22,6 +22,7 @@ export default function QuestionDetails({ params }: any) {
     assesment: {
       assesmentTitle: "",
       materialId: "",
+      id: "",
     },
   });
 
@@ -69,10 +70,10 @@ export default function QuestionDetails({ params }: any) {
       .replace(/&&rarw&([^&]*)&&/g, function (_: any, text: any) {
         return text + " \u2192";
       })
-      .replace(
-        /(\d+)\/(\d+)/g,
-        '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
-      ) // Matches _underline_
+      // .replace(
+      //   /(\d+)\/(\d+)/g,
+      //   '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
+      // ) // Matches _underline_
 
       .replace(/&&st(\d+)&&end(\d+)/g, function (_: any, start: any, end: any) {
         return start + "<sub>" + end + "</sub>";
@@ -101,13 +102,21 @@ export default function QuestionDetails({ params }: any) {
   const CorrectionStyled = formatTextToHTML(Correction);
   const CreatedAt = data?.createdAt;
   const AssesmentTitle = data?.assesment.assesmentTitle;
-  const AssessmentId = data?.assesment.materialId;
+  const AssessmentId = data?.assesment?.id;
 
   return (
     <div className="space-y-3 mx-10">
       <LoadProfileAuth />
-      <Link href={`/assesment/${AssessmentId}`}>Back to Assessment</Link>
-      <h1>Edit question</h1>
+      <Link
+        href={`/exams/${AssessmentId}`}
+        className="border-2 border-primaryColor p-1 hover:bg-primaryColor hover:text-white duration-100 rounded-lg "
+      >
+        Back to Assessment
+      </Link>
+
+      <h1 className="text-primaryColor font-semibold underline">
+        Edit question
+      </h1>
       <h1>
         {AssesmentTitle}/Question{QuestionIndex}
       </h1>
@@ -132,7 +141,10 @@ export default function QuestionDetails({ params }: any) {
       <div className="flex space-x-5">
         {/* <h2>Question: {Question}</h2> */}
 
-        <h2>Question Styled: {QuestionStyled}</h2>
+        <h2>Question </h2>
+        <div className="border-2 border-primaryColor p-2 my-1 bg-lime-200">
+          {QuestionStyled}
+        </div>
         <EditCellDialog
           type="questions"
           id={QuestionId}
@@ -143,7 +155,7 @@ export default function QuestionDetails({ params }: any) {
       </div>
 
       <div className="flex space-x-5">
-        <h2>A: {ChoiceAStyled}</h2>
+        <h2 className="flex gap-6">A: {ChoiceAStyled}</h2>
         <EditCellDialog
           type="questions"
           id={QuestionId}
@@ -154,7 +166,7 @@ export default function QuestionDetails({ params }: any) {
       </div>
 
       <div className="flex space-x-5">
-        <h2>B: {ChoiceBStyled}</h2>
+        <h2 className="flex gap-6">B: {ChoiceBStyled}</h2>
         <EditCellDialog
           type="questions"
           id={QuestionId}
@@ -164,7 +176,7 @@ export default function QuestionDetails({ params }: any) {
         />
       </div>
       <div className="flex space-x-5">
-        <h2>C: {ChoiceCStyled}</h2>
+        <h2 className="flex gap-6">C: {ChoiceCStyled}</h2>
         <EditCellDialog
           type="questions"
           id={QuestionId}
@@ -174,7 +186,7 @@ export default function QuestionDetails({ params }: any) {
         />
       </div>
       <div className="flex space-x-5">
-        <h2>D: {ChoiceDStyled}</h2>
+        <h2 className="flex gap-6">D: {ChoiceDStyled}</h2>
         <EditCellDialog
           type="questions"
           id={QuestionId}
@@ -184,7 +196,7 @@ export default function QuestionDetails({ params }: any) {
         />
       </div>
       <div className="flex space-x-5">
-        <h2>Correct Choice: {CorrectChoice}</h2>
+        <h2 className="flex gap-6">Correct Choice: {CorrectChoice}</h2>
         <EditCellDialog
           type="questions"
           id={QuestionId}

@@ -140,7 +140,7 @@ export default function LoginPage() {
                 </label>
 
                 <input
-                  className="px-2 border-b-2 border-blue-500 "
+                  className="px-2 border-b-2 border-primaryColor "
                   type="text"
                   // name="firstName"
                   id="email"
@@ -157,7 +157,7 @@ export default function LoginPage() {
                 </label>
 
                 <input
-                  className="px-2 border-b-2 border-blue-500 "
+                  className="px-2 border-b-2 border-primaryColor "
                   type="password"
                   // name="firstName"
                   id="password"
@@ -168,19 +168,19 @@ export default function LoginPage() {
               <div className="w-full flex">
                 <button
                   type="submit"
-                  className="w-3/4 py-1 mx-auto bg-blue-700 text-white rounded-full"
+                  className="w-3/4 py-1 mx-auto bg-primaryColor text-white rounded-full"
                 >
                   Login
                 </button>
               </div>
             </div>
           </form>
-          <div className="mt-5 text-sm">
+          {/* <div className="mt-5 text-sm">
             <Link href={"/forgot_password"}>
               {" "}
               <button>Forgot Password?</button>
             </Link>
-          </div>
+          </div> */}
         </div>
 
         <div className="p-10 w-full flex   bg-gradient-to-r from-blue-300 to-sky-300 rounded-2xl">

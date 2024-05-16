@@ -101,7 +101,9 @@ export default function EditCellDialog({
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <button className="px-1 text-white bg-blue-700 rounded">Edit</button>
+          <button className="px-1 text-white bg-primaryColor rounded">
+            Edit
+          </button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -112,21 +114,23 @@ export default function EditCellDialog({
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                {RecivedField}
-              </Label>
+            <div className="   items-center gap-4">
+              <Label htmlFor="name" className="text-right"></Label>
               <Input
                 id={RecivedField}
                 defaultValue={RecivedContent}
-                className="col-span-3"
+                className=""
                 type={dataType}
                 onChange={handleInputChange}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" onClick={() => handleUpdate()}>
+            <Button
+              className="bg-primaryColor text-white"
+              type="submit"
+              onClick={() => handleUpdate()}
+            >
               Save changes
             </Button>
           </DialogFooter>
