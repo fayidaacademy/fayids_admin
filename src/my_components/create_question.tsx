@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog_2";
 
 import { Form, useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
@@ -91,7 +91,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
         <Button variant="outline">Create a Question</Button>
       </DialogTrigger>
       {/* sm:max-w-[425px] */}
-      <DialogContent className="h-fit ">
+      <DialogContent className=" ">
         <form onSubmit={handleSubmit(submitData)} className="w-full space-y-4">
           <input
             className="hidden "
@@ -100,12 +100,12 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
             {...register("assesmentId")}
           />
           <div>
-            <label className="text-blue-800 space-x-2 space-y-1" htmlFor="">
+            <label className="text-primaryColor space-x-2 space-y-1" htmlFor="">
               {" "}
               Number
             </label>
             <input
-              className="border-b-2 border-blue-800 w-1/5 text-center  mx-3 space-y-3"
+              className="border-b-2 border-primaryColor w-1/5 text-center  mx-3 space-y-3"
               type="number"
               defaultValue={0}
               {...register("questionIndex")}
@@ -122,7 +122,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
           <div className="flex space-x-1">
             <label htmlFor="">Q:</label>
             <input
-              className="border-b-2 border-blue-800 space-y-3 w-full bg-blue-100"
+              className="border-b-2 border-primaryColor space-y-3 w-full bg-blue-100"
               type="text"
               {...register("question")}
               style={{ verticalAlign: "baseline" }}
@@ -131,7 +131,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
           <div>
             <label>A:</label>
             <input
-              className="border-b-2 border-blue-800"
+              className="border-b-2 border-primaryColor"
               type="text"
               {...register("choiseA")}
             />
@@ -139,7 +139,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
           <div>
             <label>B:</label>
             <input
-              className="border-b-2 border-blue-800"
+              className="border-b-2 border-primaryColor"
               type="text"
               {...register("choiseB")}
             />
@@ -147,7 +147,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
           <div>
             <label>C:</label>
             <input
-              className="border-b-2 border-blue-800"
+              className="border-b-2 border-primaryColor"
               type="text"
               {...register("choiseC")}
             />
@@ -156,7 +156,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
           <div>
             <label>D:</label>
             <input
-              className="border-b-2 border-blue-800"
+              className="border-b-2 border-primaryColor"
               type="text"
               {...register("choiseD")}
             />
@@ -175,7 +175,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
           <div className="flex space-x-1">
             <label htmlFor="">Exp:</label>
             <input
-              className="border-b-2 border-blue-800 space-y-3 w-full bg-blue-100"
+              className="border-b-2 border-primaryColor space-y-3 w-full bg-blue-100"
               type="text"
               {...register("correction")}
             />

@@ -83,15 +83,15 @@ export default function Mock_package_discount_managment({
             <CalanderForm packageId={PackageId} />
           </div>
 
-          {/* <button
+          <button
             onClick={() => {
               console.log("test: " + packageDiscountStatus);
             }}
-          ></button> */}
+          ></button>
         </div>
       </div>
 
-      {/* <div>
+      <div>
         <h1>Regulat Price: {packagePrice} Birr</h1>
         <h1>Discount Price: {discontPrice} Birr</h1>
         {parseFloat(packagePrice) < parseFloat(discontPrice) ? (
@@ -110,10 +110,10 @@ export default function Mock_package_discount_managment({
             dataType="number"
             field="temporaryPrice"
             id={PackageId}
-            type="packages"
+            type="mockexampackage"
           />
         </div>
-      </div> */}
+      </div>
 
       <div className="w-full bg-blue-200 py-5 ">
         <table className="  w-full ">

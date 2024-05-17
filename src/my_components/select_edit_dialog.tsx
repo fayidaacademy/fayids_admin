@@ -120,9 +120,12 @@ export default function SelectEditCellDialog({
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <button className="px-1 text-white bg-blue-700 rounded">Edit</button>
+          <button className="px-1 text-white bg-primaryColor rounded">
+            Edit
+          </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        {/* <DialogContent className="sm:max-w-[425px]"> */}
+        <DialogContent className="sm:max-w-[700px]">
           <DialogHeader>
             <DialogTitle>Edit from {RecivedType}</DialogTitle>
             <DialogDescription>
@@ -176,13 +179,13 @@ export default function SelectEditCellDialog({
                   onChange={handleInputChange}
                 >
                   <option className="hidden"></option>
-                  {selectValues.map((option) => (
+                  {selectValues?.map((option) => (
                     <option
                       className=""
-                      key={option.id}
-                      value={option.folderName}
+                      key={option?.id}
+                      value={option?.folderName}
                     >
-                      {option.folderName}
+                      {option?.folderName}
                     </option>
                   ))}
                 </select>
@@ -195,7 +198,11 @@ export default function SelectEditCellDialog({
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" onClick={() => handleUpdate()}>
+            <Button
+              type="submit"
+              className="bg-primaryColor"
+              onClick={() => handleUpdate()}
+            >
               Save changes
             </Button>
           </DialogFooter>

@@ -115,7 +115,9 @@ export function CalanderForm({ packageId }: any) {
                 </PopoverContent>
               </Popover>
               <div className="w-fit">
-                <Button type="submit">Update ExpiryDate</Button>
+                <Button type="submit" className="bg-primaryColor">
+                  Update ExpiryDate
+                </Button>
               </div>
               <FormDescription>
                 Expiry date will be used to calculate in how many days it will

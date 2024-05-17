@@ -52,14 +52,14 @@ export default function MockPackage_basic_components({
 
   return (
     <div className="">
-      <div>
+      <div className="">
         <h1 className="text-primary-color underline  font-semibold my-2">
           Basic Details of Package
         </h1>
       </div>
 
       <div>
-        <div className="flex space-x-5">
+        <div className="flex space-x-5 py-4">
           <h1>
             {" "}
             <span className="text-blue-900 font-semibold">
@@ -78,7 +78,7 @@ export default function MockPackage_basic_components({
             />
           </div>
         </div>
-        <div className="flex space-x-5">
+        <div className="flex space-x-5 py-4">
           <h1>
             {" "}
             <span className="text-blue-900 font-semibold">Price:</span>{" "}
@@ -93,7 +93,7 @@ export default function MockPackage_basic_components({
           />
         </div>
 
-        <div className="flex space-x-5">
+        <div className="flex space-x-5 py-4">
           <h1>
             {" "}
             <span className="text-blue-900 font-semibold">
@@ -112,7 +112,7 @@ export default function MockPackage_basic_components({
           />
         </div>
 
-        <div className="flex space-x-5">
+        <div className="flex space-x-5 py-4">
           <h1>
             {" "}
             <span className="text-blue-900 font-semibold">
@@ -131,7 +131,7 @@ export default function MockPackage_basic_components({
           />
         </div>
 
-        <div className="flex space-x-5">
+        <div className="flex space-x-5 py-4">
           <h1>
             <span className="text-blue-900 font-semibold">
               Package Description:
@@ -180,7 +180,7 @@ export default function MockPackage_basic_components({
               {packageDisplayOnHomeStatus ? "True" : "False"}{" "}
             </h1>
           </div>
-          <div className="w-fit text-white px-2 py-1 ">
+          <div className="w-fit text-primaryColor px-2 py-1 ">
             <SwitchDialog
               type="mockexampackage"
               id={packageId}

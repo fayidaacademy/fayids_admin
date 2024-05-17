@@ -30,7 +30,7 @@ export default async function SectionList() {
 
       <div className="w-fit">
         <Link href="/settings/packagefolders/addpackagefolder">
-          <h1 className="bg-blue-700 text-white w-fit  px-1 text-sm my-3 cursor-pointer">
+          <h1 className="bg-primaryColor text-white w-fit  px-1 text-sm my-3 cursor-pointer">
             Create Package Folder
           </h1>
         </Link>
