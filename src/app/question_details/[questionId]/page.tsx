@@ -68,8 +68,10 @@ export default function QuestionDetails({ params }: any) {
       .replace(/&&bimp/g, "⇔")
       .replace(/&&invv/g, "∧")
       .replace(/&&nl/g, "<br>")
-      .replace(/&&r/g, "&#8477;")
-      .replace(/&&nat/g, "&naturals;")
+      //.replace(/&&r/g, "&#8477;")
+      //.replace(/&&nat/g, "&naturals;")
+      .replace(/&&r/g, "<span style='font-size:1.2em'>&#8477;</span>")
+      .replace(/&&nat/g, "<span style='font-size:1.2em'>&naturals;</span>")
 
       .replace(/&&rarw&([^&]*)&&/g, function (_: any, text: any) {
         return text + " \u2192";
