@@ -43,6 +43,7 @@ export default async function ExamDetails({ params }: any) {
       .replace(/&&imp/g, "⇒")
       .replace(/&&bimp/g, "⇔")
       .replace(/&&invv/g, "∧")
+      .replace(/&&nl/g, "<br>")
       .replace(/&&rarw&([^&]*)&&/g, function (_: any, text: any) {
         return text + " \u2192";
       })
