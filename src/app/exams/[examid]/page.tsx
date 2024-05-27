@@ -58,6 +58,9 @@ export default async function ExamDetails({ params }: any) {
       .replace(/&&omega/g, "ω")
       .replace(/&&eta/g, "η")
       .replace(/&&dotdotdot/g, "⋮")
+      .replace(/&&greaterequal/g, "≥")
+      .replace(/&&lessequal/g, "≤")
+      .replace(/&&plusminus/g, "±")
 
       // .replace(/&&r/g, "&#8477;")
       // .replace(/&&nat/g, "&naturals;")
