@@ -58,7 +58,7 @@ export default function QuestionDetails({ params }: any) {
       .replace(/&&arb/g, "←")
       .replace(/&&aru/g, "↑")
       .replace(/&&ard/g, "↓") // &&f   // function f
-      .replace(/&&.pi/g, "π")
+      .replace(/&&pi/g, "π")
       .replace(/&&sqrt/g, "√")
       .replace(/&&noteq/g, "≠")
       .replace(/&&empty/g, "∅")
