@@ -57,6 +57,7 @@ export default async function ExamDetails({ params }: any) {
       .replace(/&&psi/g, "ψ")
       .replace(/&&omega/g, "ω")
       .replace(/&&eta/g, "η")
+      .replace(/&&dotdotdot/g, "⋮")
 
       // .replace(/&&r/g, "&#8477;")
       // .replace(/&&nat/g, "&naturals;")
