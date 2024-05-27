@@ -61,7 +61,7 @@ export default async function ExamDetails({ params }: any) {
       .replace(/&&greaterequal/g, "≥")
       .replace(/&&lessequal/g, "≤")
       .replace(/&&plusminus/g, "±")
-
+      .replace(/&&nl/g, "<br>")
       // .replace(/&&r/g, "&#8477;")
       // .replace(/&&nat/g, "&naturals;")
       .replace(/&&r/g, "<span style='font-size:1.2em'>&#8477;</span>")
