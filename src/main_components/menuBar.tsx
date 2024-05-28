@@ -22,7 +22,7 @@ export default function MenuBar() {
 
   return (
     <div className="">
-      {data == "Admin" && (
+      {(data == "Admin" || data == "SubAdmin") && (
         <div>
           <Link href="/">
             <div className="flex gap-2">

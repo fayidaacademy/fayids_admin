@@ -30,7 +30,7 @@ export default function LoadProfileAuth() {
   if (isLoading) {
     return <p>Loading...</p>;
   }
-  if (data?.accountType != "Admin") {
+  if (data?.accountType != "Admin" && data?.accountType != "SubAdmin") {
     window.location.href = "/login";
   }
   return (

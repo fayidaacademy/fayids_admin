@@ -14,6 +14,21 @@ export default function HomeDashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notificationData, setNotificationData] = useState<any[]>([]);
 
+  const [accountType, setAccountType] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch(`${apiUrl}/login_register/profile`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setAccountType(data.accountType);
+        setLoading(false);
+        //  setUserName(data.firstName + " " + data.lastName);
+        console.log("message: " + data.firstName);
+      });
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -146,19 +161,28 @@ export default function HomeDashboard() {
             })}
           </h1>
         </div>
+
         <div className="border-2   w-full h-full py-3 bg-primaryColor text-white  border-gray-200 rounded-2xl">
-          <h1 className="text-xl  text-center">
-            Total Students:{" "}
-            <span className="text-white  font-semibold">
-              {studnets?.length - 1}
-            </span>
-          </h1>
-          <h1 className="text-xl  text-center">
-            Total Exam Takers:{" "}
-            <span className="text-white  font-semibold">
-              {examTaker?.length}
-            </span>
-          </h1>
+          {accountType == "Admin" ? (
+            <div>
+              <h1 className="text-xl  text-center">
+                Total Students:{" "}
+                <span className="text-white  font-semibold">
+                  {studnets?.length - 1}
+                </span>
+              </h1>
+              <h1 className="text-xl  text-center">
+                Total Exam Takers:{" "}
+                <span className="text-white  font-semibold">
+                  {examTaker?.length}
+                </span>
+              </h1>
+            </div>
+          ) : (
+            <div>
+              <h1 className="text-xl  text-center">Sub Admin</h1>
+            </div>
+          )}
         </div>
       </div>
 
@@ -174,50 +198,52 @@ export default function HomeDashboard() {
         </div>
       </div>
 
-      <div className="w-3/4 mx-auto bg-navBarColor bg-opacity-60 text-gray-200 p-4 rounded">
-        <div>
-          <h1>Recent Notifications</h1>
-        </div>
-        <div>
-          {notificationData?.map && (
-            <div>
-              {notificationData?.map((notification) => (
-                <div key={notification?.notiId}>
-                  <div
-                    onClick={() =>
-                      handleNotificationClick(notification?.notiId)
-                    }
-                    // className="mx-4 bg-primaryColor bg-opacity-80 my-2 px-2 text-white "
-                    className={`mx-4 my-2 px-2 text-green rounded-lg ${
-                      notification?.status == "0"
-                        ? "bg-secondaryColor"
-                        : "bg-primaryColor"
-                    }`}
-                  >
-                    <Accordion type="single" collapsible>
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger>
-                          <div className="w-full pr-4">
-                            <div className="flex justify-between">
-                              <h1>{notification?.notiHead}</h1>
-                              <h1>
-                                {notification?.status == 0 ? "New" : "Seen"}
-                              </h1>
+      {accountType == "Admin" && (
+        <div className="w-3/4 mx-auto bg-navBarColor bg-opacity-60 text-gray-200 p-4 rounded">
+          <div>
+            <h1>Recent Notifications</h1>
+          </div>
+          <div>
+            {notificationData?.map && (
+              <div>
+                {notificationData?.map((notification) => (
+                  <div key={notification?.notiId}>
+                    <div
+                      onClick={() =>
+                        handleNotificationClick(notification?.notiId)
+                      }
+                      // className="mx-4 bg-primaryColor bg-opacity-80 my-2 px-2 text-white "
+                      className={`mx-4 my-2 px-2 text-green rounded-lg ${
+                        notification?.status == "0"
+                          ? "bg-secondaryColor"
+                          : "bg-primaryColor"
+                      }`}
+                    >
+                      <Accordion type="single" collapsible>
+                        <AccordionItem value="item-1">
+                          <AccordionTrigger>
+                            <div className="w-full pr-4">
+                              <div className="flex justify-between">
+                                <h1>{notification?.notiHead}</h1>
+                                <h1>
+                                  {notification?.status == 0 ? "New" : "Seen"}
+                                </h1>
+                              </div>
                             </div>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          {notification?.notiFull}
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            {notification?.notiFull}
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

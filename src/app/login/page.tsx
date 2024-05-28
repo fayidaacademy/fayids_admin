@@ -87,7 +87,7 @@ export default function LoginPage() {
     //this line is included so that 'confirm password' is not sent to server
     // const { confirmPassword, ...formData } = data;
     console.log(data);
-    fetch(`${apiUrl}/login_register/loginss`, {
+    fetch(`${apiUrl}/login_register/adminlogin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
