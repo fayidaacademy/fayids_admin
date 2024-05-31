@@ -1,3 +1,4 @@
+"use client";
 import { apiUrl } from "@/api_config";
 import { Button } from "@/components/ui/button";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
@@ -8,14 +9,21 @@ import DeleteMaterialAndVideo from "@/my_components/delete_material_and_video";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UploadQuestionImage from "./uploaduestionImage";
 import UploadCorrectionImage from "./uploadCorrectionImage";
+import useRefetchStore from "@/store/autoFetch";
 
-export default async function ExamDetails({ params }: any) {
+export default function ExamDetails({ params }: any) {
   const ExamId = params.examid;
   console.log("working");
   console.log("examid: " + ExamId);
+
+  const [data, setData] = useState<any>([]);
+  const [question_data, setQuestion_data] = useState<any>([]);
+
+  //const setQuestionFetch = useRefetchStore((state) => state.setQuestionFetch);
+  const questionFetch = useRefetchStore((state) => state.questionFetch);
 
   function formatTextToHTML(text: any) {
     if (!text) {
@@ -86,12 +94,27 @@ export default async function ExamDetails({ params }: any) {
   }
 
   // the first request it to get the assesment id from material list
-  const res = await fetch(`${apiUrl}/assesments/getexams/${ExamId}`, {
-    next: {
-      revalidate: 0,
-    },
-  });
-  const data = await res.json();
+  // const res = await fetch(`${apiUrl}/assesments/getexams/${ExamId}`, {
+  //   next: {
+  //     revalidate: 0,
+  //   },
+  // });
+  // const data = await res.json();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/assesments/getexams/${ExamId}`);
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // const AssesmentId = data?.assementId?.id;
 
   console.log("data:" + data);
@@ -108,15 +131,33 @@ export default async function ExamDetails({ params }: any) {
 
   console.log("test");
 
-  const res_questions = await fetch(
-    `${apiUrl}/questions/accessquestions/${ExamId}`,
-    {
-      next: {
-        revalidate: 0,
-      },
-    }
-  );
-  const question_data = await res_questions.json();
+  // const res_questions = await fetch(
+  //   `${apiUrl}/questions/accessquestions/${ExamId}`,
+  //   {
+  //     next: {
+  //       revalidate: 0,
+  //     },
+  //   }
+  // );
+  // const question_data = await res_questions.json();
+
+  const messagesEndRef = React.createRef();
+  const [apiData, setApiData] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${apiUrl}/questions/accessquestions/${ExamId}`
+        );
+        const data = await response.json();
+        setQuestion_data(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [questionFetch]);
 
   //the second request it to access the specific video detail from vidos table using the video id we got from the first request
   // const res2 = await fetch(`${apiUrl}/videos/${VideoId}`, {
@@ -159,12 +200,12 @@ export default async function ExamDetails({ params }: any) {
           </span>{" "}
           {AssesmentIndex}
         </h1>
-        <EditCellDialog
+        <EditNumberCellDialog
           type="assesments"
           field="assesmentIndex"
           id={ExamId}
           content={AssesmentIndex}
-          dataType="text"
+          // dataType="text"
         />
       </div>
 
@@ -241,9 +282,11 @@ export default async function ExamDetails({ params }: any) {
         id={ExamId}
         type="assesments"
       />
-      <div className="my-4">
+      <div className="my-4 w-full flex justify-end   z-50 sticky top-14  ">
         {" "}
-        <CreateQuestion assesmentId={ExamId} />
+        <div className=" w-fit  ">
+          <CreateQuestion assesmentId={ExamId} />
+        </div>
       </div>
 
       <div>
