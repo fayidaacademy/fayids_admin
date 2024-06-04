@@ -70,6 +70,8 @@ export default function ExamDetails({ params }: any) {
       .replace(/&&lessequal/g, "≤")
       .replace(/&&plusminus/g, "±")
       .replace(/&&nl/g, "<br>")
+      .replace(/&&dash/g, "________")
+      .replace(/&&dashl/g, "______________________")
       // .replace(/&&r/g, "&#8477;")
       // .replace(/&&nat/g, "&naturals;")
       .replace(/&&r/g, "<span style='font-size:1.2em'>&#8477;</span>")
