@@ -92,8 +92,8 @@ export default function ExamTakersAnalysis() {
             </tr>
           </thead>
           <tbody>
-            {cityAlanyllis.map((city: any) => (
-              <tr>
+            {cityAlanyllis.map((city: any, index: any) => (
+              <tr key={index}>
                 <td className="border border-gray-300 p-2">{city?.city}</td>
                 <td className="border border-gray-300 p-2">
                   {city?._count?.id}
