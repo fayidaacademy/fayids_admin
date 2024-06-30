@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import React, { useEffect, useState } from "react";
+import ExamTakersAnalysis from "./examtakersanalysis";
 
 export default function HomeDashboard() {
   const [studnets, setStudents] = useState<any>([]);
@@ -242,6 +243,12 @@ export default function HomeDashboard() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {accountType == "Admin" && (
+        <div>
+          <ExamTakersAnalysis />
         </div>
       )}
     </div>
