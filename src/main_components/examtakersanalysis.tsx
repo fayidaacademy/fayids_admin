@@ -7,6 +7,9 @@ export default function ExamTakersAnalysis() {
 
   const [genderAnalysis, setGenderAnalysis] = useState<any>([null]);
   const [cityAlanyllis, setCityAnalysis] = useState<any>([null]);
+  const [regionAlanyllis, setRegionAnalysis] = useState<any>([null]);
+  const [gradeAlanyllis, setGradeAnalysis] = useState<any>([null]);
+  const [scienceTypeAlanyllis, setScienceTypeAnalysis] = useState<any>([null]);
   const [totalExamtakers, setTotalExamtakers] = useState(0);
   //let totalExamtakers;
 
@@ -19,6 +22,10 @@ export default function ExamTakersAnalysis() {
         //  setTableInfo(data.accountType);
         setCityAnalysis(data.citiesWithExamTakers);
         setGenderAnalysis(data.gendersWithExamTakers);
+        setRegionAnalysis(data.regionsWithExamTakers);
+        setGradeAnalysis(data.gradeWithExamTakers);
+        setScienceTypeAnalysis(data.scienceTypeWithExamTakers);
+
         setTotalExamtakers(
           data.gendersWithExamTakers[0]._count.id +
             data.gendersWithExamTakers[1]._count.id
@@ -36,7 +43,7 @@ export default function ExamTakersAnalysis() {
   }, []);
 
   return (
-    <div className="rounded-3xl bg-emerald-900 bg-opacity-75 text-gray-300 py-10 my-10">
+    <div className="rounded-3xl text-sm bg-emerald-900 bg-opacity-75 text-gray-300 py-10 my-10">
       <div className="w-full flex pb-4">
         <h1 className="text-center w-fit mx-auto text-2xl">
           Exam Takers Statistics
@@ -47,7 +54,7 @@ export default function ExamTakersAnalysis() {
           <thead>
             <tr>
               <th className="border border-gray-300 p-2">Gender</th>
-              <th className="border border-gray-300 p-2">Number</th>
+              <th className="border border-gray-300 p-2">Qty</th>
               <th className="border border-gray-300 p-2">%</th>
             </tr>
           </thead>
@@ -86,8 +93,32 @@ export default function ExamTakersAnalysis() {
         <table className="table-auto border-collapse">
           <thead>
             <tr>
+              <th className="border border-gray-300 p-2">Region</th>
+              <th className="border border-gray-300 p-2">Qty</th>
+              <th className="border border-gray-300 p-2">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            {regionAlanyllis.map((region: any, index: any) => (
+              <tr key={index}>
+                <td className="border border-gray-300 p-2">{region?.region}</td>
+                <td className="border border-gray-300 p-2">
+                  {region?._count?.id}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {" "}
+                  {((region?._count?.id / totalExamtakers) * 100).toFixed(2)} %
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <table className="table-auto border-collapse">
+          <thead>
+            <tr>
               <th className="border border-gray-300 p-2">City</th>
-              <th className="border border-gray-300 p-2">Number</th>
+              <th className="border border-gray-300 p-2">Qty</th>
               <th className="border border-gray-300 p-2">%</th>
             </tr>
           </thead>
@@ -101,6 +132,58 @@ export default function ExamTakersAnalysis() {
                 <td className="border border-gray-300 p-2">
                   {" "}
                   {((city?._count?.id / totalExamtakers) * 100).toFixed(2)} %
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex w-full justify-around mt-10">
+        <table className="table-auto border-collapse">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 p-2">Grade</th>
+              <th className="border border-gray-300 p-2">Qty</th>
+              <th className="border border-gray-300 p-2">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            {gradeAlanyllis.map((grade: any, index: any) => (
+              <tr key={index}>
+                <td className="border border-gray-300 p-2">{grade?.grade}</td>
+                <td className="border border-gray-300 p-2">
+                  {grade?._count?.id}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {" "}
+                  {((grade?._count?.id / totalExamtakers) * 100).toFixed(2)} %
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <table className="table-auto border-collapse">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 p-2">Science</th>
+              <th className="border border-gray-300 p-2">Qty</th>
+              <th className="border border-gray-300 p-2">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scienceTypeAlanyllis.map((science: any, index: any) => (
+              <tr key={index}>
+                <td className="border border-gray-300 p-2">
+                  {science?.scienceType}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {science?._count?.id}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {" "}
+                  {((science?._count?.id / totalExamtakers) * 100).toFixed(2)} %
                 </td>
               </tr>
             ))}
