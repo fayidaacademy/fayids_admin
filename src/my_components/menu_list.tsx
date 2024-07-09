@@ -209,7 +209,27 @@ export function AccordionMenu() {
             </AccordionContent>
           </AccordionItem>
         )}
-        <AccordionItem value="item-9">
+        {data == "Admin" && (
+          <AccordionItem value="item-9">
+            <AccordionTrigger>
+              {" "}
+              <div className="flex gap-1">
+                {" "}
+                <Award /> <h1>Manage Categories</h1>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link href="/category_mgmt/key_words">Key Words</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/prize">Category List</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/prize/addprize">Category Folders</Link>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+        <AccordionItem value="item-10">
           <AccordionTrigger>More</AccordionTrigger>
           <AccordionContent>
             <Link href="/settings/languages">
