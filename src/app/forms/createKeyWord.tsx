@@ -19,6 +19,8 @@ import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import useRefetchStore from "@/store/autoFetch";
+import { useEffect } from "react";
 
 const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
 const formSchema = z.object({
@@ -42,6 +44,10 @@ const formSchema = z.object({
 export default function AddKeywordForm() {
   const { push } = useRouter();
   const { toast } = useToast();
+
+  const setKeywordFetch = useRefetchStore((state) => state.setKeywordFetch);
+  const keywordFetch = useRefetchStore((state) => state.keyWordFetch);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,6 +59,8 @@ export default function AddKeywordForm() {
   /// api call to post
   const handleSectionPost = async (formData: any) => {
     console.log("Form Data: " + JSON.stringify(formData));
+
+    console.log("Keyword Change to: " + keywordFetch);
     try {
       const response = await fetch(`${apiUrl}/keywordslist/`, {
         method: "POST",
@@ -66,6 +74,7 @@ export default function AddKeywordForm() {
       if (response.ok) {
         //   push("/settings/blogs");
         // console.log("Course Added");
+        setKeywordFetch(!keywordFetch);
         toast({
           title: "Success!",
           description: "KeyWord Added!",
