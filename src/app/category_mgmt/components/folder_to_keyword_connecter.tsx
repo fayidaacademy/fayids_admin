@@ -29,46 +29,63 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
-import { postRequest } from "../../../../lib/course_package_relation";
+//import { postRequest } from "../../../../lib/course_package_relation";
 import { useRouter } from "next/navigation";
+import { postRequestCategoryKeyword } from "@/lib/category_folder_keyword_relation";
+import useRefetchStore from "@/store/autoFetch";
 
 const FormSchema = z.object({
-  course: z.string({
-    required_error: "Select a Course.",
-  }),
+  keyword: z.coerce.number(),
 });
 
 interface RecivedProps {
-  datas: any;
-  packageId: any;
+  keywords: any;
+  folderId: any;
 }
 
-export function DropdownComponent({ datas, packageId }: RecivedProps) {
-  const RecivedData = datas;
-  const PackageId = packageId;
-  console.log("print form RecivedData: " + JSON.stringify(RecivedData));
+export function CategoryKeywordDropdownComponent({
+  keywords,
+  folderId,
+}: RecivedProps) {
+  const RecivedData = keywords;
+  const FolderId = folderId;
+
+  const setCategoryFolderFetch = useRefetchStore(
+    (state) => state.setCategoryFolderFetch
+  );
+  const categoryFolderFetch = useRefetchStore(
+    (state) => state.categoryFolderFetch
+  );
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
   const { push } = useRouter();
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data.course);
+    console.log("Data from fun: " + JSON.stringify(data.keyword));
+
     // if the last attribute of the isUpdated function ture, it will run connect course to package, if false it disconnects
-    const isUpdated = await postRequest(data.course, PackageId, true);
+    const isUpdated = await postRequestCategoryKeyword(
+      FolderId,
+      data.keyword,
+
+      true
+    );
     {
-      isUpdated && push(`/packages/${packageId}`);
+      isUpdated && push(`/category_mgmt/folder_list`);
     }
+    setCategoryFolderFetch(!categoryFolderFetch);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className=" flex space-x-4">
         <FormField
           control={form.control}
-          name="course"
+          name="keyword"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Courses</FormLabel>
+            <FormItem className="flex space-x-2">
+              <FormLabel className="my-auto">Keywords</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -84,22 +101,22 @@ export function DropdownComponent({ datas, packageId }: RecivedProps) {
                         ? RecivedData.find(
                             (data: any) => data.value === field.value
                           )?.label
-                        : "Select Course"}
+                        : "Select Keyword"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
-                    <CommandInput placeholder="Search course..." />
-                    <CommandEmpty>No course found.</CommandEmpty>
+                    <CommandInput placeholder="Search keyword..." />
+                    <CommandEmpty>No Keyword found.</CommandEmpty>
                     <CommandGroup>
                       {RecivedData.map((data: any) => (
                         <CommandItem
                           value={data.label}
                           key={data.value}
                           onSelect={() => {
-                            form.setValue("course", data.value);
+                            form.setValue("keyword", data.value);
                           }}
                         >
                           <Check
@@ -118,7 +135,7 @@ export function DropdownComponent({ datas, packageId }: RecivedProps) {
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                Find the name of the course and add it.
+                Find the name of the Keyword and add it.
               </FormDescription>
               <FormMessage />
             </FormItem>

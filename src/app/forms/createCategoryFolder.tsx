@@ -29,8 +29,8 @@ const formSchema = z.object({
   //   message: "Index can not contain symbols!",
   // }),
 
-  word: z.string().min(1, { message: "keyword cannot be empty!" }),
-  type: z.string(),
+  name: z.string().min(1, { message: "keyword cannot be empty!" }),
+  index: z.coerce.number(),
 
   // writtenBy: z.string().min(1, { message: "Writer cannot be empty!" }),
 
@@ -41,7 +41,7 @@ const formSchema = z.object({
 
 ////////////////////
 
-export default function AddKeywordForm() {
+export default function AddCategoryFolder() {
   const { push } = useRouter();
   const { toast } = useToast();
 
@@ -51,8 +51,8 @@ export default function AddKeywordForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      word: "",
-      type: "category",
+      name: "",
+      index: 0,
     },
   });
 
@@ -60,9 +60,9 @@ export default function AddKeywordForm() {
   const handleSectionPost = async (formData: any) => {
     console.log("Form Data: " + JSON.stringify(formData));
 
-    console.log("Keyword Change to: " + keywordFetch);
+    // console.log("Keyword Change to: " + keywordFetch);
     try {
-      const response = await fetch(`${apiUrl}/keywordslist/`, {
+      const response = await fetch(`${apiUrl}/categoryfolders/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,17 +74,17 @@ export default function AddKeywordForm() {
       if (response.ok) {
         //   push("/settings/blogs");
         // console.log("Course Added");
-        setKeywordFetch(!keywordFetch);
+        // setKeywordFetch(!keywordFetch);
         toast({
           title: "Success!",
-          description: "KeyWord Added!",
+          description: "Folder Added!",
         });
       } else {
         // File deletion failed
-        console.error("Failed to add keyword");
+        console.error("Failed to add folder");
       }
     } catch (error) {
-      console.error("Error adding Keyword", error);
+      console.error("Error adding Folder", error);
     }
   };
 
@@ -104,15 +104,15 @@ export default function AddKeywordForm() {
         >
           <FormField
             control={form.control}
-            name="word"
+            name="name"
             render={({ field }) => (
               <FormItem className="flex space-x-5">
-                <FormLabel className="my-auto">Add a new Keyword</FormLabel>
+                <FormLabel className="my-auto">Folder Name</FormLabel>
                 <FormControl className="my-auto">
                   <div className="w-1/2  h-fit">
                     <Input
                       className="w-[400px]"
-                      placeholder="type the keyword here ..."
+                      placeholder="type the folder name here ..."
                       {...field}
                     />
                   </div>
@@ -122,6 +122,29 @@ export default function AddKeywordForm() {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="index"
+            render={({ field }) => (
+              <FormItem className="flex space-x-5">
+                <FormLabel className="my-auto">Index</FormLabel>
+                <FormControl className="my-auto">
+                  <div className="w-1/2  h-fit">
+                    <Input
+                      type="number"
+                      className="w-[50px]"
+                      placeholder="0.."
+                      {...field}
+                    />
+                  </div>
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="h-fit my-auto  ">
             <Button type="submit" className="my-auto ">
               Add

@@ -6,6 +6,9 @@ interface StoreState {
 
   keyWordFetch: boolean;
   setKeywordFetch: (newKeyWordFetch: boolean) => void;
+
+  categoryFolderFetch: boolean;
+  setCategoryFolderFetch: (newCategoryFolderFetch: boolean) => void;
 }
 
 const useRefetchStore = create<StoreState>((set) => ({
@@ -15,6 +18,10 @@ const useRefetchStore = create<StoreState>((set) => ({
 
   keyWordFetch: false,
   setKeywordFetch: (newKeyWordFetch) => set({ keyWordFetch: newKeyWordFetch }),
+
+  categoryFolderFetch: false,
+  setCategoryFolderFetch: (newCategoryFolderFetch) =>
+    set({ categoryFolderFetch: newCategoryFolderFetch }),
 }));
 
 export default useRefetchStore;

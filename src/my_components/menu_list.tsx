@@ -222,10 +222,10 @@ export function AccordionMenu() {
               <Link href="/category_mgmt/key_words">Key Words</Link>
             </AccordionContent>
             <AccordionContent>
-              <Link href="/prize">Category List</Link>
+              <Link href="/category_mgmt/folder_list">Folder List</Link>
             </AccordionContent>
             <AccordionContent>
-              <Link href="/prize/addprize">Category Folders</Link>
+              <Link href="/category_mgmt/category_list">Category List</Link>
             </AccordionContent>
           </AccordionItem>
         )}
