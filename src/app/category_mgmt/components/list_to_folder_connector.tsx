@@ -70,7 +70,7 @@ export function CategoryListFolderdDropdownComponent({
       true
     );
     {
-      isUpdated && push(`/category_mgmt/category_list`);
+      //  isUpdated && push(`/category_mgmt/category_list`);
     }
     setCategoryListFetch(!categoryListFetch);
   }

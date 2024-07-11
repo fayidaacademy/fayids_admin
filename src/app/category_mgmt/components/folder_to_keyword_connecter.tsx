@@ -72,7 +72,7 @@ export function CategoryKeywordDropdownComponent({
       true
     );
     {
-      isUpdated && push(`/category_mgmt/folder_list`);
+      //isUpdated && push(`/category_mgmt/folder_list`);
     }
     setCategoryFolderFetch(!categoryFolderFetch);
   }
