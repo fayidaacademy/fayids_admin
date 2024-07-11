@@ -9,6 +9,9 @@ interface StoreState {
 
   categoryFolderFetch: boolean;
   setCategoryFolderFetch: (newCategoryFolderFetch: boolean) => void;
+
+  categoryListFetch: boolean;
+  setCategoryListFetch: (newCategoryListFetch: boolean) => void;
 }
 
 const useRefetchStore = create<StoreState>((set) => ({
@@ -22,6 +25,10 @@ const useRefetchStore = create<StoreState>((set) => ({
   categoryFolderFetch: false,
   setCategoryFolderFetch: (newCategoryFolderFetch) =>
     set({ categoryFolderFetch: newCategoryFolderFetch }),
+
+  categoryListFetch: false,
+  setCategoryListFetch: (newCategoryListFetch) =>
+    set({ categoryListFetch: newCategoryListFetch }),
 }));
 
 export default useRefetchStore;
