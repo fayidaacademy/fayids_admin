@@ -77,6 +77,7 @@ export async function fetchPackage(PackageId: any): Promise<{
   group: string;
   group2: string;
   imgUrl: string;
+  tag: string;
 }> {
   try {
     console.log(PackageId);
@@ -104,6 +105,7 @@ export async function fetchPackage(PackageId: any): Promise<{
         group: data.group,
         group2: data.group2,
         imgUrl: data.imgUrl,
+        tag: data.tag,
       };
       console.log(packageData);
 
@@ -130,6 +132,7 @@ export async function fetchPackage(PackageId: any): Promise<{
         group: "",
         group2: "",
         imgUrl: "",
+        tag: "",
       };
     }
   } catch (error) {
@@ -154,6 +157,7 @@ export async function fetchPackage(PackageId: any): Promise<{
       group: "",
       group2: "",
       imgUrl: "",
+      tag: "",
     };
   }
 }

@@ -1,6 +1,8 @@
 import { apiUrl } from "@/api_config";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import SelectEditCellDialog from "@/my_components/select_edit_dialog";
+import SelectEditCellDialogCustom from "@/my_components/select_edit_dialog_custom";
+
 import SwitchDialog from "@/my_components/switch_dialog";
 import React, { useEffect, useState } from "react";
 
@@ -16,12 +18,20 @@ export default function Package_basic_components({
   packageDisplayOnHomeStatus,
   group,
   group2,
+  tag,
 }: any) {
   const [folderChoices, setFolderChoices] = useState<any[]>([]);
   const [subFolder, setSubFolder] = useState<any[]>([]);
+  const [tagChoice, setTagChoice] = useState<any[]>([]);
+  const tags = [
+    { grade: "Grade 9" },
+    { grade: "Grade 10" },
+    { grade: "Grade 11" },
+    { grade: "Grade 12" },
+  ];
 
   useEffect(() => {
-    const fetchSectionChoices = async () => {
+    const fetchSectionChoices: any = async () => {
       try {
         const response = await fetch(`${apiUrl}/pacakgefolder/coursemain`);
         const data = await response.json();
@@ -40,6 +50,20 @@ export default function Package_basic_components({
         const response = await fetch(`${apiUrl}/pacakgefolder/coursesub`);
         const data = await response.json();
         setSubFolder(data);
+      } catch (error) {
+        console.error("Error fetching choices:", error);
+      }
+    };
+
+    fetchSectionChoices();
+  }, []);
+
+  useEffect(() => {
+    const fetchSectionChoices = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/sections`);
+        const data = await response.json();
+        setTagChoice(data);
       } catch (error) {
         console.error("Error fetching choices:", error);
       }
@@ -161,6 +185,23 @@ export default function Package_basic_components({
             content={group2}
             id={packageId}
             selectValues={subFolder}
+            // dataType="number"
+          />
+        </div>
+
+        <div className="flex space-x-5">
+          <h1>
+            {" "}
+            <span className="text-blue-900 font-semibold">For Grade:</span>{" "}
+            {tag}{" "}
+          </h1>
+
+          <SelectEditCellDialogCustom
+            type="packages"
+            field="tag"
+            content={tag}
+            id={packageId}
+            selectValues={tagChoice}
             // dataType="number"
           />
         </div>

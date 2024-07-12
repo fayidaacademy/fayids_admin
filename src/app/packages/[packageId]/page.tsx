@@ -57,6 +57,7 @@ export default function PackageDetails({ params }: any) {
   const [discountStatus, setDiscountStatus] = useState(false);
   const [discountExpiryDate, setDiscountExpiryDate] = useState(new Date());
   const [displayOnHome, setDisplayOnHome] = useState(false);
+  const [tagFetched, setTagFetched] = useState("");
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -90,6 +91,7 @@ export default function PackageDetails({ params }: any) {
           group,
           group2,
           imgUrl,
+          tag,
         }) => {
           setPackageNameVariable(PackageName);
           // setPackageId(PackageId);
@@ -111,6 +113,7 @@ export default function PackageDetails({ params }: any) {
           setGroup(group);
           setGroup2(group2);
           setImgUrl(imgUrl);
+          setTagFetched(tag);
         }
       )
       .catch((error) => {
@@ -149,6 +152,7 @@ export default function PackageDetails({ params }: any) {
               packageDisplayOnHomeStatus={displayOnHome}
               group={Group}
               group2={Group2}
+              tag={tagFetched}
             />
           </div>
         </TabsContent>
