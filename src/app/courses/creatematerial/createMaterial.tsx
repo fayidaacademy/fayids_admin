@@ -68,9 +68,14 @@ export default function CreateMaterial(params: any) {
           description: "Material Space Created!",
         });
 
-        inputType == "video"
+        inputType === "video"
           ? push("../creatematerial/createvideo")
-          : push("../creatematerial/createassesment");
+          : inputType === "assessment"
+          ? push("../creatematerial/createassessment")
+          : inputType === "link"
+          ? push("../creatematerial/create_material_link")
+          : push("../creatematerial/createdefault");
+        //
       } else {
         // File deletion failed
         console.error("Failed to create material space");
@@ -138,6 +143,16 @@ export default function CreateMaterial(params: any) {
                   >
                     <RadioGroupItem value="assessment" id="r2" />
                     <Label htmlFor="r2">Assessment</Label>
+                  </div>
+                  <div
+                    className="flex items-center space-x-2"
+                    onClick={() => {
+                      setInputValue("link");
+                    }}
+                  >
+                    <RadioGroupItem value="link" id="r1" />
+
+                    <Label htmlFor="r1">Link</Label>
                   </div>
                 </RadioGroup>
               </div>
