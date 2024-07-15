@@ -74,7 +74,7 @@ export default function CreateMaterial(params: any) {
           ? push("../creatematerial/createassessment")
           : inputType === "link"
           ? push("../creatematerial/create_material_link")
-          : push("../creatematerial/createdefault");
+          : push("../creatematerial/create_material_file");
         //
       } else {
         // File deletion failed
@@ -153,6 +153,17 @@ export default function CreateMaterial(params: any) {
                     <RadioGroupItem value="link" id="r1" />
 
                     <Label htmlFor="r1">Link</Label>
+                  </div>
+
+                  <div
+                    className="flex items-center space-x-2"
+                    onClick={() => {
+                      setInputValue("file");
+                    }}
+                  >
+                    <RadioGroupItem value="file" id="r1" />
+
+                    <Label htmlFor="r1">File</Label>
                   </div>
                 </RadioGroup>
               </div>

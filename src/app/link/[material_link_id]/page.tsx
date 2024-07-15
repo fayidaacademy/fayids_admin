@@ -3,6 +3,7 @@ import { apiUrl } from "@/api_config";
 import React, { useEffect, useState } from "react";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
+import DeleteMaterialAndLink from "@/my_components/delete_material_and_link";
 
 export default function MaterialLink({ params }: any) {
   const MaterialId = params.material_link_id;
@@ -124,7 +125,11 @@ export default function MaterialLink({ params }: any) {
         </div>
 
         <div className="flex space-x-4">
-          <h1></h1>
+          <DeleteMaterialAndLink
+            courseId={CourseId}
+            linkId={MaterialLinkId}
+            materialId={MaterialId}
+          />
         </div>
       </div>
     </div>
