@@ -6,12 +6,18 @@ import UpdateExpiryDate from "@/my_components/updateExpiryDate";
 import { Heading1 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import useRefetchStore from "@/store/autoFetch";
 
 export default function PurchaseInfo({ params }: any) {
   const purchaseId = params.purchase_id;
 
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const setPackageId = useRefetchStore((state) => state.setPackageIdFetched);
+  const setStudentId = useRefetchStore((state) => state.setStudentIdFetched);
+  const setPurchaseId = useRefetchStore((state) => state.setPurchaseIdFetched);
+
   //const [timeRangeRecived , setTimeRangeRecived] = useState('');
 
   useEffect(() => {
@@ -28,6 +34,10 @@ export default function PurchaseInfo({ params }: any) {
         setData(jsonData);
         console.log("first");
         console.log("Data: ", jsonData);
+
+        setPackageId(jsonData?.Package?.id);
+        setStudentId(jsonData?.Student?.id);
+        setPurchaseId(purchaseId);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -79,10 +89,10 @@ export default function PurchaseInfo({ params }: any) {
         <h1>
           <span className="text-blue-800 font-semibold"> Full Name:</span>
           <span className="hover:text-blue-700 hover:underline">
-            <Link href={`/students/${data?.Student.id}`}>
+            <Link href={`/students/${data?.Student?.id}`}>
               {" "}
-              {data?.Student.firstName} {data?.Student.lastName}{" "}
-              {data?.Student.grandName}
+              {data?.Student?.firstName} {data?.Student?.lastName}{" "}
+              {data?.Student?.grandName}
             </Link>
           </span>
         </h1>
@@ -140,14 +150,25 @@ export default function PurchaseInfo({ params }: any) {
             : "Not Set"}
         </h1>
         {data.paymentStatus == "active" && (
-          <div className="bg-blue-600 text-white w-fit py-1 px-2">
-            <EditSwitch
-              buttonTitle="Deactivate"
-              changeTo="pending"
-              id={purchaseId}
-              recivedField="paymentStatus"
-              type="purchaselist/filterPurchase/reverse"
-            />
+          <div>
+            <div className="bg-blue-600 text-white w-fit py-1 px-2">
+              <EditSwitch
+                buttonTitle="Deactivate"
+                changeTo="pending"
+                id={purchaseId}
+                recivedField="paymentStatus"
+                type="purchaselist/filterPurchase/reverse"
+              />
+            </div>
+
+            <Link
+              className="my-5"
+              href={`/purchaselist_managment/material_mgmt`}
+            >
+              <h1 className="my-5 bg-green-600 text-white w-fit py-1 px-2">
+                Go to Material Managment
+              </h1>
+            </Link>
           </div>
         )}
         {data.paymentStatus == "pending" && (

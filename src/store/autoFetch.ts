@@ -12,9 +12,37 @@ interface StoreState {
 
   categoryListFetch: boolean;
   setCategoryListFetch: (newCategoryListFetch: boolean) => void;
+
+  studentIdFetched: string;
+  setStudentIdFetched: (newStudentIdFetch: string) => void;
+
+  packageIdFetched: string;
+  setPackageIdFetched: (newPackageIdFetch: string) => void;
+
+  purchaseIdFetched: string;
+  setPurchaseIdFetched: (newPurchaseIdFetched: string) => void;
+
+  courseUnitsFetched: string;
+  setCourseUnitsFetched: (newCourseUnitsFetched: string) => void;
 }
 
 const useRefetchStore = create<StoreState>((set) => ({
+  courseUnitsFetched: "",
+  setCourseUnitsFetched: (newCourseUnitsFetched) =>
+    set({ courseUnitsFetched: newCourseUnitsFetched }),
+
+  purchaseIdFetched: "",
+  setPurchaseIdFetched: (newPurchaseIdFetched) =>
+    set({ purchaseIdFetched: newPurchaseIdFetched }),
+
+  studentIdFetched: "",
+  setStudentIdFetched: (newStudentIdFetch) =>
+    set({ studentIdFetched: newStudentIdFetch }),
+
+  packageIdFetched: "",
+  setPackageIdFetched: (newPackageIdFetch) =>
+    set({ packageIdFetched: newPackageIdFetch }),
+
   questionFetch: false,
   setQuestionFetch: (newQuestionFetch) =>
     set({ questionFetch: newQuestionFetch }),

@@ -58,7 +58,12 @@ export function AccordionMenu() {
             </AccordionTrigger>
             <AccordionContent>
               <Link href="/purchaselist_managment/purchase_list">
-                New Course Package Purchase List
+                Package Purchase List
+              </Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/purchaselist_managment/material_mgmt">
+                Material Management
               </Link>
             </AccordionContent>
             <AccordionContent>

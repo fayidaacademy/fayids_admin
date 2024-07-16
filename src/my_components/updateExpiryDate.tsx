@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +14,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { apiUrl, localUrl } from "@/api_config";
+import useRefetchStore from "@/store/autoFetch";
 
 interface UpdateProps {
   type: string;
@@ -89,6 +90,7 @@ export default function UpdateExpiryDate({
         if (response.ok) {
           // File successfully deleted
           console.log("File updated");
+
           // push(`${localUrl}/${BackTo}`);
           toast({
             title: `Updated Successfuly!`,
@@ -117,6 +119,7 @@ export default function UpdateExpiryDate({
           // File successfully deleted
           console.log("File updated");
           // push(`${localUrl}/${BackTo}`);
+
           toast({
             title: `Updated Successfuly!`,
             //description: ` ${RecivedType}`,
