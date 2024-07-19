@@ -85,7 +85,7 @@ export default function MaterialManagment() {
       <div>
         {data?.Packages?.courses?.map((course: any) => (
           //   <div>{course.courseName}</div>
-          <div>
+          <div key={course.id}>
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
                 <AccordionTrigger>{course.courseName}</AccordionTrigger>

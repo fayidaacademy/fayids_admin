@@ -126,7 +126,7 @@ export default function ListCategories() {
               <div className="grid grid-cols-4">
                 {d.CategoryFolders.map((folder: any) => {
                   return (
-                    <div className="flex space-x-2">
+                    <div key={folder.id} className="flex space-x-2">
                       <h1>{folder.name}</h1>
 
                       <button

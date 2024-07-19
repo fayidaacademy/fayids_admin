@@ -121,7 +121,7 @@ export const columns: ColumnDef<Package>[] = [
     accessorKey: "status",
   },
   {
-    header: "Disp.Home",
-    accessorKey: "displayOnHome",
+    header: "Tag",
+    accessorKey: "tag",
   },
 ];

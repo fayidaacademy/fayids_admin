@@ -22,12 +22,31 @@ export default function Package_basic_components({
 }: any) {
   const [folderChoices, setFolderChoices] = useState<any[]>([]);
   const [subFolder, setSubFolder] = useState<any[]>([]);
-  const [tagChoice, setTagChoice] = useState<any[]>([]);
   const tags = [
-    { grade: "Grade 9" },
-    { grade: "Grade 10" },
-    { grade: "Grade 11" },
-    { grade: "Grade 12" },
+    {
+      sectionName: "Grade 10",
+    },
+    {
+      sectionName: "Grade 11",
+    },
+    {
+      sectionName: "Grade 12",
+    },
+    {
+      sectionName: "Grade 9",
+    },
+    {
+      sectionName: "Language",
+    },
+    {
+      sectionName: "Computer",
+    },
+    {
+      sectionName: "Art Litrature",
+    },
+    {
+      sectionName: "Other",
+    },
   ];
 
   useEffect(() => {
@@ -50,20 +69,6 @@ export default function Package_basic_components({
         const response = await fetch(`${apiUrl}/pacakgefolder/coursesub`);
         const data = await response.json();
         setSubFolder(data);
-      } catch (error) {
-        console.error("Error fetching choices:", error);
-      }
-    };
-
-    fetchSectionChoices();
-  }, []);
-
-  useEffect(() => {
-    const fetchSectionChoices = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/sections`);
-        const data = await response.json();
-        setTagChoice(data);
       } catch (error) {
         console.error("Error fetching choices:", error);
       }
@@ -192,7 +197,9 @@ export default function Package_basic_components({
         <div className="flex space-x-5">
           <h1>
             {" "}
-            <span className="text-blue-900 font-semibold">For Grade:</span>{" "}
+            <span className="text-blue-900 font-semibold">
+              Package Tag:
+            </span>{" "}
             {tag}{" "}
           </h1>
 
@@ -201,7 +208,7 @@ export default function Package_basic_components({
             field="tag"
             content={tag}
             id={packageId}
-            selectValues={tagChoice}
+            selectValues={tags}
             // dataType="number"
           />
         </div>

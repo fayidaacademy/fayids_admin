@@ -61,11 +61,11 @@ export function AccordionMenu() {
                 Package Purchase List
               </Link>
             </AccordionContent>
-            <AccordionContent>
+            {/* <AccordionContent>
               <Link href="/purchaselist_managment/material_mgmt">
                 Material Management
               </Link>
-            </AccordionContent>
+            </AccordionContent> */}
             <AccordionContent>
               <Link href="/purchaselist_managment/purchase_update_list">
                 Update Course Package Purchase List

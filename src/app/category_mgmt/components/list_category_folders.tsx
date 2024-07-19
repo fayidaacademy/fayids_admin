@@ -4,7 +4,7 @@ import SimpleRemoveButton from "@/my_components/simple_remove";
 
 import React from "react";
 import { useEffect, useState } from "react";
-import useRefetchStore from "@/store/autoFetch"; 
+import useRefetchStore from "@/store/autoFetch";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import SimpleEditNumberCellDialog from "@/my_components/simple_number_edit_dialog";
 import SimpleEditCellDialog from "@/my_components/simple_edit_cell_deialog";
@@ -129,7 +129,7 @@ export default function ListCategoryFolders() {
               <div className="grid grid-cols-4">
                 {d.KeyWords.map((keyword: any) => {
                   return (
-                    <div className="flex space-x-2">
+                    <div key={keyword.id} className="flex space-x-2">
                       <h1>{keyword.word}</h1>
 
                       <button

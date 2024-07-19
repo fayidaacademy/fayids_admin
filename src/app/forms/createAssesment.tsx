@@ -49,7 +49,7 @@ export default function CreteAssesmentForm() {
 
   const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
   const formSchema = z.object({
-    assesmentIndex: z.string().min(1, { message: "Index cannot be empty!" }),
+    assesmentIndex: z.coerce.number(),
 
     assesmentTitle: z.string().min(1, { message: "Title cannot be empty!" }),
     assesmentDescription: z.string(),
@@ -65,7 +65,7 @@ export default function CreteAssesmentForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      assesmentIndex: "0",
+      assesmentIndex: 0,
       assesmentTitle: "Assesment",
       assesmentDescription: "",
       assesmentPoints: "0",
@@ -77,6 +77,7 @@ export default function CreteAssesmentForm() {
 
   const handleSectionPost = async (formData: any) => {
     try {
+      console.log("HandleSelectionPost started");
       const response = await fetch(`${apiUrl}/assesments/`, {
         method: "post",
         headers: {
@@ -188,7 +189,7 @@ export default function CreteAssesmentForm() {
                   </div>
                 </FormControl>
                 <FormDescription>
-                  Total time duration in minutes{" "}
+                  Total time duration in minutessss{" "}
                 </FormDescription>
                 <FormMessage />
               </FormItem>

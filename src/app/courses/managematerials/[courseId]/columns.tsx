@@ -36,7 +36,12 @@ export const columns: ColumnDef<Materials>[] = [
     cell: ({ row }) => {
       const Material = row.original;
       const MaterialId = Material.id;
-      const MaterialType = Material.materialType;
+      let MaterialType = Material.materialType;
+      let fixmaterialtype = Material.materialType;
+      if (fixmaterialtype == "assessment") {
+        MaterialType = "assesment";
+      }
+
       const CourseId = Material.courseId;
 
       return (

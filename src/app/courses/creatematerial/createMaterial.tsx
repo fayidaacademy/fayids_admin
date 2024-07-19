@@ -68,14 +68,23 @@ export default function CreateMaterial(params: any) {
           description: "Material Space Created!",
         });
 
-        inputType === "video"
-          ? push("../creatematerial/createvideo")
-          : inputType === "assessment"
-          ? push("../creatematerial/createassessment")
-          : inputType === "link"
-          ? push("../creatematerial/create_material_link")
-          : push("../creatematerial/create_material_file");
-        //
+        // inputType === "video"
+        //   ? push("../creatematerial/createvideo")
+        //   : inputType === "assessment"
+        //   ? push("../creatematerial/createassesment")
+        //   : inputType === "link"
+        //   ? push("../creatematerial/create_material_link")
+        //   : push("../creatematerial/create_material_file");
+
+        if (inputType === "video") {
+          push("../creatematerial/createvideo");
+        } else if (inputType === "assessment") {
+          push("../creatematerial/createassesment");
+        } else if (inputType === "link") {
+          push("../creatematerial/create_material_link");
+        } else {
+          push("../creatematerial/create_material_file");
+        }
       } else {
         // File deletion failed
         console.error("Failed to create material space");
@@ -120,7 +129,7 @@ export default function CreateMaterial(params: any) {
 
           <div className="mx-auto pt-5">
             <Label htmlFor="name" className="text-right">
-              Material Type
+              Material Type : {inputType}
             </Label>
             <div className="pt-5">
               <div>
@@ -138,7 +147,7 @@ export default function CreateMaterial(params: any) {
                   <div
                     className="flex items-center space-x-2"
                     onClick={() => {
-                      setInputValue("assesment");
+                      setInputValue("assessment");
                     }}
                   >
                     <RadioGroupItem value="assessment" id="r2" />
