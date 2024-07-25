@@ -7,6 +7,10 @@ import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import Link from "next/link";
 import CreateForum from "@/my_components/create_form";
 import UploadVideo from "./uploadCourseIntroductionVideo";
+import AddCourseForm from "@/app/forms/createCourse";
+import AddUnitList from "@/app/forms/createCourseUnitList";
+import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
+import useRefetchStore from "@/store/autoFetch";
 
 //async function getData(): Promise<[]> {
 // Fetch data from  API .
@@ -19,12 +23,18 @@ export default function CourseDetails({ params }: any) {
   const [videoLocation, setVideoLocation] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
 
+  const CourseUnitsFetched = useRefetchStore(
+    (state) => state.courseUnitsFetched
+  );
+
   const [course, setCourse] = useState({
     courseName: "",
     courseDescription: "",
     parts: "",
     partName: "",
     courseIntroductionVideo: "",
+    CourseUnitsList: [],
+    id: "",
   });
   const [checkForum, setCheckFourm] = useState("");
 
@@ -45,7 +55,7 @@ export default function CourseDetails({ params }: any) {
     };
 
     getCourse();
-  }, []);
+  }, [CourseUnitsFetched]);
 
   useEffect(() => {
     const getForum = async () => {
@@ -146,7 +156,57 @@ export default function CourseDetails({ params }: any) {
         </div>
       </div>
 
-      <UploadVideo courseId={courseId} />
+      <div className="mt-7">
+        <div>
+          <h1 className="text-xl underline font-semibold">Create Units List</h1>
+        </div>
+        <AddUnitList courseId={courseId} />
+
+        <div className="my-3">
+          {course?.CourseUnitsList?.map((unit: any) => (
+            <div
+              key={unit.id}
+              className="flex justify-between space-x-4 bg-gray-200 py-3 px-5 rounded my-3"
+            >
+              <div className="flex space-x-3">
+                <h1>Unit {unit.UnitNumber}</h1>{" "}
+                <div className="w-fit">
+                  <EditNumberCellDialog
+                    content={unit.UnitNumber}
+                    field="UnitNumber"
+                    id={unit.id}
+                    type="courseunitslist"
+                  />{" "}
+                </div>
+              </div>
+
+              <div className="flex space-x-3 py-2">
+                {" "}
+                <h1>{unit.Title}</h1>
+                <div>
+                  <EditCellDialog
+                    content={unit.Title}
+                    dataType="text"
+                    field="Title"
+                    id={unit.id}
+                    type="courseunitslist"
+                  />
+                </div>
+              </div>
+              <div>
+                <DeleteDialog
+                  backTo={`/courses/${courseId}`}
+                  buttonTitle="Delete"
+                  id={unit.id}
+                  type="courseunitslist"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* <UploadVideo courseId={courseId} /> */}
 
       <div className="py-5">
         {/* <video controls>
@@ -157,7 +217,7 @@ export default function CourseDetails({ params }: any) {
             Your browser does not support the video tag.
           </video> */}
 
-        {videoLocation == "" ? (
+        {/* {videoLocation == "" ? (
           <div>
             <h1>Loading Video</h1>
           </div>
@@ -165,12 +225,12 @@ export default function CourseDetails({ params }: any) {
           <video controls>
             <source
               src={videoUrl}
-              // src={`${apiUrl}/upload_assets/videos/course_introduction_videos/${videoLocation}`}
+            //  // src={`${apiUrl}/upload_assets/videos/course_introduction_videos/${videoLocation}`}
               type="video/mp4"
             />
             Your browser does not support the video tag.
           </video>
-        )}
+        )} */}
       </div>
 
       <DeleteDialog
