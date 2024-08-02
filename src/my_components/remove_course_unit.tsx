@@ -87,7 +87,7 @@ export default function RemoveCourseContent({
               Are you sure to remove unit from the student?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action will remove the student's access to the unit.
+              This action will remove the access to the unit.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
