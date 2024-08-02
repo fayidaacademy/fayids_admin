@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CreateCourseUnit from "@/my_components/create_course_unit";
+import RemoveCourseContent from "@/my_components/remove_course_unit";
 
 export default function MaterialManagment() {
   const PackageId = useRefetchStore((state) => state.packageIdFetched);
@@ -78,9 +79,9 @@ export default function MaterialManagment() {
       <div>
         <h1>Material Managment</h1>
       </div>
-      <div>StudentId: {StudentId}</div>
+      {/* <div>StudentId: {StudentId}</div>
       <div>PackageId: {PackageId}</div>
-      <div>PurchaseId: {PurchaseId}</div>
+      <div>PurchaseId: {PurchaseId}</div> */}
 
       <div>
         {data?.Packages?.courses?.map((course: any) => (
@@ -102,7 +103,16 @@ export default function MaterialManagment() {
                             (unit: any) =>
                               unit.StudentCourse.coursesId === course.id &&
                               unit.unitNumber === currentUnit &&
+                              unit.StudentCourse.studentsId === StudentId &&
+                              unit.status == true
+                          );
+
+                          const existingUnitNotActive = courseUnitdata.find(
+                            (unit: any) =>
+                              unit.StudentCourse.coursesId === course.id &&
+                              unit.unitNumber === currentUnit &&
                               unit.StudentCourse.studentsId === StudentId
+                            //  unit.status == false
                           );
 
                           if (!existingUnit) {
@@ -116,11 +126,25 @@ export default function MaterialManagment() {
                                 />
                               </div>
                             );
+                          } else if (existingUnitNotActive) {
+                            listItems.push(
+                              <div
+                                key={i}
+                                className="my-2 flex space-x-5 line-through text-green-600"
+                              >
+                                <h1>Unit {currentUnit}</h1>
+                                <RemoveCourseContent
+                                  courseId={course.id}
+                                  studentId={StudentId}
+                                  unit={currentUnit}
+                                />
+                              </div>
+                            );
                           } else {
                             listItems.push(
                               <div
                                 key={i}
-                                className="my-2 flex space-x-5 line-through"
+                                className="my-2 flex space-x-5 line-through text-yellow-300"
                               >
                                 <h1>Unit {currentUnit}</h1>
                               </div>
