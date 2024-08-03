@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import React, { useEffect, useState } from "react";
 import ExamTakersAnalysis from "./examtakersanalysis";
+import ChartOne from "./components/studentsData";
 
 export default function HomeDashboard() {
   const [studnets, setStudents] = useState<any>([]);
@@ -169,7 +170,7 @@ export default function HomeDashboard() {
               <h1 className="text-xl  text-center">
                 Total Students:{" "}
                 <span className="text-white  font-semibold">
-                  {studnets?.length - 1}
+                  {studnets?.length - 2}
                 </span>
               </h1>
               <h1 className="text-xl  text-center">
@@ -187,7 +188,7 @@ export default function HomeDashboard() {
         </div>
       </div>
 
-      <div className=" flex justify-around mx-auto my-5">
+      {/* <div className=" flex justify-around mx-auto my-5">
         <div>
           <h1>Admin Dashboard : Version 1.0.0</h1>
         </div>
@@ -197,7 +198,9 @@ export default function HomeDashboard() {
         <div>
           <h1></h1>
         </div>
-      </div>
+      </div> */}
+
+      <ChartOne />
 
       {accountType == "Admin" && (
         <div className="w-3/4 mx-auto bg-navBarColor bg-opacity-60 text-gray-200 p-4 rounded">
