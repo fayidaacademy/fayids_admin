@@ -29,12 +29,13 @@ const formSchema = z.object({
       message: "Item name can not contain symbols!",
     }),
 
-  prizeIndex: z
-    .string()
-    .min(1, { message: "Prize index cannot be empty!" })
-    .refine((value) => noSymbolsRegex.test(value), {
-      message: "Item name can not contain symbols!",
-    }),
+  // prizeIndex: z
+  //   .number()
+  //   .min(1, { message: "Prize index cannot be empty!" })
+  //   .refine((value) => noSymbolsRegex.test(value), {
+  //     message: "Item name can not contain symbols!",
+  //   }),
+  prizeIndex: z.coerce.number().min(1, { message: "Index cannot be empty!" }),
 
   itemDecription: z.string(),
 
