@@ -288,8 +288,13 @@ export default function AssesmentDetails({ params }: any) {
         courseId={CourseId}
       />
 
-      <CreateQuestion assesmentId={AssesmentId} />
-
+      {/* <CreateQuestion assesmentId={AssesmentId} /> */}
+      <div className="my-4 w-full flex justify-end   z-50 sticky top-14  ">
+        {" "}
+        <div className=" w-fit  ">
+          <CreateQuestion assesmentId={AssesmentId} />
+        </div>
+      </div>
       <div>
         <h1>
           <span className="text-blue-800 font-semibold">
