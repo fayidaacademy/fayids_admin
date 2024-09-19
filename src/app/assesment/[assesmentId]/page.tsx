@@ -12,6 +12,9 @@ import useRefetchStore from "@/store/autoFetch";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+import UploadQuestionImage from "./uploaduestionImage";
+import UploadCorrectionImage from "./uploadCorrectionImage";
+
 export default function AssesmentDetails({ params }: any) {
   const MaterialId = params.assesmentId;
 
@@ -37,6 +40,26 @@ export default function AssesmentDetails({ params }: any) {
       .catch((error) => {
         // Handle any errors that occur during the fetch request
       });
+  }, [questionFetch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response2 = await fetch(`${apiUrl}/materials/${MaterialId}`);
+        const data2 = await response2.json();
+        //  setQuestion_data(data2);
+
+        const response = await fetch(
+          `${apiUrl}/questions/accessquestions/${data2?.assementId?.id}`
+        );
+        const data = await response.json();
+        setQuestion_data(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, [questionFetch]);
 
   function formatTextToHTML(text: any) {
@@ -274,7 +297,9 @@ export default function AssesmentDetails({ params }: any) {
           </span>{" "}
           {AssesmentTitle}{" "}
         </h1>
-        {fetchedData?.assementId?.question?.map((q: any, index: number) => {
+        {/*question_data*/}
+        {/*fetchedData?.assementId?.question*/}
+        {question_data?.map((q: any, index: number) => {
           return (
             <div className="py-5" key={index}>
               <div className="flex space-x-3">
@@ -296,6 +321,42 @@ export default function AssesmentDetails({ params }: any) {
                     </button>
                   </Link>
 
+                  <div className="w-full border-2 border-lime-700 p-2 my-3">
+                    <div className="grid grid-cols-2 w-full  gap-4">
+                      <div className="col-span-1">
+                        <div>
+                          {/* <h1>Url: {q?.questionImgUrl}</h1>
+                          <h1>Exam Id:{ExamId}</h1> */}
+                          {q?.questionImage != null && (
+                            <img
+                              //  src={`${apiUrl}/upload_assets/images/question_images/${q?.questionImage}`}
+                              src={q?.questionImgUrl}
+                            />
+                          )}
+                        </div>
+
+                        <div>
+                          <UploadQuestionImage questionId={q?.id} />
+                        </div>
+                      </div>
+
+                      <div className="col-span-1">
+                        <div>
+                          {q?.correctionImage != null && (
+                            <img
+                              //   src={`${apiUrl}/upload_assets/images/correction_images/${q?.correctionImage}`}
+                              src={q?.correctionImageUrl}
+                              alt="Explanation Image"
+                            />
+                          )}
+                        </div>
+
+                        <div>
+                          <UploadCorrectionImage questionId={q?.id} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div>
                     <DeleteDialog
                       type="questions"
