@@ -314,6 +314,9 @@ export default function AssesmentDetails({ params }: any) {
                 <h2 className="flex gap-2">
                   Correct Choice: {formatTextToHTML(q.correctChoice)}
                 </h2>
+                <div>
+                  <h1>Exp: {formatTextToHTML(q.correction)}</h1>
+                </div>
                 <div className="flex space-x-6">
                   <Link href={`/question_details/${q.id}`}>
                     <button className="bg-primaryColor text-white px-2 ">
