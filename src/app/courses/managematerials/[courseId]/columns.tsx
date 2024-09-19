@@ -66,6 +66,15 @@ export const columns: ColumnDef<Materials>[] = [
                 >
                   <User className="mr-2 h-4 w-4" />
                   <Link href={`/${MaterialType}/${MaterialId}`}>Details</Link>
+                  {/* <Link
+                    href={
+                      MaterialType === "assesment"
+                        ? `/exams/${MaterialId}`
+                        : `/${MaterialType}/${MaterialId}`
+                    }
+                  >
+                    Details
+                  </Link> */}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
