@@ -29,23 +29,23 @@ export default function UploadVideo(params: { videoId: string }) {
       }
 
       // Start polling for progress
-      const interval = setInterval(async () => {
-        try {
-          const progressResponse = await fetch(
-            `${apiUrl}/videos/progressvalue`
-          );
-          const data = await progressResponse.json();
-          setUploadProgress(data.progress); // Update the progress from the server
-          console.log(`Fetched Progress: ${data.progress}%`);
-          if (data.progress >= 100) {
-            clearInterval(interval); // Stop polling if 100%
-          }
-        } catch (err) {
-          console.error("Error fetching progress:", err);
-        }
-      }, 2000); // Fetch progress every 2 seconds
+      // const interval = setInterval(async () => {
+      //   try {
+      //     const progressResponse = await fetch(
+      //       `${apiUrl}/videos/progressvalue`
+      //     );
+      //     const data = await progressResponse.json();
+      //     setUploadProgress(data.progress); // Update the progress from the server
+      //     console.log(`Fetched Progress: ${data.progress}%`);
+      //     if (data.progress >= 100) {
+      //       clearInterval(interval); // Stop polling if 100%
+      //     }
+      //   } catch (err) {
+      //     console.error("Error fetching progress:", err);
+      //   }
+      // }, 2000); // Fetch progress every 2 seconds
 
-      setProgressInterval(interval as unknown as number); // Type assertion for compatibility
+      // setProgressInterval(interval as unknown as number); // Type assertion for compatibility
 
       const data = await response.json();
       console.log("Upload response:", data);
