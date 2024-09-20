@@ -9,67 +9,67 @@ export default function UploadVideo(params: { videoId: string }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [progressInterval, setProgressInterval] = useState<number | null>(null);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setUploading(true);
     setUploadError(null);
+    const formData = new FormData(event.target as HTMLFormElement);
+    const file = (event.target as HTMLFormElement).course_video.files[0];
 
-    const formData = new FormData(event.currentTarget);
-
-    try {
-      const response = await fetch(`${apiUrl}/videos/upload_video/${VideoId}`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Upload failed with status: ${response.status}`);
-      }
-
-      // Start polling for progress
-      // const interval = setInterval(async () => {
-      //   try {
-      //     const progressResponse = await fetch(
-      //       `${apiUrl}/videos/progressvalue`
-      //     );
-      //     const data = await progressResponse.json();
-      //     setUploadProgress(data.progress); // Update the progress from the server
-      //     console.log(`Fetched Progress: ${data.progress}%`);
-      //     if (data.progress >= 100) {
-      //       clearInterval(interval); // Stop polling if 100%
-      //     }
-      //   } catch (err) {
-      //     console.error("Error fetching progress:", err);
-      //   }
-      // }, 2000); // Fetch progress every 2 seconds
-
-      // setProgressInterval(interval as unknown as number); // Type assertion for compatibility
-
-      const data = await response.json();
-      console.log("Upload response:", data);
-      toast({
-        title: "Success!",
-        description: "File Uploaded",
-      });
-    } catch (error) {
-      console.error("Upload error:", error);
-      //  setUploadError(error.message); // Set error message for display
-    } finally {
+    if (!file) {
+      setUploadError("No file selected.");
       setUploading(false);
-      if (progressInterval) clearInterval(progressInterval); // Clear the interval on complete
+      return;
     }
-  };
 
-  useEffect(() => {
-    // Clean up the interval on unmount
-    return () => {
-      if (progressInterval) {
-        clearInterval(progressInterval);
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${apiUrl}/videos/upload_video/${VideoId}`, true);
+
+    // Handle response
+    xhr.onload = () => {
+      setUploading(false);
+      if (xhr.status >= 200 && xhr.status < 300) {
+        const data = JSON.parse(xhr.responseText);
+        toast({
+          title: "Success!",
+          description: "File Uploaded",
+        });
+        setUploadProgress(100); // Set to 100% on success
+      } else {
+        setUploadError(`Upload failed with status: ${xhr.status}`);
+        console.error("Upload error:", xhr.statusText);
       }
     };
-  }, [progressInterval]);
+
+    // Handle errors
+    xhr.onerror = () => {
+      setUploading(false);
+      setUploadError("Upload failed. Please try again.");
+    };
+
+    // Track upload progress
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        let progress = Math.round((event.loaded / event.total) * 100);
+
+        // Simulate a slowing down effect around 86%
+        if (progress >= 86 && progress < 100) {
+          progress = 86 + (progress - 86) * 0.2; // Slow down between 86% and 100%
+        }
+
+        setUploadProgress(progress);
+
+        // If progress is near 100%, delay the last bit
+        if (progress >= 100) {
+          setTimeout(() => setUploadProgress(100), 500); // Smooth finish to 100%
+        }
+      }
+    };
+
+    // Send the request
+    xhr.send(formData);
+  };
 
   return (
     <div>
@@ -78,7 +78,7 @@ export default function UploadVideo(params: { videoId: string }) {
           <div className="my-4">
             <h1 className="text-lg font-bold">Uploading In Progress...</h1>
             <Progress value={uploadProgress} max={100} />
-            <p>{uploadProgress}%</p> {/* Display numeric progress */}
+            <p>{uploadProgress.toFixed(2)}%</p> {/* Display numeric progress */}
           </div>
         )}
         {uploadError && <p className="text-red-500">{uploadError}</p>}
