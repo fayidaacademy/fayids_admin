@@ -6,7 +6,7 @@ import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import UploadVideo from "../uploadeVideo";
+import UploadVideo from "../uploadeVideo3";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 
 export default function VideoDetail({ params }: any) {
@@ -73,6 +73,7 @@ export default function VideoDetail({ params }: any) {
     <div className="space-y-3 mx-3">
       <LoadProfileAuth />
       <h1 className="text-blue-800 font-semibold">Video Details</h1>
+      <h1>Id : {VideoIds}</h1>
       <Link href={`/courses/managematerials/${CourseId}`}>
         <h1 className="bg-blue-800 text-white px-2 py-1 w-fit">
           To Manage Materials
