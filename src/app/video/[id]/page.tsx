@@ -6,7 +6,7 @@ import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import UploadVideo from "../uploadeVideo4";
+import UploadVideo from "../uploadeVideo3";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 
 export default function VideoDetail({ params }: any) {
