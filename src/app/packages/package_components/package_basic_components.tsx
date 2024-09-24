@@ -234,7 +234,7 @@ export default function Package_basic_components({
             {packageStatus ? "Active" : "Down"}{" "}
           </h1>
         </div>
-        <div className="w-fit text-white px-2 py-1">
+        <div className="w-fit text-green-400 px-2 py-1">
           <SwitchDialog
             type="packages"
             id={packageId}
