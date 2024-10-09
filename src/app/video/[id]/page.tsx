@@ -121,7 +121,7 @@ export default function VideoDetail({ params }: any) {
         <EditCellDialog
           type="videos"
           field="vidTitle"
-          id={VideoId}
+          id={VideoIds}
           content={VideoTitle}
           dataType="text"
         />
@@ -136,7 +136,7 @@ export default function VideoDetail({ params }: any) {
         <EditCellDialog
           type="videos"
           field="vidDescription"
-          id={VideoId}
+          id={VideoIds}
           content={VideoDescription}
           dataType="text"
         />
@@ -149,8 +149,7 @@ export default function VideoDetail({ params }: any) {
           vidLocation={VideoLocation}
         />
       </div>
-      <h1>Id: {VideoIds}</h1>
-      <h1>Mat: {MaterialId}</h1>
+
       <UploadVideo videoId={VideoIds} />
       <div className="py-5">
         {VideoUrl && (
