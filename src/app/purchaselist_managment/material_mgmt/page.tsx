@@ -78,6 +78,8 @@ export default function MaterialManagment() {
     <div>
       <div>
         <h1>Material Managment</h1>
+        <h1>Student Id: {StudentId}</h1>
+        <h1>Package Id: {PackageId}</h1>
       </div>
       {/* <div>StudentId: {StudentId}</div>
       <div>PackageId: {PackageId}</div>
@@ -112,7 +114,7 @@ export default function MaterialManagment() {
                               unit.StudentCourse.coursesId === course.id &&
                               unit.unitNumber === currentUnit &&
                               unit.StudentCourse.studentsId === StudentId
-                            //  unit.status == false
+                            // unit.status == false
                           );
 
                           if (!existingUnit) {

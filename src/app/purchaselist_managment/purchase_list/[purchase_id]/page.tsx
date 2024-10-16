@@ -55,6 +55,7 @@ export default function PurchaseInfo({ params }: any) {
   return (
     <div className="mx-10 my-5">
       <LoadProfileAuth />
+      <h1>purchaseId : {purchaseId}</h1>
       <div className="space-y-3">
         <h1>
           <span className="text-blue-800 font-semibold"> Request Id:</span>{" "}

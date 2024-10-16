@@ -93,6 +93,22 @@ export function AccordionMenu() {
           </AccordionContent>
         </AccordionItem>
 
+        <AccordionItem value="item-14">
+          <AccordionTrigger>
+            {" "}
+            <div className="flex gap-1">
+              {" "}
+              <UserCheck /> <h1></h1> Agents
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <Link href="/agents">Agents List</Link>
+          </AccordionContent>
+          <AccordionContent>
+            <Link href="/examtaker">Agent Settings</Link>
+          </AccordionContent>
+        </AccordionItem>
+
         <AccordionItem value="item-2">
           <AccordionTrigger>
             {" "}
