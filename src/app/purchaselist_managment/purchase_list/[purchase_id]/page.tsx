@@ -185,6 +185,7 @@ export default function PurchaseInfo({ params }: any) {
               recivedField="paymentStatus"
               type="purchaselist/filterPurchase"
               changeTo="active"
+              packagePrice={data.value}
             />
           </div>
         )}

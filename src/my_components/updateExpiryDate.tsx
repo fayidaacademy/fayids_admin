@@ -27,6 +27,7 @@ interface UpdateProps {
   changeTo: string;
   pcakageId: string;
   studentId: string;
+  packagePrice: string;
 }
 
 export default function UpdateExpiryDate({
@@ -40,6 +41,7 @@ export default function UpdateExpiryDate({
   //backTo,
   buttonTitle,
   changeTo,
+  packagePrice,
 }: UpdateProps) {
   const { push } = useRouter();
   const RecivedType = type;
@@ -52,6 +54,7 @@ export default function UpdateExpiryDate({
   const ChangeTo = changeTo;
   const RecivedData = recivedData;
   const PurchaseType = purchaseType;
+  const PackagePrice = packagePrice;
   // console.log("Back to =" + BackTo);
 
   const { toast } = useToast();
@@ -61,6 +64,7 @@ export default function UpdateExpiryDate({
     dateToAdd: RecivedData,
     packageId: PackageId,
     studentId: StudentId,
+    packagePrice: PackagePrice,
   };
 
   const updatedData2 = {

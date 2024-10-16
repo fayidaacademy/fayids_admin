@@ -105,7 +105,7 @@ export function AccordionMenu() {
             <Link href="/agents">Agents List</Link>
           </AccordionContent>
           <AccordionContent>
-            <Link href="/examtaker">Agent Settings</Link>
+            <Link href="/agents/settings">Agent Settings</Link>
           </AccordionContent>
         </AccordionItem>
 
