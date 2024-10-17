@@ -189,7 +189,7 @@ export default function StudentDetails({ params }: any) {
                     <strong>Student ID:</strong> {answer.student.id}
                   </p>
                   <p>
-                    <strong>Student's Answer:</strong>
+                    <strong>Student Answers:</strong>
                     <br />
                     {answer.text.split("\n").map((line: any, index: any) => (
                       <span key={index}>
