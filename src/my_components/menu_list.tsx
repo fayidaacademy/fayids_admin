@@ -320,6 +320,15 @@ export function AccordionMenu() {
               </div>
             </Link>
           </AccordionContent>
+          <AccordionContent>
+            <Link href="/comments">
+              {" "}
+              <div className="flex gap-1">
+                {" "}
+                <Mail /> <h1>Comments form Bot</h1>
+              </div>
+            </Link>
+          </AccordionContent>
 
           {data == "Admin" && (
             <AccordionContent>
