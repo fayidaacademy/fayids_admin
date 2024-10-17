@@ -108,6 +108,21 @@ export function AccordionMenu() {
             <Link href="/agents/settings">Agent Settings</Link>
           </AccordionContent>
         </AccordionItem>
+        <AccordionItem value="item-12">
+          <AccordionTrigger>
+            {" "}
+            <div className="flex gap-1">
+              {" "}
+              <UserCheck /> <h1></h1> Bot Questions
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <Link href="/botquestions">Question List</Link>
+          </AccordionContent>
+          <AccordionContent>
+            <Link href="/botquestions/createquestion">Create Question</Link>
+          </AccordionContent>
+        </AccordionItem>
 
         <AccordionItem value="item-2">
           <AccordionTrigger>
