@@ -144,6 +144,68 @@ export default function StudentDetails({ params }: any) {
           />
         </div>
       )}
+
+      <div className="my-8 py-2 mx-5">
+        <h1>Answers Given:</h1>
+        <div>
+          {data?.answers?.length > 0 ? (
+            <ul>
+              {data.answers.map((answer: any) => (
+                <li
+                  key={answer.id}
+                  style={{
+                    marginBottom: "20px",
+                    border: "1px solid #ccc",
+                    padding: "10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <h3>Status: {answer.correct}</h3>
+                  <div className="space-x-4 flex py-4">
+                    <EditSwitch
+                      buttonTitle="Change to Correct"
+                      changeTo="correct"
+                      id={answer.id}
+                      recivedField="correct"
+                      type="botquestions/botquestionanswer"
+                    />
+                    <EditSwitch
+                      buttonTitle="Change to Incorrect"
+                      changeTo="incorrect"
+                      id={answer.id}
+                      recivedField="correct"
+                      type="botquestions/botquestionanswer"
+                    />
+                  </div>
+                  <p>
+                    <strong>Answer Posted:</strong>{" "}
+                    {new Date(answer.createdAt).toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>Student Full Name:</strong>{" "}
+                    {`${answer.student.firstName} ${answer.student.lastName} ${answer.student.grandName}`}
+                  </p>
+                  <p>
+                    <strong>Student ID:</strong> {answer.student.id}
+                  </p>
+                  <p>
+                    <strong>Student's Answer:</strong>
+                    <br />
+                    {answer.text.split("\n").map((line: any, index: any) => (
+                      <span key={index}>
+                        {line}
+                        <br />
+                      </span>
+                    ))}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No answers available.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
