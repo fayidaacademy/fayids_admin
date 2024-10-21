@@ -19,6 +19,7 @@ export default function Package_basic_components({
   group,
   group2,
   tag,
+  featured,
 }: any) {
   const [folderChoices, setFolderChoices] = useState<any[]>([]);
   const [subFolder, setSubFolder] = useState<any[]>([]);
@@ -245,6 +246,26 @@ export default function Package_basic_components({
           />
         </div>
 
+        <div className="border-2 p-2 w-fit">
+          <div className="flex space-x-5">
+            <h1>
+              <span className="text-blue-900 font-semibold">
+                Featured on Mobile:
+              </span>
+              {featured ? "Active" : "Down"}{" "}
+            </h1>
+          </div>
+          <div className="w-fit text-green-400 px-2 py-1">
+            <SwitchDialog
+              type="packages"
+              id={packageId}
+              field="featured"
+              buttonTitle={featured ? "Deactivate" : "To active"}
+              content={featured}
+              backTo={`/packages/${packageId}`}
+            />
+          </div>
+        </div>
         <div>
           <div className="flex space-x-5">
             <h1>

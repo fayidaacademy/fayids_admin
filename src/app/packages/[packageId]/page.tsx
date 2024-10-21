@@ -60,6 +60,7 @@ export default function PackageDetails({ params }: any) {
   const [tagFetched, setTagFetched] = useState("");
 
   const [isChecked, setIsChecked] = useState(false);
+  const [featured, setFeatured] = useState(false);
 
   const hadleSwitchStatus = () => {
     setIsChecked(!isChecked);
@@ -92,6 +93,7 @@ export default function PackageDetails({ params }: any) {
           group2,
           imgUrl,
           tag,
+          featured,
         }) => {
           setPackageNameVariable(PackageName);
           // setPackageId(PackageId);
@@ -114,6 +116,7 @@ export default function PackageDetails({ params }: any) {
           setGroup2(group2);
           setImgUrl(imgUrl);
           setTagFetched(tag);
+          setFeatured(featured);
         }
       )
       .catch((error) => {
@@ -153,6 +156,7 @@ export default function PackageDetails({ params }: any) {
               group={Group}
               group2={Group2}
               tag={tagFetched}
+              featured={featured}
             />
           </div>
         </TabsContent>
