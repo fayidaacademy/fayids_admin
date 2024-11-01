@@ -13,9 +13,8 @@ export default function StudentDetails({ params }: any) {
   const QuestionId = params.questionId;
 
   const [data, setData] = useState<any>([]);
-  const [list, setList] = useState<any>([]);
-  const [transactionList, setTransactionList] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [correctCount, setCorrectCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,11 +22,25 @@ export default function StudentDetails({ params }: any) {
         const response = await fetch(`${apiUrl}/botquestions/${QuestionId}`, {
           credentials: "include",
         });
-
         const jsonData = await response.json();
         setData(jsonData);
-        console.log("first");
-        console.log("Data: ", jsonData);
+
+        // Check if choice is active and calculate correct answers
+        if (jsonData?.choice) {
+          const correctChoice = jsonData.correct_choice;
+          let correctAnswers = 0;
+
+          jsonData.answers?.forEach((answer: any) => {
+            if (answer.text.trim() === correctChoice) {
+              answer.isCorrect = true; // Mark answer as correct
+              correctAnswers += 1;
+            } else {
+              answer.isCorrect = false;
+            }
+          });
+
+          setCorrectCount(correctAnswers);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -59,6 +72,7 @@ export default function StudentDetails({ params }: any) {
         id={QuestionId}
         type="botquestions"
       />
+
       <div>
         <h1>
           <span className="text-blue-800 font-semibold">
@@ -87,13 +101,13 @@ export default function StudentDetails({ params }: any) {
         id={QuestionId}
         type="botquestions"
       />
+
       <div>
         <h1>
           <span className="text-blue-800 font-semibold"> Target Grade:</span>{" "}
           {data?.grade}
         </h1>
       </div>
-
       <EditCellDialog
         content={data?.grade}
         dataType="text"
@@ -101,11 +115,53 @@ export default function StudentDetails({ params }: any) {
         id={QuestionId}
         type="botquestions"
       />
-      <div>
-        <div>
-          {data?.image != null && <img src={data?.imgUrl} alt="Image" />}
-        </div>
 
+      <div>
+        <h1>
+          <span className="text-blue-800 font-semibold"> Choice: </span>
+          {data?.choice ? "Active" : "Not Active"}
+        </h1>
+      </div>
+      {data?.choice === false || data?.choice === null ? (
+        <div>
+          <SwitchDialog
+            backTo=""
+            buttonTitle="Activate Choice"
+            content={false}
+            field="choice"
+            id={QuestionId}
+            type="botquestions"
+          />
+        </div>
+      ) : (
+        <div>
+          <SwitchDialog
+            backTo=""
+            buttonTitle="Deactivate Choice"
+            content={true}
+            field="choice"
+            id={QuestionId}
+            type="botquestions"
+          />
+        </div>
+      )}
+
+      <div>
+        <h1>
+          <span className="text-blue-800 font-semibold"> Correct Choice:</span>{" "}
+          {data?.correct_choice}
+        </h1>
+      </div>
+      <EditCellDialog
+        content={data?.correct_choice}
+        dataType="text"
+        field="correct_choice"
+        id={QuestionId}
+        type="botquestions"
+      />
+
+      <div>
+        <div>{data?.image && <img src={data.imgUrl} alt="Image" />}</div>
         <UploadBotQuestionImage questionId={QuestionId} />
       </div>
 
@@ -123,7 +179,7 @@ export default function StudentDetails({ params }: any) {
         </h1>
       </div>
 
-      {data?.status == "down" ? (
+      {data?.status === "down" ? (
         <div>
           <EditSwitch
             buttonTitle="Activate"
@@ -147,8 +203,15 @@ export default function StudentDetails({ params }: any) {
 
       <div className="my-8 py-2 mx-5">
         <h1>Answers Given:</h1>
-        <div>
-          {data?.answers?.length > 0 ? (
+        {data?.answers?.length > 0 ? (
+          <>
+            {/* Summary of answers */}
+            {data?.choice && (
+              <p>
+                Total Answers: {data.answers.length} | Correct Answers:{" "}
+                {correctCount}
+              </p>
+            )}
             <ul>
               {data.answers.map((answer: any) => (
                 <li
@@ -160,7 +223,13 @@ export default function StudentDetails({ params }: any) {
                     borderRadius: "5px",
                   }}
                 >
-                  <h3>Status: {answer.correct}</h3>
+                  {data?.choice ? (
+                    <h3>
+                      Status: {answer.isCorrect ? "Correct" : "Incorrect"}
+                    </h3>
+                  ) : (
+                    <h1>Status:{answer.correct} </h1>
+                  )}
                   <div className="space-x-4 flex py-4">
                     <EditSwitch
                       buttonTitle="Change to Correct"
@@ -201,10 +270,10 @@ export default function StudentDetails({ params }: any) {
                 </li>
               ))}
             </ul>
-          ) : (
-            <p>No answers available.</p>
-          )}
-        </div>
+          </>
+        ) : (
+          <p>No answers available.</p>
+        )}
       </div>
     </div>
   );
