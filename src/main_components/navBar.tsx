@@ -50,7 +50,11 @@ export default function NavBar() {
         console.log("message: " + data);
       });
   }, []);
+  const setTokenLogout= () =>{
 
+    setAccessToken("0");
+    window.location.href = "/login";
+  }
   return (
     <div className="fixed w-full bg-navBarColor text-white z-50">
       <div className="flex justify-between px-10 my-2">
@@ -78,17 +82,14 @@ export default function NavBar() {
 
               <PopoverContent>
                 <div>
-                  <form
-                    action={`${apiUrl}/login_register/logoutadmin`}
-                    method="POST"
-                  >
-                    <button type="submit">
-                      <div className="flex space-x-1 nav_bar_hover_dropdown ">
-                        <LogOut />
-                        <h1>Log Out</h1>
-                      </div>
-                    </button>
-                  </form>
+                 
+                <button onClick={()=>setTokenLogout()}>
+                  <div className="flex space-x-1 nav_bar_hover_dropdown ">
+                    <LogOut size={20} className="" />
+                    <h1>Log Out</h1>
+                  </div>
+                </button>
+                  
                 </div>
               </PopoverContent>
             </Popover>
