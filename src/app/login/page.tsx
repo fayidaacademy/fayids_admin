@@ -9,6 +9,9 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiUrl } from "@/api_config";
+
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+
 type zodInputs = {
   email: string;
   password: string;
@@ -87,7 +90,7 @@ export default function LoginPage() {
     //this line is included so that 'confirm password' is not sent to server
     // const { confirmPassword, ...formData } = data;
     console.log(data);
-    fetch(`${apiUrl}/login_register/adminlogin`, {
+    fetch(`${apiUrl}/newlogin/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -107,10 +110,11 @@ export default function LoginPage() {
       .then((responseData) => {
         // Handle the response data
         console.log(responseData);
-
+        setAccessToken(responseData.accessToken);
+console.log("Token: "+ responseData.accessToken)
         toast({
           title: `Success!`,
-          description: `${responseData.message}`,
+          description: `Login Successful`,
         });
         // push("/");
         window.location.href = "/";

@@ -9,6 +9,8 @@ import {
 import React, { useEffect, useState } from "react";
 import ExamTakersAnalysis from "./examtakersanalysis";
 import ChartOne from "./components/studentsData";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
 
 export default function HomeDashboard() {
   const [studnets, setStudents] = useState<any>([]);
@@ -18,9 +20,16 @@ export default function HomeDashboard() {
 
   const [accountType, setAccountType] = useState(null);
   const [isLoading, setLoading] = useState(true);
+
+  const accessToken = getAccessToken();
+
   useEffect(() => {
-    fetch(`${apiUrl}/login_register/profile`, {
-      credentials: "include",
+    fetch(`${apiUrl}/newlogin/profile`, {
+      method: "GET",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+},
     })
       .then((res) => res.json())
       .then((data) => {
@@ -43,7 +52,11 @@ export default function HomeDashboard() {
 
   useEffect(() => {
     fetch(`${apiUrl}/notifications/admin`, {
-      credentials: "include",
+      method: "GET",
+      headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+      },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -56,7 +69,11 @@ export default function HomeDashboard() {
 
   useEffect(() => {
     const fetchData = () => {
-      fetch(`${apiUrl}/students`, { credentials: "include" })
+      fetch(`${apiUrl}/students`, { method: "GET",
+        headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        }, })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Request failed");
@@ -79,7 +96,11 @@ export default function HomeDashboard() {
   }, []);
   useEffect(() => {
     const fetchData = () => {
-      fetch(`${apiUrl}/examtaker`, { credentials: "include" })
+      fetch(`${apiUrl}/examtaker`, { method: "GET",
+        headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        }, })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Request failed");
@@ -102,8 +123,11 @@ export default function HomeDashboard() {
   }, []);
   const handleNotificationClick = (notificationId: any) => {
     fetch(`${apiUrl}/notifications/notification_admin_read/${notificationId}`, {
-      method: "get",
-      credentials: "include",
+      method: "GET",
+      headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+      },
       // Add any required headers or body for the update request
     })
       .then((res) => res.json())

@@ -4,8 +4,13 @@ import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
+
+
 export default function StudentDetails({ params }: any) {
   const StudentId = params.student_id;
+  const accessToken = getAccessToken();
+
 
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +19,11 @@ export default function StudentDetails({ params }: any) {
     const fetchData = async () => {
       try {
         const response = await fetch(`${apiUrl}/students/${StudentId}`, {
-          credentials: "include",
+          method: "GET",
+          headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+          },
         });
 
         const jsonData = await response.json();

@@ -6,14 +6,20 @@ import { apiUrl } from "@/api_config";
 import axios from "axios";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
+
+
 export default function PurchaseList() {
   const [data, setData] = useState([]);
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(`${apiUrl}/purchaselist/update/`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, 
         },
         withCredentials: true, // Include credentials in the request
       });

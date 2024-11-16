@@ -8,6 +8,10 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import useRefetchStore from "@/store/autoFetch";
 
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../../lib/tokenManager";
+
+const accessToken = getAccessToken();
+
 export default function PurchaseInfo({ params }: any) {
   const purchaseId = params.purchase_id;
 
@@ -17,6 +21,7 @@ export default function PurchaseInfo({ params }: any) {
   const setPackageId = useRefetchStore((state) => state.setPackageIdFetched);
   const setStudentId = useRefetchStore((state) => state.setStudentIdFetched);
   const setPurchaseId = useRefetchStore((state) => state.setPurchaseIdFetched);
+  const accessToken = getAccessToken();
 
   //const [timeRangeRecived , setTimeRangeRecived] = useState('');
 
@@ -26,7 +31,11 @@ export default function PurchaseInfo({ params }: any) {
         const response = await fetch(
           `${apiUrl}/purchaselist/filterPurchase/${purchaseId}`,
           {
-            credentials: "include",
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+            },
           }
         );
 

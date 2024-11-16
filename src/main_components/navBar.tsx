@@ -9,10 +9,11 @@ import { LogOut } from "lucide-react";
 import { apiUrl } from "@/api_config";
 import { Bell } from "lucide-react";
 import Link from "next/link";
-
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
 export default function NavBar() {
   //const profile = response3;
   //const routerPathname = usePathname();
+  const accessToken = getAccessToken();
 
   const [data, setData] = useState(null);
   const [notificationData, setNotificationData] = useState(null);
@@ -23,7 +24,10 @@ export default function NavBar() {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      fetch(`${apiUrl}/notifications/admin/count/`, { credentials: "include" })
+      fetch(`${apiUrl}/notifications/admin/count/`, {  headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        }, })
         .then((res) => res.json())
         .then((data) => {
           setNotificationData(data.message);

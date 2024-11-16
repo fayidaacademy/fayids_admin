@@ -3,16 +3,25 @@ import { apiUrl } from "@/api_config";
 import HomeDashboard from "@/main_components/home_dashboard";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
+
 
 export default function Home() {
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const accessToken = getAccessToken();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/login_register/profile`, {
-          credentials: "include",
+        const response = await fetch(`${apiUrl}/newlogin/profile`, {
+          method: "GET",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+},
         });
 
         const jsonData = await response.json();

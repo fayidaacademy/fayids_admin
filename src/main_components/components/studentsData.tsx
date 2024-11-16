@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/chart";
 import { useEffect, useState } from "react";
 import { apiUrl } from "@/api_config";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+
 
 // Function to shuffle an array
 function shuffleArray<T>(array: T[]): T[] {
@@ -31,6 +33,8 @@ const chartColors = [
   "hsl(var(--chart-4))",
   "hsl(var(--chart-5))",
 ];
+
+const accessToken = getAccessToken();
 
 // Shuffle the color array
 const shuffledColors = shuffleArray(chartColors);
@@ -97,7 +101,11 @@ export default function ChartOne() {
 
   useEffect(() => {
     const fetchData = () => {
-      fetch(`${apiUrl}/students`, { credentials: "include" })
+      fetch(`${apiUrl}/students`, { method: "GET",
+        headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        }, })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Request failed");
@@ -119,7 +127,7 @@ export default function ChartOne() {
     <div className="w-full grid grid-cols-2 m-5">
       <Card className="col-span-1 flex flex-col">
         <CardHeader className="items-center pb-0">
-          <CardTitle>Students Stat In Cities </CardTitle>
+          <CardTitle>In Cities </CardTitle>
           <CardDescription></CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">
@@ -185,7 +193,7 @@ export default function ChartOne() {
 
       <Card className="col-span-1 flex flex-col">
         <CardHeader className="items-center pb-0">
-          <CardTitle>Students Stat In Regions </CardTitle>
+          <CardTitle>In Regions </CardTitle>
           <CardDescription></CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">

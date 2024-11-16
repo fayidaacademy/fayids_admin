@@ -5,14 +5,20 @@ import DataTableGenerator from "@/main_components/data-table";
 import { apiUrl } from "@/api_config";
 import axios from "axios";
 
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+
+
+
 export default function StudentsList() {
   const [data, setData] = useState([]);
-
+  const accessToken = getAccessToken();
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(`${apiUrl}/students/`, {
+        method: "GET",
         headers: {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
         },
         withCredentials: true, // Include credentials in the request
       });
