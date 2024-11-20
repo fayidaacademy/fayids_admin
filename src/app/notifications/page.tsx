@@ -8,13 +8,21 @@ import {
 } from "@/components/ui/accordion";
 import { apiUrl } from "@/api_config";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+
 
 export default function Notifications() {
+  const accessToken = getAccessToken();
+
   const [notificationData, setNotificationData] = useState<any[]>([]);
 
   useEffect(() => {
     fetch(`${apiUrl}/notifications/admin`, {
-      credentials: "include",
+      method: "GET",
+      headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+      },
     })
       .then((res) => res.json())
       .then((data) => {
