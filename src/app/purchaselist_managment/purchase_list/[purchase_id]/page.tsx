@@ -64,7 +64,7 @@ export default function PurchaseInfo({ params }: any) {
   return (
     <div className="mx-10 my-5">
       <LoadProfileAuth />
-      <h1>purchaseId : {purchaseId}</h1>
+      {/* <h1>purchaseId : {purchaseId}</h1> */}
       <div className="space-y-3">
         <h1>
           <span className="text-blue-800 font-semibold"> Request Id:</span>{" "}
@@ -110,29 +110,29 @@ export default function PurchaseInfo({ params }: any) {
           <span className="text-blue-800 font-semibold"> Package:</span>{" "}
           {data.Package.packageName}
         </h1>
-        <h1>
+        {/* <h1>
           <span className="text-blue-800 font-semibold">
             {" "}
             Selected Time Range:{" "}
           </span>{" "}
           {data.timeLength} Month
-        </h1>
-        <h1>
+        </h1> */}
+        {/* <h1>
           <span className="text-blue-800 font-semibold"> Price: </span>{" "}
           {data.value} Birr
-        </h1>
+        </h1> */}
         <h1>
           <span className="text-blue-800 font-semibold"> Payment Method: </span>{" "}
           {data.method}
         </h1>
-        <h1>
+        {/* <h1>
           <span className="text-blue-800 font-semibold"> Transaction Id:</span>{" "}
           {data.transaction_id}
-        </h1>
-        <h1>
+        </h1> */}
+        {/* <h1>
           <span className="text-blue-800 font-semibold"> Order Name:</span>{" "}
           {data.name}
-        </h1>
+        </h1> */}
         <h1>
           <span className="text-blue-800 font-semibold"> Payment Status: </span>{" "}
           {data.paymentStatus}
@@ -159,9 +159,9 @@ export default function PurchaseInfo({ params }: any) {
               })
             : "Not Set"}
         </h1>
-        {data.paymentStatus == "active" && (
+        {(data.paymentStatus == "done" ||data.paymentStatus == "active")  && (
           <div>
-            <div className="bg-blue-600 text-white w-fit py-1 px-2">
+            {/* <div className="bg-blue-600 text-white w-fit py-1 px-2">
               <EditSwitch
                 buttonTitle="Deactivate"
                 changeTo="pending"
@@ -169,7 +169,7 @@ export default function PurchaseInfo({ params }: any) {
                 recivedField="paymentStatus"
                 type="purchaselist/filterPurchase/reverse"
               />
-            </div>
+            </div> */}
 
             <Link
               className="my-5"

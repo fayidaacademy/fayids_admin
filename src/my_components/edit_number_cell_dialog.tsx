@@ -18,6 +18,8 @@ import { Label } from "@/components/ui/label";
 
 import { apiUrl } from "@/api_config";
 import { toast } from "@/components/ui/use-toast";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
 
 interface EditDialogProps {
   type: string;
@@ -32,6 +34,8 @@ export default function EditNumberCellDialog({
   field,
   content,
 }: EditDialogProps) {
+  const accessToken = getAccessToken();
+
   const RecivedType = type;
   const RecivedId = id;
   const RecivedField = field;
@@ -56,6 +60,7 @@ export default function EditNumberCellDialog({
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, 
         },
         body: JSON.stringify(updatedData),
         credentials: "include",

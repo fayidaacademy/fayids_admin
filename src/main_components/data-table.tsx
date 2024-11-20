@@ -67,7 +67,7 @@ export function DataTableGenerator<TData, TValue>({
       filterBytoDisplay = "Section Name";
       break;
     case "purchase":
-      filterBytoDisplay = "Order Name";
+      filterBytoDisplay = "Student Id";
       break;
     case "language":
       filterBytoDisplay = "Short Form";

@@ -11,6 +11,7 @@ import AddCourseForm from "@/app/forms/createCourse";
 import AddUnitList from "@/app/forms/createCourseUnitList";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import useRefetchStore from "@/store/autoFetch";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
 
 //async function getData(): Promise<[]> {
 // Fetch data from  API .
@@ -18,6 +19,7 @@ import useRefetchStore from "@/store/autoFetch";
 //}
 
 export default function CourseDetails({ params }: any) {
+  const accessToken = getAccessToken();
   const courseId = params.courseId;
   const [forumId, setForumId] = useState("");
   const [videoLocation, setVideoLocation] = useState("");
@@ -44,7 +46,11 @@ export default function CourseDetails({ params }: any) {
         next: {
           revalidate: 0,
         },
-        credentials: "include",
+        method: "GET",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+},
       });
       const course = await res.json();
       setCourse(course);

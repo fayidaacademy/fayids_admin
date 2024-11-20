@@ -14,12 +14,15 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { apiUrl, localUrl } from "@/api_config";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
 
 interface UpdateProps {
   courseId: string;
 }
 
 export default function CreateForum({ courseId }: UpdateProps) {
+  const accessToken = getAccessToken();
+
   const { push } = useRouter();
   const RecivedCourseId = courseId;
 
@@ -40,6 +43,7 @@ export default function CreateForum({ courseId }: UpdateProps) {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
           },
           //  body: JSON.stringify(updatedData),
           credentials: "include",

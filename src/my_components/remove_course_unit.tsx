@@ -15,6 +15,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { apiUrl, localUrl } from "@/api_config";
 import useRefetchStore from "@/store/autoFetch";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
 
 interface DeleteDialogProps {
   studentId: string;
@@ -28,6 +30,8 @@ export default function RemoveCourseContent({
   unit,
 }: DeleteDialogProps) {
   // const { push } = useRouter();
+  const accessToken = getAccessToken();
+
   const RecivedStudentId = studentId;
   const RecivedCourseId = courseId;
   const RecivedUnit = unit;
@@ -51,10 +55,15 @@ export default function RemoveCourseContent({
       const response = await fetch(
         `${apiUrl}/courseunits/removeone/${RecivedStudentId}/${RecivedCourseId}/${RecivedUnit}`,
         {
-          method: "get",
-          credentials: "include",
+         
+          method: "GET",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+},
           // Add any necessary headers or authentication tokens
         }
+        
       );
 
       if (response.ok) {

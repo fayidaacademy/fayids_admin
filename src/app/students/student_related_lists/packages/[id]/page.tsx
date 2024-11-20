@@ -2,8 +2,12 @@
 import { apiUrl } from "@/api_config";
 import { Divide } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../../../lib/tokenManager";
 
 export default function StudentPackagesList({ params }: any) {
+
+  const accessToken = getAccessToken();
+
   const StudentId = params.id;
 
   const [data, setData] = useState<any>([]);
@@ -15,7 +19,11 @@ export default function StudentPackagesList({ params }: any) {
         const response = await fetch(
           `${apiUrl}/purchaselist/filterbyStudentId/${StudentId}`,
           {
-            credentials: "include",
+            method: "GET",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+},
           }
         );
 

@@ -20,8 +20,12 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+
 
 export default function CreateBotQuestion() {
+  const accessToken = getAccessToken();
+
   const { push } = useRouter();
   const { toast } = useToast();
   const [grades, setGrades] = useState<string[]>([]); // State to store fetched grades
@@ -69,9 +73,10 @@ export default function CreateBotQuestion() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, 
         },
         body: JSON.stringify(formData),
-        credentials: "include",
+       // credentials: "include",
       });
 
       if (response.ok) {

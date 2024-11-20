@@ -95,13 +95,13 @@ export const columns: ColumnDef<Purchase>[] = [
         >
           {" "}
           <div className="flex space-x-1">
-            StudentId
+            OrderName
             <ArrowUpDown size={16} />
           </div>
         </button>
       );
     },
-    accessorKey: "studentsId",
+    accessorKey: "name",
   },
 
   {

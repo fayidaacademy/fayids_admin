@@ -17,12 +17,16 @@ import { apiUrl } from "@/api_config";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import useRefetchStore from "@/store/autoFetch";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
 
 interface DeleteDialogProps {
   assesmentId: string;
 }
 
 export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
+  const accessToken = getAccessToken();
+
   //this is to manually close the dialog box
   const [open, setOpen] = useState(false);
   const [key, setKey] = useState(0);
@@ -72,6 +76,7 @@ export function CreateQuestion({ assesmentId }: DeleteDialogProps) {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(data),
         credentials: "include",

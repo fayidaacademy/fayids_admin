@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { apiUrl, localUrl } from "@/api_config";
 import useRefetchStore from "@/store/autoFetch";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
 
 interface DeleteDialogProps {
   studentId: string;
@@ -27,6 +28,8 @@ export default function CreateCourseUnit({
   courseId,
   unit,
 }: DeleteDialogProps) {
+  const accessToken = getAccessToken();
+
   // const { push } = useRouter();
   const RecivedStudentId = studentId;
   const RecivedCourseId = courseId;
@@ -53,6 +56,10 @@ export default function CreateCourseUnit({
         {
           method: "get",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+            },
           // Add any necessary headers or authentication tokens
         }
       );

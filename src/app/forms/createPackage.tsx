@@ -30,8 +30,11 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+
 
 export default function CreatePackageForm() {
+  const accessToken = getAccessToken();
   // const courseId = useStore((state) => state.courseId);
   // const MaterialId = useStore((state) => state.materialId);
 
@@ -74,6 +77,7 @@ export default function CreatePackageForm() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         credentials: "include",
         body: JSON.stringify(formData),

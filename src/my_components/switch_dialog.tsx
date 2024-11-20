@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import useRefetchPackageStore from "../store/refetchPackageDetails";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
 
 import { apiUrl, localUrl } from "@/api_config";
 
@@ -36,6 +38,8 @@ export default function SwitchDialog({
   backTo,
   buttonTitle,
 }: SwitchDialogProps) {
+  const accessToken = getAccessToken();
+
   const { push } = useRouter();
   const RecivedType = type;
   const RecivedId = id;
@@ -66,6 +70,7 @@ export default function SwitchDialog({
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
         body: JSON.stringify(updatedData),
         credentials: "include",

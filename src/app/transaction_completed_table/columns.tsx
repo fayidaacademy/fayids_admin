@@ -55,7 +55,7 @@ export const columns: ColumnDef<Purchase>[] = [
                 >
                   <User className="mr-2 h-4 w-4" />
                   <Link
-                    href={`../purchaselist_managment/purchase_list/${PurchaseId}`}
+                    href={`../transaction_table/${PurchaseId}`}
                   >
                     {" "}
                     Details
@@ -95,13 +95,13 @@ export const columns: ColumnDef<Purchase>[] = [
         >
           {" "}
           <div className="flex space-x-1">
-            StudentId
+            TransactionId
             <ArrowUpDown size={16} />
           </div>
         </button>
       );
     },
-    accessorKey: "studentsId",
+    accessorKey: "TransactionId",
   },
 
   {
@@ -114,13 +114,13 @@ export const columns: ColumnDef<Purchase>[] = [
         >
           {" "}
           <div className="flex space-x-1">
-            First Name
+            Total
             <ArrowUpDown size={16} />
           </div>
         </button>
       );
     },
-    accessorKey: "Student.firstName",
+    accessorKey: "totalAmount",
   },
 
   {
@@ -133,51 +133,13 @@ export const columns: ColumnDef<Purchase>[] = [
         >
           {" "}
           <div className="flex space-x-1">
-            Last Name
+            Reason
             <ArrowUpDown size={16} />
           </div>
         </button>
       );
     },
-    accessorKey: "Student.lastName",
-  },
-
-  {
-    header: ({ column }) => {
-      return (
-        <button
-          onClick={() => {
-            column.toggleSorting(column.getIsSorted() == "asc");
-          }}
-        >
-          {" "}
-          <div className="flex space-x-1">
-            Package
-            <ArrowUpDown size={16} />
-          </div>
-        </button>
-      );
-    },
-    accessorKey: "Package.packageName",
-  },
-
-  {
-    header: ({ column }) => {
-      return (
-        <button
-          onClick={() => {
-            column.toggleSorting(column.getIsSorted() == "asc");
-          }}
-        >
-          {" "}
-          <div className="flex space-x-1">
-            Payment Method
-            <ArrowUpDown size={16} />
-          </div>
-        </button>
-      );
-    },
-    accessorKey: "method",
+    accessorKey: "reason",
   },
 
   {
@@ -196,6 +158,8 @@ export const columns: ColumnDef<Purchase>[] = [
         </button>
       );
     },
-    accessorKey: "paymentStatus",
+    accessorKey: "status",
   },
+
+  
 ];

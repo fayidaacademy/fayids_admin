@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
 
 import {
   Select,
@@ -45,6 +46,8 @@ export default function SelectEditCellDialogCustom({
   //dataType,
   selectValues,
 }: EditDialogProps) {
+  const accessToken = getAccessToken();
+
   const RecivedType = type;
   const RecivedId = id;
   const RecivedField = field;
@@ -86,6 +89,7 @@ export default function SelectEditCellDialogCustom({
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(updatedData),
         credentials: "include",

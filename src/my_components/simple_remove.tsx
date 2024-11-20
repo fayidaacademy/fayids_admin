@@ -14,6 +14,8 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { apiUrl, localUrl } from "@/api_config";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
 
 import useRefetchStore from "@/store/autoFetch";
 
@@ -28,6 +30,8 @@ export default function SimpleRemoveButton({
 }: // backTo,
 
 DeleteDialogProps) {
+  const accessToken = getAccessToken();
+
   const { push } = useRouter();
   const RecivedType = type;
   const RecivedId = id;
@@ -46,6 +50,11 @@ DeleteDialogProps) {
       const response = await fetch(`${apiUrl}/${RecivedType}/${RecivedId}`, {
         method: "delete",
         credentials: "include",
+       
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+},
         // Add any necessary headers or authentication tokens
       });
 

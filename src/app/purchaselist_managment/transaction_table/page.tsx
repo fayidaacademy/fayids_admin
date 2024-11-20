@@ -17,7 +17,7 @@ export default function PurchaseList() {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get(`${apiUrl}/purchaselist/`, {
+      const response = await axios.get(`${apiUrl}/inforeciver/transactionlist/`, {
         headers: {
           "Content-Type": "application/json",Authorization: `Bearer ${accessToken}`,
         },
@@ -35,12 +35,12 @@ export default function PurchaseList() {
     <div className="mx-3">
       <LoadProfileAuth />
       <h1 className="text-lg font-semibold text-blue-800 underline">
-        New Purchase List
+        Transaction Table
       </h1>
       <DataTableGenerator
         columns={columns}
         data={data}
-        filterBy="studentsId"
+        filterBy="name"
         type="purchase"
       />
     </div>

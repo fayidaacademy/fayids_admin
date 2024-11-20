@@ -15,6 +15,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { apiUrl, localUrl } from "@/api_config";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
 
 interface DeleteDialogProps {
   materialId: string;
@@ -29,6 +30,8 @@ export default function DeleteMaterialAndFile({
   fileId,
   fileLocation,
 }: DeleteDialogProps) {
+  const accessToken = getAccessToken();
+
   const { push } = useRouter();
   const MaterialId = materialId;
   const CourseId = courseId;
@@ -45,7 +48,11 @@ export default function DeleteMaterialAndFile({
       const response = await fetch(`${apiUrl}/materials/${MaterialId}`, {
         method: "delete",
         credentials: "include",
-
+       
+        headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        },
         // Add any necessary headers or authentication tokens
       });
 

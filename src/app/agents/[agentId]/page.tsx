@@ -5,8 +5,12 @@ import TransactionButton from "@/my_components/agent_transaction_update";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
+
 
 export default function StudentDetails({ params }: any) {
+  const accessToken = getAccessToken();
+
   const StudentId = params.agentId;
 
   const [data, setData] = useState<any>([]);
@@ -18,8 +22,11 @@ export default function StudentDetails({ params }: any) {
     const fetchData = async () => {
       try {
         const response = await fetch(`${apiUrl}/students/${StudentId}`, {
-          credentials: "include",
-        });
+          method: "GET",
+          headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+          },        });
 
         const jsonData = await response.json();
         setData(jsonData);
@@ -41,7 +48,11 @@ export default function StudentDetails({ params }: any) {
         const response = await fetch(
           `${apiUrl}/agents/studentswithpromocode/${data.promocode}`,
           {
-            credentials: "include",
+            method: "GET",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+},
           }
         );
 

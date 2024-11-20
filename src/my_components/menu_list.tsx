@@ -75,6 +75,28 @@ export function AccordionMenu() {
               Mock Package Purchase List
             </Link>
           </AccordionContent>
+          
+        </AccordionItem>
+
+        <AccordionItem value="item-15">
+          <AccordionTrigger>
+            {" "}
+            <div className="flex gap-1">
+              {" "}
+              <UserCheck /> <h1></h1> Transaction
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <Link href="/transaction_completed_table">
+              Completed Transactions Table 
+            </Link>
+          </AccordionContent>
+          <AccordionContent>
+            <Link href="/transaction_table">
+              All Transaction Table 
+            </Link>
+          </AccordionContent>
+         
         </AccordionItem>
 
         <AccordionItem value="item-1">
@@ -93,12 +115,12 @@ export function AccordionMenu() {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="item-14">
+        <AccordionItem value="item-14" className="text-yellow-400">
           <AccordionTrigger>
             {" "}
             <div className="flex gap-1">
               {" "}
-              <UserCheck /> <h1></h1> Agents
+              <UserCheck /> <h1 className=""> Agents</h1>
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -108,7 +130,7 @@ export function AccordionMenu() {
             <Link href="/agents/settings">Agent Settings</Link>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-12">
+        <AccordionItem value="item-12" className="text-yellow-400">
           <AccordionTrigger>
             {" "}
             <div className="flex gap-1">

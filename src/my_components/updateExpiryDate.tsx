@@ -15,6 +15,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { apiUrl, localUrl } from "@/api_config";
 import useRefetchStore from "@/store/autoFetch";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+
 
 interface UpdateProps {
   type: string;
@@ -43,6 +45,8 @@ export default function UpdateExpiryDate({
   changeTo,
   packagePrice,
 }: UpdateProps) {
+  const accessToken = getAccessToken();
+
   const { push } = useRouter();
   const RecivedType = type;
   const RecivedId = id;
@@ -66,7 +70,7 @@ export default function UpdateExpiryDate({
     studentId: StudentId,
     packagePrice: PackagePrice,
   };
-
+//23/12/24
   const updatedData2 = {
     [RecivedField.toString()]: ChangeTo,
     dateToAdd: RecivedData,
@@ -83,6 +87,8 @@ export default function UpdateExpiryDate({
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+
             },
             body: JSON.stringify(updatedData),
             credentials: "include",
