@@ -10,12 +10,17 @@ import {
 } from "@/components/ui/accordion";
 import CreateCourseUnit from "@/my_components/create_course_unit";
 import RemoveCourseContent from "@/my_components/remove_course_unit";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
 
 export default function MaterialManagment() {
+  const accessToken = getAccessToken();
   const PackageId = useRefetchStore((state) => state.packageIdFetched);
 
   const StudentId = useRefetchStore((state) => state.studentIdFetched);
   const PurchaseId = useRefetchStore((state) => state.purchaseIdFetched);
+
+  console.log("Working on it");
+  console.log("PackageId : "+ PackageId)
 
   const [data, setData] = useState<any>([]);
 
@@ -33,7 +38,10 @@ export default function MaterialManagment() {
         const response = await fetch(
           `${apiUrl}/studentcourse/accessone/${StudentId}/${PackageId}`,
           {
-            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+              },
           }
         );
         //7428c334-9fa2-48f2-861a-de65d23c0563
