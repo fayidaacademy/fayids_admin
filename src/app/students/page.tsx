@@ -14,7 +14,7 @@ export default function StudentsList() {
   const accessToken = getAccessToken();
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get(`${apiUrl}/students/`, {
+      const response = await axios.get(`${apiUrl}/students/list`, {
         method: "GET",
         headers: {
         "Content-Type": "application/json",

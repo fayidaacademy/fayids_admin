@@ -5,6 +5,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
+import EditSwitch from "@/my_components/edit_switch";
+
 
 
 export default function StudentDetails({ params }: any) {
@@ -147,6 +149,17 @@ export default function StudentDetails({ params }: any) {
           <span className="text-blue-800 font-semibold"> Account Status:</span>{" "}
           {data?.studentStatus}
         </h1>
+      </div>
+      <div className="flex space-x-32">
+      <div>
+        <h1>
+          <span className="text-blue-800 font-semibold">Visiblity</span>{" "}
+          {data?.visiblity}
+        </h1>
+      </div>
+      <div className="bg-red-400 text-white p-2 rounded">
+       <EditSwitch buttonTitle="Remove Student" changeTo="removed" id={data?.id} recivedField="visiblity" type="Students"/>
+      </div>
       </div>
 
       <div className="px-2 py-1 bg-blue-800 w-fit text-white rounded">
