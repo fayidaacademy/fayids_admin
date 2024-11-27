@@ -115,7 +115,7 @@ export function AccordionMenu() {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="item-14" className="text-yellow-400">
+        <AccordionItem value="item-14" >
           <AccordionTrigger>
             {" "}
             <div className="flex gap-1">
@@ -130,7 +130,7 @@ export function AccordionMenu() {
             <Link href="/agents/settings">Agent Settings</Link>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-12" className="text-yellow-400">
+        <AccordionItem value="item-12" >
           <AccordionTrigger>
             {" "}
             <div className="flex gap-1">

@@ -4,16 +4,22 @@ import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
 
 export default function Settings() {
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const accessToken = getAccessToken();
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(`${apiUrl}/agents/config/commison`, {
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+            },
         });
 
         const jsonData = await response.json();
