@@ -20,6 +20,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../lib/tokenManager";
+
 const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
 const formSchema = z.object({
   courseName: z
@@ -64,6 +70,7 @@ export default function AddCourseForm() {
       partName: "",
     },
   });
+  const accessToken = getAccessToken();
 
   /// api call to post
   const handleSectionPost = async (formData: any) => {
@@ -72,6 +79,7 @@ export default function AddCourseForm() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(formData),
         credentials: "include",
