@@ -28,20 +28,41 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { apiUrl } from "@/api_config";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../lib/tokenManager";
 
 export function AccordionMenu() {
+  const accessToken = getAccessToken();
+
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   fetch(`${apiUrl}/login_register/profile`, {
+  //     credentials: "include",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setData(data.accountType);
+  //       setLoading(false);
+  //       console.log("message: " + data.firstName);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    fetch(`${apiUrl}/login_register/profile`, {
-      credentials: "include",
+    fetch(`${apiUrl}/newlogin/profile`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+      },
     })
       .then((res) => res.json())
       .then((data) => {
         setData(data.accountType);
         setLoading(false);
-        //  setUserName(data.firstName + " " + data.lastName);
-        console.log("message: " + data.firstName);
       });
   }, []);
 
@@ -75,7 +96,6 @@ export function AccordionMenu() {
               Mock Package Purchase List
             </Link>
           </AccordionContent>
-          
         </AccordionItem>
 
         <AccordionItem value="item-15">
@@ -88,15 +108,12 @@ export function AccordionMenu() {
           </AccordionTrigger>
           <AccordionContent>
             <Link href="/transaction_completed_table">
-              Completed Transactions Table 
+              Completed Transactions Table
             </Link>
           </AccordionContent>
           <AccordionContent>
-            <Link href="/transaction_table">
-              All Transaction Table 
-            </Link>
+            <Link href="/transaction_table">All Transaction Table</Link>
           </AccordionContent>
-         
         </AccordionItem>
 
         <AccordionItem value="item-1">
@@ -115,7 +132,7 @@ export function AccordionMenu() {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="item-14" >
+        <AccordionItem value="item-14">
           <AccordionTrigger>
             {" "}
             <div className="flex gap-1">
@@ -130,74 +147,85 @@ export function AccordionMenu() {
             <Link href="/agents/settings">Agent Settings</Link>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-12" >
-          <AccordionTrigger>
-            {" "}
-            <div className="flex gap-1">
-              {" "}
-              <UserCheck /> <h1></h1> Bot Questions
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Link href="/botquestions">Question List</Link>
-          </AccordionContent>
-          <AccordionContent>
-            <Link href="/botquestions/createquestion">Create Question</Link>
-          </AccordionContent>
-        </AccordionItem>
 
-        <AccordionItem value="item-13">
-          <AccordionTrigger>
-            {" "}
-            <div className="flex gap-1">
+        {(data === "Admin" || data === "SubAdmin" || data === "Assistant") && (
+          <AccordionItem value="item-12">
+            <AccordionTrigger>
               {" "}
-              <UserCheck /> <h1></h1> Resources
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Link href="/resources">Resources List</Link>
-          </AccordionContent>
-          <AccordionContent>
-            <Link href="/resources/createresource">Add Resource</Link>
-          </AccordionContent>
-        </AccordionItem>
+              <div className="flex gap-1">
+                {" "}
+                <UserCheck /> <h1></h1> Bot Questions
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link href="/botquestions">Question List</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/botquestions/createquestion">Create Question</Link>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-        <AccordionItem value="item-2">
-          <AccordionTrigger>
-            {" "}
-            <div className="flex gap-1">
-              {" "}
-              <Group /> <h1></h1> Mock Exam Packages
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Link href="/mockexampackage">Mock Package List</Link>
-          </AccordionContent>
-          <AccordionContent>
-            <Link href="/mockexampackage/createpackage">
-              Create Mock Package
-            </Link>
-          </AccordionContent>
-        </AccordionItem>
+        {data == "Admin" ||
+          (data == "SubAdmin" && (
+            <AccordionItem value="item-13">
+              <AccordionTrigger>
+                {" "}
+                <div className="flex gap-1">
+                  {" "}
+                  <UserCheck /> <h1></h1> Resources
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <Link href="/resources">Resources List</Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link href="/resources/createresource">Add Resource</Link>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
 
-        <AccordionItem value="item-3">
-          <AccordionTrigger>
-            {" "}
-            <div className="flex gap-1">
+        {data == "Admin" && (
+          <AccordionItem value="item-2">
+            <AccordionTrigger>
               {" "}
-              <StickyNote /> <h1></h1> Exams
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Link href="/exams/examlist">Exams List</Link>
-          </AccordionContent>
-          <AccordionContent>
-            <Link href="/exams/createexam">Create Exam</Link>
-          </AccordionContent>
-          {/* <AccordionContent>
+              <div className="flex gap-1">
+                {" "}
+                <Group /> <h1></h1> Mock Exam Packages
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link href="/mockexampackage">Mock Package List</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/mockexampackage/createpackage">
+                Create Mock Package
+              </Link>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
+        {data == "Admin" && (
+          <AccordionItem value="item-3">
+            <AccordionTrigger>
+              {" "}
+              <div className="flex gap-1">
+                {" "}
+                <StickyNote /> <h1></h1> Exams
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link href="/exams/examlist">Exams List</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/exams/createexam">Create Exam</Link>
+            </AccordionContent>
+            {/* <AccordionContent>
             <Link href="/exams/examtakers">Exam Takers</Link>
           </AccordionContent> */}
-        </AccordionItem>
+          </AccordionItem>
+        )}
+
         {data == "Admin" && (
           <AccordionItem value="item-4">
             <AccordionTrigger>
@@ -212,51 +240,57 @@ export function AccordionMenu() {
           </AccordionItem>
         )}
 
-        <AccordionItem value="item-5">
-          <AccordionTrigger>
-            <div className="flex gap-1">
-              {" "}
-              <Blocks /> <h1></h1> Packages
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Link href="/packages">Packages List</Link>
-          </AccordionContent>
-          <AccordionContent>
-            <Link href="/packages/createpackage">Add a Package</Link>
-          </AccordionContent>
-        </AccordionItem>
+        {data == "Admin" && (
+          <AccordionItem value="item-5">
+            <AccordionTrigger>
+              <div className="flex gap-1">
+                {" "}
+                <Blocks /> <h1></h1> Packages
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link href="/packages">Packages List</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/packages/createpackage">Add a Package</Link>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-        <AccordionItem value="item-6">
-          <AccordionTrigger>
-            {" "}
-            <div className="flex gap-1">
+        {data == "Admin" && (
+          <AccordionItem value="item-6">
+            <AccordionTrigger>
               {" "}
-              <BookCopy /> <h1></h1> Courses
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Link href="/courses">Courses List</Link>
-          </AccordionContent>
-          <AccordionContent>
-            <Link href="/courses/addcourse">Add a Course</Link>
-          </AccordionContent>
-        </AccordionItem>
+              <div className="flex gap-1">
+                {" "}
+                <BookCopy /> <h1></h1> Courses
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link href="/courses">Courses List</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/courses/addcourse">Add a Course</Link>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-        <AccordionItem value="item-7">
-          <AccordionTrigger>
-            <div className="flex gap-1">
-              {" "}
-              <LayoutPanelTop /> <h1></h1> Sections
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <Link href="/sections">Section List</Link>
-          </AccordionContent>
-          <AccordionContent>
-            <Link href="/sections/addsection">Add a Section</Link>
-          </AccordionContent>
-        </AccordionItem>
+        {data == "Admin" && (
+          <AccordionItem value="item-7">
+            <AccordionTrigger>
+              <div className="flex gap-1">
+                {" "}
+                <LayoutPanelTop /> <h1></h1> Sections
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link href="/sections">Section List</Link>
+            </AccordionContent>
+            <AccordionContent>
+              <Link href="/sections/addsection">Add a Section</Link>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
         {data == "Admin" && (
           <AccordionItem value="item-8">
@@ -278,6 +312,7 @@ export function AccordionMenu() {
             </AccordionContent>
           </AccordionItem>
         )}
+
         {data == "Admin" && (
           <AccordionItem value="item-9">
             <AccordionTrigger>
@@ -298,6 +333,7 @@ export function AccordionMenu() {
             </AccordionContent>
           </AccordionItem>
         )}
+
         <AccordionItem value="item-10">
           <AccordionTrigger>More</AccordionTrigger>
           <AccordionContent>
@@ -308,14 +344,18 @@ export function AccordionMenu() {
               </div>
             </Link>
           </AccordionContent>
-          <AccordionContent>
-            <Link href="/settings/packagefolders/packagefolderslist">
-              <div className="flex gap-1">
-                {" "}
-                <Folder /> <h1>Package Folders</h1>
-              </div>
-            </Link>
-          </AccordionContent>
+
+          {data == "Admin" && (
+            <AccordionContent>
+              <Link href="/settings/packagefolders/packagefolderslist">
+                <div className="flex gap-1">
+                  {" "}
+                  <Folder /> <h1>Package Folders</h1>
+                </div>
+              </Link>
+            </AccordionContent>
+          )}
+
           <AccordionContent>
             <Link href="/settings/city/citylist">
               <div className="flex gap-1">
@@ -332,15 +372,19 @@ export function AccordionMenu() {
               </div>
             </Link>
           </AccordionContent>
-          <AccordionContent>
-            <Link href="/settings/advertisment">
-              {" "}
-              <div className="flex gap-1">
+
+          {data == "Admin" && (
+            <AccordionContent>
+              <Link href="/settings/advertisment">
                 {" "}
-                <Megaphone /> <h1>Advertisment</h1>
-              </div>
-            </Link>
-          </AccordionContent>
+                <div className="flex gap-1">
+                  {" "}
+                  <Megaphone /> <h1>Advertisment</h1>
+                </div>
+              </Link>
+            </AccordionContent>
+          )}
+
           <AccordionContent>
             <Link href="/settings/blogs">
               <div className="flex gap-1">
