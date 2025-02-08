@@ -4,7 +4,11 @@ import { Student, columns } from "./columns";
 import DataTableGenerator from "@/main_components/data-table";
 import { apiUrl } from "@/api_config";
 import axios from "axios";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../lib/tokenManager";
 
 export default function StudentsList() {
   const accessToken = getAccessToken();
@@ -16,9 +20,9 @@ export default function StudentsList() {
       const response = await axios.get(`${apiUrl}/agents/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, 
+          Authorization: `Bearer ${accessToken}`,
         },
-      // Include credentials in the request
+        // Include credentials in the request
       });
 
       const data = response.data;
@@ -31,7 +35,7 @@ export default function StudentsList() {
   return (
     <div className="mx-3">
       <h1 className="text-lg text-blue-800 underline font-semibold">
-        Students List
+        Agents List
       </h1>
       <DataTableGenerator
         columns={columns}

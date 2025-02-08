@@ -9,8 +9,11 @@ import {
 import React, { useEffect, useState } from "react";
 import ExamTakersAnalysis from "./examtakersanalysis";
 import ChartOne from "./components/studentsData";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../lib/tokenManager";
 
 export default function HomeDashboard() {
   const [studnets, setStudents] = useState<any>([]);
@@ -26,10 +29,10 @@ export default function HomeDashboard() {
   useEffect(() => {
     fetch(`${apiUrl}/newlogin/profile`, {
       method: "GET",
-headers: {
-"Content-Type": "application/json",
-Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-},
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+      },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -54,8 +57,8 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
     fetch(`${apiUrl}/notifications/admin`, {
       method: "GET",
       headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
       },
     })
       .then((res) => res.json())
@@ -69,11 +72,13 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
 
   useEffect(() => {
     const fetchData = () => {
-      fetch(`${apiUrl}/students`, { method: "GET",
+      fetch(`${apiUrl}/students`, {
+        method: "GET",
         headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-        }, })
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        },
+      })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Request failed");
@@ -96,11 +101,13 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
   }, []);
   useEffect(() => {
     const fetchData = () => {
-      fetch(`${apiUrl}/examtaker`, { method: "GET",
+      fetch(`${apiUrl}/examtaker`, {
+        method: "GET",
         headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-        }, })
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        },
+      })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Request failed");
@@ -125,8 +132,8 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
     fetch(`${apiUrl}/notifications/notification_admin_read/${notificationId}`, {
       method: "GET",
       headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
       },
       // Add any required headers or body for the update request
     })
@@ -189,24 +196,30 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
         </div>
 
         <div className="border-2   w-full h-full py-3 bg-primaryColor text-white  border-gray-200 rounded-2xl">
-          {accountType == "Admin" ? (
+          {accountType === "Admin" ? (
             <div>
-              <h1 className="text-xl  text-center">
+              <h1 className="text-xl text-center">
                 Total Students:{" "}
-                <span className="text-white  font-semibold">
+                <span className="text-white font-semibold">
                   {studnets?.length - 2}
                 </span>
               </h1>
-              <h1 className="text-xl  text-center">
+              <h1 className="text-xl text-center">
                 Total Exam Takers:{" "}
-                <span className="text-white  font-semibold">
+                <span className="text-white font-semibold">
                   {examTaker?.length}
                 </span>
               </h1>
             </div>
+          ) : accountType === "SubAdmin" ? (
+            <div>
+              {/* Add SubAdmin-specific content here */}
+              <h1 className="text-xl text-center text-white">SubAdmin!</h1>
+            </div>
           ) : (
             <div>
-              <h1 className="text-xl  text-center">Sub Admin</h1>
+              {/* Default case for other account types */}
+              <h1 className="text-xl text-center text-white">Assistant</h1>
             </div>
           )}
         </div>

@@ -2,9 +2,11 @@
 import { apiUrl } from "@/api_config";
 import React, { useEffect, useState } from "react";
 
-import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
-
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../lib/tokenManager";
 
 export default function LoadProfileAuth() {
   const [data, setData] = useState<any>([]);
@@ -17,8 +19,8 @@ export default function LoadProfileAuth() {
         const response = await fetch(`${apiUrl}/newlogin/profile`, {
           method: "GET",
           headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
           },
         });
 
@@ -39,7 +41,11 @@ export default function LoadProfileAuth() {
   if (isLoading) {
     return <p>Loading...</p>;
   }
-  if (data?.accountType != "Admin" && data?.accountType != "SubAdmin") {
+  if (
+    data?.accountType != "Admin" &&
+    data?.accountType != "SubAdmin" &&
+    data?.accountType != "Assistant"
+  ) {
     window.location.href = "/login";
   }
   return (

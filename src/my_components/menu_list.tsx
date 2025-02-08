@@ -148,7 +148,7 @@ export function AccordionMenu() {
           </AccordionContent>
         </AccordionItem>
 
-        {(data === "Admin" || data === "SubAdmin" || data === "Assistant") && (
+        {(data === "Admin" || data === "SubAdmin") && (
           <AccordionItem value="item-12">
             <AccordionTrigger>
               {" "}
