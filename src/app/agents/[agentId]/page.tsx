@@ -5,8 +5,11 @@ import TransactionButton from "@/my_components/agent_transaction_update";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../../lib/tokenManager";
 
 export default function StudentDetails({ params }: any) {
   const accessToken = getAccessToken();
@@ -24,9 +27,10 @@ export default function StudentDetails({ params }: any) {
         const response = await fetch(`${apiUrl}/students/${StudentId}`, {
           method: "GET",
           headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-          },        });
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+          },
+        });
 
         const jsonData = await response.json();
         setData(jsonData);
@@ -49,10 +53,10 @@ export default function StudentDetails({ params }: any) {
           `${apiUrl}/agents/studentswithpromocode/${data.promocode}`,
           {
             method: "GET",
-headers: {
-"Content-Type": "application/json",
-Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-},
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+            },
           }
         );
 
@@ -92,6 +96,7 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
     };
 
     fetchData();
+    // console.log("Heello: " + JSON.stringify(data));
   }, [data]);
 
   return (
@@ -123,7 +128,7 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
       <div>
         <h1>
           <span className="text-blue-800 font-semibold"> Email:</span>{" "}
-          {data?.email}
+          {data?.agent_email}
         </h1>
       </div>
       {/* <div>
