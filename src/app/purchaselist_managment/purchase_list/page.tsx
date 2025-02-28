@@ -44,7 +44,7 @@ export default function PurchaseList() {
         columns={columns}
         data={data}
         filterBy="studentsId"
-        type="purchase"
+        type="newPurchase"
       />
     </div>
   );

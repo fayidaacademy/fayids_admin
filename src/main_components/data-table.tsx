@@ -34,6 +34,7 @@ import { downloadPaymentMethodsToExcel } from "@/lib/export_excel/payment_method
 import { downloadPrizesToExcel } from "@/lib/export_excel/prizes_export";
 import { downloadLeaderBoardToExcel } from "@/lib/export_excel/leaderboard_export";
 import { downloadPrizeOrderToExcel } from "@/lib/export_excel/prize_order_export";
+import { downloadNewPurchaseToExcel } from "@/lib/export_excel/package_purchase_export";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -114,6 +115,8 @@ export function DataTableGenerator<TData, TValue>({
       downloadLeaderBoardToExcel();
     } else if (type == "prizeOrders") {
       downloadPrizeOrderToExcel();
+    } else if (type == "newPurchase") {
+      downloadNewPurchaseToExcel();
     }
   };
 
