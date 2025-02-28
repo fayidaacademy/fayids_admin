@@ -6,8 +6,11 @@ import { apiUrl } from "@/api_config";
 import axios from "axios";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../../lib/tokenManager";
 
 export default function PurchaseList() {
   const [data, setData] = useState([]);
@@ -19,7 +22,7 @@ export default function PurchaseList() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, 
+          Authorization: `Bearer ${accessToken}`,
         },
         withCredentials: true, // Include credentials in the request
       });
@@ -41,7 +44,7 @@ export default function PurchaseList() {
         columns={columns}
         data={data}
         filterBy="name"
-        type="purchase"
+        type="updatePurchase"
       />
     </div>
   );
