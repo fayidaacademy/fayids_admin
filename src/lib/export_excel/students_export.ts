@@ -3,12 +3,21 @@ import xlsx, { IJsonSheet } from "json-as-xlsx";
 import { apiUrl } from "@/api_config";
 
 import { Student } from "@/app/students/columns";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../lib/tokenManager";
 
 async function getData(): Promise<Student[]> {
   // Fetch data from API.
-  const res = await fetch(`${apiUrl}/students/t`, {
+
+  const accessToken = getAccessToken();
+
+  const res = await fetch(`${apiUrl}/students/list`, {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     method: "GET",
   });
@@ -18,6 +27,7 @@ async function getData(): Promise<Student[]> {
 }
 export async function downloadStudentsToExcel() {
   const data = await getData();
+  console.log("Export to excel pressed");
   let columns: IJsonSheet[] = [
     {
       sheet: "fayida export",

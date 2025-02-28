@@ -239,52 +239,53 @@ export default function HomeDashboard() {
 
       <ChartOne />
 
-      {accountType == "Admin" && (
-        <div className="w-3/4 mx-auto bg-navBarColor bg-opacity-60 text-gray-200 p-4 rounded">
-          <div>
-            <h1>Recent Notifications</h1>
-          </div>
-          <div>
-            {notificationData?.map && (
-              <div>
-                {notificationData?.map((notification) => (
-                  <div key={notification?.notiId}>
-                    <div
-                      onClick={() =>
-                        handleNotificationClick(notification?.notiId)
-                      }
-                      // className="mx-4 bg-primaryColor bg-opacity-80 my-2 px-2 text-white "
-                      className={`mx-4 my-2 px-2 text-green rounded-lg ${
-                        notification?.status == "0"
-                          ? "bg-secondaryColor"
-                          : "bg-primaryColor"
-                      }`}
-                    >
-                      <Accordion type="single" collapsible>
-                        <AccordionItem value="item-1">
-                          <AccordionTrigger>
-                            <div className="w-full pr-4">
-                              <div className="flex justify-between">
-                                <h1>{notification?.notiHead}</h1>
-                                <h1>
-                                  {notification?.status == 0 ? "New" : "Seen"}
-                                </h1>
+      {accountType == "Admin" ||
+        (accountType == "Assistant" && (
+          <div className="w-3/4 mx-auto mb-10 bg-navBarColor bg-opacity-60 text-gray-200 p-4 rounded">
+            <div>
+              <h1>Recent Notifications</h1>
+            </div>
+            <div>
+              {notificationData?.map && (
+                <div>
+                  {notificationData?.map((notification) => (
+                    <div key={notification?.notiId}>
+                      <div
+                        onClick={() =>
+                          handleNotificationClick(notification?.notiId)
+                        }
+                        // className="mx-4 bg-primaryColor bg-opacity-80 my-2 px-2 text-white "
+                        className={`mx-4 my-2 px-2 text-green rounded-lg ${
+                          notification?.status == "0"
+                            ? "bg-secondaryColor"
+                            : "bg-primaryColor"
+                        }`}
+                      >
+                        <Accordion type="single" collapsible>
+                          <AccordionItem value="item-1">
+                            <AccordionTrigger>
+                              <div className="w-full pr-4">
+                                <div className="flex justify-between">
+                                  <h1>{notification?.notiHead}</h1>
+                                  <h1>
+                                    {notification?.status == 0 ? "New" : "Seen"}
+                                  </h1>
+                                </div>
                               </div>
-                            </div>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            {notification?.notiFull}
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              {notification?.notiFull}
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        ))}
 
       {accountType == "Admin" && (
         <div>
