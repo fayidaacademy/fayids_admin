@@ -1,5 +1,6 @@
 import { apiUrl } from "@/api_config";
 import React, { useEffect, useState } from "react";
+import { BarChart, PieChart, LineChart, ActivitySquare } from "lucide-react";
 
 export default function ExamTakersAnalysis() {
   // const [tableInfo, setTableInfo] = useState(null);
@@ -42,154 +43,153 @@ export default function ExamTakersAnalysis() {
       });
   }, []);
 
+  const StatCard = ({ title, icon, children }: any) => (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6">
+      <div className="flex items-center mb-4">
+        {icon}
+        <h3 className="text-lg font-medium text-gray-800 ml-2">{title}</h3>
+      </div>
+      {children}
+    </div>
+  );
+
+  // Custom table component
+  const DataTable = ({ headers, data, keyField, valueField, percentageField }: any) => (
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            {headers.map((header: string, index: number) => (
+              <th
+                key={index}
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {data.map((item: any, index: number) => (
+            <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {item[keyField]}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {item[valueField]}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div className="flex items-center">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div 
+                      className="bg-blue-600 h-2.5 rounded-full" 
+                      style={{ width: `${((item[valueField] / totalExamtakers) * 100).toFixed(2)}%` }}
+                    ></div>
+                  </div>
+                  <span className="ml-2">
+                    {((item[valueField] / totalExamtakers) * 100).toFixed(2)}%
+                  </span>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  // Prepare data for tables
+  const genderData = genderAnalysis.filter(Boolean).map((item: any) => ({
+    gender: item.gender,
+    count: item._count.id,
+  }));
+
+  const regionData = regionAlanyllis.filter(Boolean).map((item: any) => ({
+    region: item.region,
+    count: item._count.id,
+  }));
+
+  const cityData = cityAlanyllis.filter(Boolean).map((item: any) => ({
+    city: item.city,
+    count: item._count.id,
+  }));
+
+  const gradeData = gradeAlanyllis.filter(Boolean).map((item: any) => ({
+    grade: item.grade,
+    count: item._count.id,
+  }));
+
+  const scienceData = scienceTypeAlanyllis.filter(Boolean).map((item: any) => ({
+    scienceType: item.scienceType,
+    count: item._count.id,
+  }));
+
   return (
-    <div className="rounded-3xl text-sm bg-emerald-900 bg-opacity-75 text-gray-300 py-10 my-10">
-      <div className="w-full flex pb-4">
-        <h1 className="text-center w-fit mx-auto text-2xl">
-          Exam Takers Statistics
-        </h1>
-      </div>
-      <div className="flex w-full justify-around ">
-        <table className="table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Gender</th>
-              <th className="border border-gray-300 p-2">Qty</th>
-              <th className="border border-gray-300 p-2">%</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border border-gray-300 p-2">Male</td>
-              <td className="border border-gray-300 p-2">
-                {genderAnalysis[0]?._count?.id}
-              </td>
-              <td className="border border-gray-300 p-2">
-                {" "}
-                {(
-                  (genderAnalysis[0]?._count?.id / totalExamtakers) *
-                  100
-                ).toFixed(2)}{" "}
-                %
-              </td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 p-2">Female</td>
-              <td className="border border-gray-300 p-2">
-                {genderAnalysis[1]?._count?.id}
-              </td>
-              <td className="border border-gray-300 p-2">
-                {" "}
-                {(
-                  (genderAnalysis[1]?._count?.id / totalExamtakers) *
-                  100
-                ).toFixed(2)}{" "}
-                %
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <StatCard 
+          title="Gender Distribution" 
+          icon={<PieChart className="h-5 w-5 text-blue-600" />}
+        >
+          <DataTable
+            headers={["Gender", "Count", "Percentage"]}
+            data={genderData}
+            keyField="gender"
+            valueField="count"
+          />
+        </StatCard>
 
-        <table className="table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Region</th>
-              <th className="border border-gray-300 p-2">Qty</th>
-              <th className="border border-gray-300 p-2">%</th>
-            </tr>
-          </thead>
-          <tbody>
-            {regionAlanyllis.map((region: any, index: any) => (
-              <tr key={index}>
-                <td className="border border-gray-300 p-2">{region?.region}</td>
-                <td className="border border-gray-300 p-2">
-                  {region?._count?.id}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {" "}
-                  {((region?._count?.id / totalExamtakers) * 100).toFixed(2)} %
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <table className="table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">City</th>
-              <th className="border border-gray-300 p-2">Qty</th>
-              <th className="border border-gray-300 p-2">%</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cityAlanyllis.map((city: any, index: any) => (
-              <tr key={index}>
-                <td className="border border-gray-300 p-2">{city?.city}</td>
-                <td className="border border-gray-300 p-2">
-                  {city?._count?.id}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {" "}
-                  {((city?._count?.id / totalExamtakers) * 100).toFixed(2)} %
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <StatCard 
+          title="Regional Distribution" 
+          icon={<BarChart className="h-5 w-5 text-indigo-600" />}
+        >
+          <DataTable
+            headers={["Region", "Count", "Percentage"]}
+            data={regionData}
+            keyField="region"
+            valueField="count"
+          />
+        </StatCard>
       </div>
 
-      <div className="flex w-full justify-around mt-10">
-        <table className="table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Grade</th>
-              <th className="border border-gray-300 p-2">Qty</th>
-              <th className="border border-gray-300 p-2">%</th>
-            </tr>
-          </thead>
-          <tbody>
-            {gradeAlanyllis.map((grade: any, index: any) => (
-              <tr key={index}>
-                <td className="border border-gray-300 p-2">{grade?.grade}</td>
-                <td className="border border-gray-300 p-2">
-                  {grade?._count?.id}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {" "}
-                  {((grade?._count?.id / totalExamtakers) * 100).toFixed(2)} %
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <StatCard 
+          title="City Distribution" 
+          icon={<BarChart className="h-5 w-5 text-emerald-600" />}
+        >
+          <DataTable
+            headers={["City", "Count", "Percentage"]}
+            data={cityData}
+            keyField="city"
+            valueField="count"
+          />
+        </StatCard>
 
-        <table className="table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Science</th>
-              <th className="border border-gray-300 p-2">Qty</th>
-              <th className="border border-gray-300 p-2">%</th>
-            </tr>
-          </thead>
-          <tbody>
-            {scienceTypeAlanyllis.map((science: any, index: any) => (
-              <tr key={index}>
-                <td className="border border-gray-300 p-2">
-                  {science?.scienceType}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {science?._count?.id}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {" "}
-                  {((science?._count?.id / totalExamtakers) * 100).toFixed(2)} %
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <StatCard 
+          title="Grade Distribution" 
+          icon={<LineChart className="h-5 w-5 text-purple-600" />}
+        >
+          <DataTable
+            headers={["Grade", "Count", "Percentage"]}
+            data={gradeData}
+            keyField="grade"
+            valueField="count"
+          />
+        </StatCard>
       </div>
+
+      <StatCard 
+        title="Science Type Distribution" 
+        icon={<ActivitySquare className="h-5 w-5 text-amber-600" />}
+      >
+        <DataTable
+          headers={["Science Type", "Count", "Percentage"]}
+          data={scienceData}
+          keyField="scienceType"
+          valueField="count"
+        />
+      </StatCard>
     </div>
   );
 }
