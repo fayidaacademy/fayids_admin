@@ -12,6 +12,8 @@ import AddUnitList from "@/app/forms/createCourseUnitList";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import useRefetchStore from "@/store/autoFetch";
 import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, BookOpen, Edit, Users, FileText, Trash2, Plus } from "lucide-react";
 
 //async function getData(): Promise<[]> {
 // Fetch data from  API .
@@ -47,10 +49,10 @@ export default function CourseDetails({ params }: any) {
           revalidate: 0,
         },
         method: "GET",
-headers: {
-"Content-Type": "application/json",
-Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-},
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        },
       });
       const course = await res.json();
       setCourse(course);
@@ -83,123 +85,217 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
   // console.log(res);
   console.log("printed");
   return (
-    <div className="mx-10 my-5">
+    <div className="min-h-screen bg-white relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform rotate-12 scale-150"></div>
+        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-blue-300/10 to-transparent transform -rotate-12 scale-150"></div>
+      </div>
+      
+      {/* Floating Elements */}
+      <div className="absolute top-20 left-10 w-40 h-40 bg-blue-300/30 rounded-full blur-2xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-48 h-48 bg-purple-300/25 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-1/2 left-1/3 w-32 h-32 bg-indigo-300/20 rounded-full blur-xl animate-pulse delay-500"></div>
+      <div className="absolute top-1/4 right-1/4 w-24 h-24 bg-cyan-300/25 rounded-full blur-lg animate-pulse delay-700"></div>
+      
       <LoadProfileAuth />
-      <h1 className="text-primary-color text-lg font-semibold underline mb-2">
-        Course Details
-      </h1>
-      {/* <h1>{courseId}</h1> */}
-      {checkForum == "0" ? (
-        <div>
-          <CreateForum courseId={courseId} />
-        </div>
-      ) : (
-        <div>
-          <Link href={`/Forum/${forumId}`}>
-            <h1 className="text-base font-semibold text-primary-color hover:underline w-fit">
-              View Forum
-            </h1>
-          </Link>
-        </div>
-      )}
-      <div className="flex space-x-6 py-3">
-        <h1 className="text-primary-color font-semibold">Course Name:</h1>
-        <h1>{course?.courseName}</h1>
-        <div className="">
-          <EditCellDialog
-            type={"courses"}
-            id={courseId}
-            field={"courseName"}
-            content={course?.courseName}
-            dataType="text"
-          />
-        </div>
-      </div>
-
-      <div className=" space-x-6 py-3">
-        <h1 className="text-primary-color font-semibold">
-          Course Description:
-        </h1>
-        <div className="px-4 flex space-x-3 border-2 w-fit p-2">
-          <h1>{course?.courseDescription}</h1>
-          <div className=" ">
-            <EditCellDialog
-              type={"courses"}
-              id={courseId}
-              field={"courseDescription"}
-              content={course?.courseDescription}
-              dataType="text"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex space-x-6 py-3">
-        <h1 className="text-primary-color font-semibold">Parts:</h1>
-        <h1>{course?.parts}</h1>
-        <div className="">
-          <EditCellDialog
-            type={"courses"}
-            id={courseId}
-            field={"parts"}
-            content={course.parts}
-            dataType="number"
-          />
-        </div>
-      </div>
-
-      <div className="flex space-x-6">
-        <h1 className="text-primary-color font-semibold">Parts Name:</h1>
-        <h1>{course?.partName}</h1>
-        <div className="">
-          <EditCellDialog
-            type={"courses"}
-            id={courseId}
-            field={"partName"}
-            content={course?.partName}
-            dataType="text"
-          />
-        </div>
-      </div>
-
-      <div className="mt-7">
-        <div>
-          <h1 className="text-xl underline font-semibold">Create Units List</h1>
-        </div>
-        <AddUnitList courseId={courseId} />
-
-        <div className="my-3">
-          {course?.CourseUnitsList?.map((unit: any) => (
-            <div
-              key={unit.id}
-              className="flex justify-between space-x-4 bg-gray-200 py-3 px-5 rounded my-3"
-            >
-              <div className="flex space-x-3">
-                <h1>Unit {unit.UnitNumber}</h1>{" "}
-                <div className="w-fit">
-                  <EditNumberCellDialog
-                    content={unit.UnitNumber}
-                    field="UnitNumber"
-                    id={unit.id}
-                    type="courseunitslist"
-                  />{" "}
-                </div>
-              </div>
-
-              <div className="flex space-x-3 py-2">
-                {" "}
-                <h1>{unit.Title}</h1>
-                <div>
-                  <EditCellDialog
-                    content={unit.Title}
-                    dataType="text"
-                    field="Title"
-                    id={unit.id}
-                    type="courseunitslist"
-                  />
-                </div>
+      <div className="relative z-10 container mx-auto px-6 py-8">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Link href="/courses">
+                <Button variant="outline" className="p-3 rounded-xl border-gray-200 hover:bg-gray-50">
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+              </Link>
+              <div className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg">
+                <BookOpen className="h-8 w-8 text-white" />
               </div>
               <div>
+                <h1 className="text-3xl font-bold text-gray-900">Course Details</h1>
+                <p className="text-gray-600 mt-1">Manage course information and units</p>
+              </div>
+            </div>
+            <div className="flex space-x-3">
+              <Link href={`/courses/managematerials/${courseId}`}>
+                <Button className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl shadow-lg transition-all duration-200">
+                  <FileText className="h-5 w-5 mr-2" />
+                  Manage Materials
+                </Button>
+              </Link>
+              <DeleteDialog
+                type={"courses"}
+                id={courseId}
+                backTo="/courses"
+                buttonTitle="Delete Course"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Course Information Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Basic Information */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <BookOpen className="h-5 w-5 text-blue-600" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">Basic Information</h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Course Name</p>
+                  <p className="text-lg font-semibold text-gray-900">{course?.courseName}</p>
+                </div>
+                <EditCellDialog
+                  type={"courses"}
+                  id={courseId}
+                  field={"courseName"}
+                  content={course?.courseName}
+                  dataType="text"
+                />
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Parts</p>
+                  <p className="text-lg font-semibold text-gray-900">{course?.parts}</p>
+                </div>
+                <EditNumberCellDialog
+                  type={"courses"}
+                  id={courseId}
+                  field={"parts"}
+                  content={course.parts}
+                />
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Part Name</p>
+                  <p className="text-lg font-semibold text-gray-900">{course?.partName}</p>
+                </div>
+                <EditCellDialog
+                  type={"courses"}
+                  id={courseId}
+                  field={"partName"}
+                  content={course?.partName}
+                  dataType="text"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <FileText className="h-5 w-5 text-purple-600" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">Description</h2>
+            </div>
+
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-600 mb-2">Course Description</p>
+                  <p className="text-gray-900">{course?.courseDescription}</p>
+                </div>
+                <EditCellDialog
+                  type={"courses"}
+                  id={courseId}
+                  field={"courseDescription"}
+                  content={course?.courseDescription}
+                  dataType="text"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Forum Section */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8">
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="p-2 bg-green-100 rounded-lg">
+              <Users className="h-5 w-5 text-green-600" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900">Discussion Forum</h2>
+          </div>
+
+          {checkForum == "0" ? (
+            <div className="text-center py-8">
+              <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600 mb-4">No forum created for this course yet.</p>
+              <CreateForum courseId={courseId} />
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Users className="h-12 w-12 text-green-500 mx-auto mb-4" />
+              <p className="text-gray-600 mb-4">Forum is available for this course.</p>
+              <Link href={`/Forum/${forumId}`}>
+                <Button className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl shadow-lg">
+                  <Users className="h-5 w-5 mr-2" />
+                  View Forum
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Course Units Section */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <BookOpen className="h-5 w-5 text-orange-600" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">Course Units</h2>
+            </div>
+            <Button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-4 py-2 rounded-lg">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Unit
+            </Button>
+          </div>
+
+          <div className="mb-6">
+            <AddUnitList courseId={courseId} />
+          </div>
+
+          <div className="space-y-4">
+            {course?.CourseUnitsList?.map((unit: any) => (
+              <div
+                key={unit.id}
+                className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-gray-600">Unit</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-semibold text-gray-900">{unit.UnitNumber}</span>
+                      <EditNumberCellDialog
+                        content={unit.UnitNumber}
+                        field="UnitNumber"
+                        id={unit.id}
+                        type="courseunitslist"
+                      />
+                    </div>
+                  </div>
+                  <div className="h-6 w-px bg-gray-300"></div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-gray-600">Title:</span>
+                    <span className="font-semibold text-gray-900">{unit.Title}</span>
+                    <EditCellDialog
+                      content={unit.Title}
+                      dataType="text"
+                      field="Title"
+                      id={unit.id}
+                      type="courseunitslist"
+                    />
+                  </div>
+                </div>
                 <DeleteDialog
                   backTo={`/courses/${courseId}`}
                   buttonTitle="Delete"
@@ -207,44 +303,13 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
                   type="courseunitslist"
                 />
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* <UploadVideo courseId={courseId} /> */}
-
-      <div className="py-5">
-        {/* <video controls>
-            <source
-              src={`${apiUrl}/upload_assets/videos/course_introduction_videos/${course?.courseIntroductionVideo}`}
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video> */}
-
-        {/* {videoLocation == "" ? (
-          <div>
-            <h1>Loading Video</h1>
+            ))}
           </div>
-        ) : (
-          <video controls>
-            <source
-              src={videoUrl}
-            //  // src={`${apiUrl}/upload_assets/videos/course_introduction_videos/${videoLocation}`}
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-        )} */}
-      </div>
+        </div>
 
-      <DeleteDialog
-        type={"courses"}
-        id={courseId}
-        backTo="/courses"
-        buttonTitle="Delete Course"
-      />
+        {/* Video Section - Commented out as in original */}
+        {/* <UploadVideo courseId={courseId} /> */}
+      </div>
     </div>
   );
 }

@@ -41,40 +41,47 @@ Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Author
     fetchData();
   }, []);
   return (
-    <div className="mx-10 my-5">
-      <div>
-        <h1 className="text-lg text-blue-800 underline font-semibold">
-          Packages List
-        </h1>
-      </div>
-      <div>
-        <h1 className="text-green-700 font-semibold"> {data[0]?.name}</h1>
-      </div>
-      {!data[0]?.id && (
-        <div>
-          <h1>No Packages Found</h1>
+    <div className="min-h-screen bg-white">
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Student Packages
+          </h1>
+          <p className="text-gray-600">Packages purchased by the student</p>
         </div>
-      )}
-
-      <div>
-        {data.map((purchase: any) => {
-          return (
-            <div key={purchase.id}>
-              <div className="border-blue-900 border-2 text-blue-800 mx-6 w-full  rounded my-2 px-3">
-                <div className=" flex w-full justify-between">
-                  <h1>Package: {purchase.Package.packageName}</h1>
-                  <h1>{purchase.paymentStatus}</h1>
-                </div>
-                <div>
-                  <h1>
-                    Date of purchase:{" "}
-                    {new Date(purchase.createdAt).toLocaleDateString()}
-                  </h1>
-                </div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800">{data[0]?.name}</h2>
+        </div>
+        {!data[0]?.id && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No packages found for this student</p>
+          </div>
+        )}
+        <div className="space-y-6">
+          {data.map((purchase: any) => (
+            <div key={purchase.id} className="bg-gray-50 p-6 rounded-lg">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                <h3 className="text-xl font-medium text-gray-900 mb-2 md:mb-0">
+                  {purchase.Package.packageName}
+                </h3>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  purchase.paymentStatus === 'completed' ? 'bg-green-100 text-green-800' :
+                  purchase.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {purchase.paymentStatus}
+                </span>
+              </div>
+              <div className="text-gray-700">
+                <strong>Purchase Date:</strong> {new Date(purchase.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );

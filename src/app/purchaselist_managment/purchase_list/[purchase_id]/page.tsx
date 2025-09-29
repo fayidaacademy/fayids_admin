@@ -3,7 +3,15 @@ import { apiUrl } from "@/api_config";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import EditSwitch from "@/my_components/edit_switch";
 import UpdateExpiryDate from "@/my_components/updateExpiryDate";
-import { Heading1 } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { 
+  Package, 
+  User, 
+  Calendar, 
+  ArrowLeft 
+} from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import useRefetchStore from "@/store/autoFetch";
@@ -62,142 +70,257 @@ export default function PurchaseInfo({ params }: any) {
   }
 
   return (
-    <div className="mx-10 my-5">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      {/* <h1>purchaseId : {purchaseId}</h1> */}
-      <div className="space-y-3">
-        <h1>
-          <span className="text-blue-800 font-semibold"> Request Id:</span>{" "}
-          {data?.id}
-        </h1>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Request Type:</span>{" "}
-          {data?.type}
-        </h1>
-        {data?.type == "update" && (
-          <h1 className="flex space-x-1">
-            <span className="text-blue-800 font-semibold ">
-              {" "}
-              Update Status:
-            </span>{" "}
-            {data?.updatePackageStatus == "on" ? (
-              <h1>Pending</h1>
-            ) : (
-              <h1>Done</h1>
-            )}
-          </h1>
-        )}
-
-        <h1>
-          <span className="text-blue-800 font-semibold"> Request Date:</span>{" "}
-          {new Date(data.createdAt).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "2-digit",
-          })}{" "}
-        </h1>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Full Name:</span>
-          <span className="hover:text-blue-700 hover:underline">
-            <Link href={`/students/${data?.Student?.id}`}>
-              {" "}
-              {data?.Student?.firstName} {data?.Student?.lastName}{" "}
-              {data?.Student?.grandName}
+      
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link href="/purchaselist_managment/purchase_list">
+              <Button variant="outline" size="sm" className="flex items-center">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Purchases
+              </Button>
             </Link>
-          </span>
-        </h1>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Package:</span>{" "}
-          {data.Package.packageName}
-        </h1>
-        {/* <h1>
-          <span className="text-blue-800 font-semibold">
-            {" "}
-            Selected Time Range:{" "}
-          </span>{" "}
-          {data.timeLength} Month
-        </h1> */}
-        {/* <h1>
-          <span className="text-blue-800 font-semibold"> Price: </span>{" "}
-          {data.value} Birr
-        </h1> */}
-        <h1>
-          <span className="text-blue-800 font-semibold"> Payment Method: </span>{" "}
-          {data.method}
-        </h1>
-        {/* <h1>
-          <span className="text-blue-800 font-semibold"> Transaction Id:</span>{" "}
-          {data.transaction_id}
-        </h1> */}
-        {/* <h1>
-          <span className="text-blue-800 font-semibold"> Order Name:</span>{" "}
-          {data.name}
-        </h1> */}
-        <h1>
-          <span className="text-blue-800 font-semibold"> Payment Status: </span>{" "}
-          {data.paymentStatus}
-        </h1>
-
-        <h1>
-          <span className="text-blue-800 font-semibold">Activated Date: </span>{" "}
-          {data.activatedDate
-            ? new Date(data.activatedDate).toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "2-digit",
-              })
-            : "Not Set"}
-        </h1>
-
-        <h1>
-          <span className="text-blue-800 font-semibold">Expiry Date: </span>{" "}
-          {data.expiryDate
-            ? new Date(data.expiryDate).toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "2-digit",
-              })
-            : "Not Set"}
-        </h1>
-        {(data.paymentStatus == "done" ||data.paymentStatus == "active")  && (
-          <div>
-            {/* <div className="bg-blue-600 text-white w-fit py-1 px-2">
-              <EditSwitch
-                buttonTitle="Deactivate"
-                changeTo="pending"
-                id={purchaseId}
-                recivedField="paymentStatus"
-                type="purchaselist/filterPurchase/reverse"
-              />
-            </div> */}
-
-            <Link
-              className="my-5"
-              href={`/purchaselist_managment/material_mgmt`}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Purchase Details</h1>
+              <p className="text-gray-600">View and manage purchase information</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3">
+            <Badge 
+              variant={data.paymentStatus === 'active' ? 'default' : 
+                       data.paymentStatus === 'done' ? 'secondary' : 'outline'}
+              className="px-3 py-1"
             >
-              <h1 className="my-5 bg-green-600 text-white w-fit py-1 px-2">
-                Go to Material Managment
-              </h1>
-            </Link>
+              {data.paymentStatus?.toUpperCase()}
+            </Badge>
           </div>
-        )}
-        {data.paymentStatus == "pending" && (
-          <div className="bg-green-600 text-white w-fit py-1 px-2">
-            <UpdateExpiryDate
-              id={purchaseId}
-              studentId={data.Student.id}
-              pcakageId={data.Package.id}
-              purchaseType={data.type}
-              recivedData={(parseInt(data.timeLength) * 30).toString()}
-              //  backTo=""
-              buttonTitle="Confirm Payment"
-              recivedField="paymentStatus"
-              type="purchaselist/filterPurchase"
-              changeTo="active"
-              packagePrice={data.value}
-            />
-          </div>
-        )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Details */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Purchase Information */}
+          <Card className="glass-card border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Package className="h-5 w-5 mr-2 text-blue-600" />
+                Purchase Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Request ID</label>
+                    <p className="text-lg font-semibold text-gray-900">{data?.id}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Request Type</label>
+                    <p className="text-lg font-semibold text-gray-900">{data?.type}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Request Date</label>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {new Date(data.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Payment Method</label>
+                    <p className="text-lg font-semibold text-gray-900">{data.method}</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Package</label>
+                    <p className="text-lg font-semibold text-gray-900">{data.Package?.packageName}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Payment Status</label>
+                    <Badge 
+                      variant={data.paymentStatus === 'active' ? 'default' : 
+                               data.paymentStatus === 'done' ? 'secondary' : 'outline'}
+                      className="ml-2"
+                    >
+                      {data.paymentStatus}
+                    </Badge>
+                  </div>
+                  {data?.type === "update" && (
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Update Status</label>
+                      <Badge variant={data?.updatePackageStatus === "on" ? "outline" : "default"} className="ml-2">
+                        {data?.updatePackageStatus === "on" ? "Pending" : "Done"}
+                      </Badge>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Student Information */}
+          <Card className="glass-card border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <User className="h-5 w-5 mr-2 text-green-600" />
+                Student Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-green-100 rounded-xl">
+                  <User className="h-8 w-8 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    <Link 
+                      href={`/students/${data?.Student?.id}`}
+                      className="hover:text-blue-600 hover:underline transition-colors"
+                    >
+                      {data?.Student?.firstName} {data?.Student?.lastName} {data?.Student?.grandName}
+                    </Link>
+                  </h3>
+                  <p className="text-sm text-gray-600">Student ID: {data?.Student?.id}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Dates Information */}
+          <Card className="glass-card border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Calendar className="h-5 w-5 mr-2 text-purple-600" />
+                Important Dates
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Activated Date</label>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {data.activatedDate
+                      ? new Date(data.activatedDate).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })
+                      : "Not Set"}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Expiry Date</label>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {data.expiryDate
+                      ? new Date(data.expiryDate).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })
+                      : "Not Set"}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Actions Sidebar */}
+        <div className="space-y-6">
+          {/* Status Card */}
+          <Card className="glass-card border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-lg">Status Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-600">Payment Status</span>
+                  <Badge 
+                    variant={data.paymentStatus === 'active' ? 'default' : 
+                             data.paymentStatus === 'done' ? 'secondary' : 'outline'}
+                  >
+                    {data.paymentStatus}
+                  </Badge>
+                </div>
+                {data?.type === "update" && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-600">Update Status</span>
+                    <Badge variant={data?.updatePackageStatus === "on" ? "outline" : "default"}>
+                      {data?.updatePackageStatus === "on" ? "Pending" : "Done"}
+                    </Badge>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Actions */}
+          <Card className="glass-card border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-lg">Actions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {(data.paymentStatus === "done" || data.paymentStatus === "active") && (
+                  <Link href={`/purchaselist_managment/material_mgmt`}>
+                    <Button className="w-full bg-green-600 hover:bg-green-700">
+                      <Package className="h-4 w-4 mr-2" />
+                      Material Management
+                    </Button>
+                  </Link>
+                )}
+                
+                {data.paymentStatus === "pending" && (
+                  <div className="bg-green-600 text-white p-3 rounded-lg">
+                    <UpdateExpiryDate
+                      id={purchaseId}
+                      studentId={data.Student.id}
+                      pcakageId={data.Package.id}
+                      purchaseType={data.type}
+                      recivedData={(parseInt(data.timeLength) * 30).toString()}
+                      buttonTitle="Confirm Payment"
+                      recivedField="paymentStatus"
+                      type="purchaselist/filterPurchase"
+                      changeTo="active"
+                      packagePrice={data.value}
+                    />
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Stats */}
+          <Card className="glass-card border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-lg">Quick Info</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Request Type</span>
+                  <span className="font-semibold">{data?.type}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Package</span>
+                  <span className="font-semibold">{data.Package?.packageName}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Payment Method</span>
+                  <span className="font-semibold">{data.method}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
