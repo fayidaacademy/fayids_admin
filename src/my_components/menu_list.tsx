@@ -10,6 +10,7 @@ import Link from "next/link";
 import {
   Ticket,
   UserCheck,
+  Users,
   Table,
   Blocks,
   BookCopy,
@@ -66,8 +67,9 @@ export function AccordionMenu() {
       });
   }, []);
 
+  // Show full accordion - always expanded
   return (
-    <div className="h-full ">
+    <div className="h-full">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-0">
           <AccordionTrigger>

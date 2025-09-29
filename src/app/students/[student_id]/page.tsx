@@ -43,129 +43,63 @@ export default function StudentDetails({ params }: any) {
   }, []);
 
   return (
-    <div className="space-y-2 mx-10 my-5">
+    <div className="min-h-screen bg-white">
       <LoadProfileAuth />
-      <div>
-        <h1 className="text-lg text-blue-800 underline font-semibold">
-          Student Details
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> First Name:</span>{" "}
-          {data?.firstName}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Last Name:</span>{" "}
-          {data?.lastName}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Grand Name:</span>{" "}
-          {data?.grandName}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Email:</span>{" "}
-          {data?.email}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          {" "}
-          <span className="text-blue-800 font-semibold"> Age: </span>
-          {data?.age}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Created At:</span>{" "}
-          {data?.createdAt}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Section: </span>
-          {data?.gread}
-        </h1>
-      </div>
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Region: </span>
-          {data?.region}
-        </h1>
-      </div>
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> City: </span>
-          {data?.city}
-        </h1>
-      </div>
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> School: </span>
-          {data?.schoolName}
-        </h1>
-      </div>
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Gender: </span>
-          {data?.gender}
-        </h1>
-      </div>
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Phone Number:</span>{" "}
-          {data?.phoneNumber}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold">
-            {" "}
-            Preffered Language:{" "}
-          </span>{" "}
-          {data?.prefferdLanguage}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          {" "}
-          <span className="text-blue-800 font-semibold"> Points: </span>
-          {data?.points}
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Account Status:</span>{" "}
-          {data?.studentStatus}
-        </h1>
-      </div>
-      <div className="flex space-x-32">
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold">Visiblity</span>{" "}
-          {data?.visiblity}
-        </h1>
-      </div>
-      <div className="bg-red-400 text-white p-2 rounded">
-       <EditSwitch buttonTitle="Remove Student" changeTo="removed" id={data?.id} recivedField="visiblity" type="Students"/>
-      </div>
-      </div>
-
-      <div className="px-2 py-1 bg-blue-800 w-fit text-white rounded">
-        <Link href={`/students/student_related_lists/packages/${StudentId}`}>
-          Packages
-        </Link>
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Student Details
+          </h1>
+          <p className="text-gray-600">Comprehensive information about the student</p>
+        </div>
+        <div className="bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
+              <div className="space-y-3">
+                <div><strong className="text-gray-700">First Name:</strong> {data?.firstName}</div>
+                <div><strong className="text-gray-700">Last Name:</strong> {data?.lastName}</div>
+                <div><strong className="text-gray-700">Grand Name:</strong> {data?.grandName}</div>
+                <div><strong className="text-gray-700">Gender:</strong> {data?.gender}</div>
+                <div><strong className="text-gray-700">Age:</strong> {data?.age}</div>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+              <div className="space-y-3">
+                <div><strong className="text-gray-700">Email:</strong> {data?.email}</div>
+                <div><strong className="text-gray-700">Phone Number:</strong> {data?.phoneNumber}</div>
+                <div><strong className="text-gray-700">Preferred Language:</strong> {data?.prefferdLanguage}</div>
+              </div>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Academic Information</h3>
+              <div className="space-y-3">
+                <div><strong className="text-gray-700">Section:</strong> {data?.gread}</div>
+                <div><strong className="text-gray-700">School:</strong> {data?.schoolName}</div>
+                <div><strong className="text-gray-700">Region:</strong> {data?.region}</div>
+                <div><strong className="text-gray-700">City:</strong> {data?.city}</div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-lg mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><strong className="text-gray-700">Created At:</strong> {data?.createdAt}</div>
+              <div><strong className="text-gray-700">Points:</strong> {data?.points}</div>
+              <div><strong className="text-gray-700">Account Status:</strong> {data?.studentStatus}</div>
+              <div><strong className="text-gray-700">Visibility:</strong> {data?.visiblity}</div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="border border-red-500 text-red-500 px-6 py-3 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
+              <EditSwitch buttonTitle="Remove Student" changeTo="removed" id={data?.id} recivedField="visiblity" type="Students"/>
+            </div>
+            <Link href={`/students/student_related_lists/packages/${StudentId}`} className="border border-blue-500 text-blue-500 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors text-center">
+              View Packages
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

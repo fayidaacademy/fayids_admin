@@ -149,6 +149,18 @@ export const columns: ColumnDef<Student>[] = [
       );
     },
     accessorKey: "studentStatus",
+    cell: ({ row }) => {
+      const status = row.getValue("studentStatus") as string;
+      return (
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+          status === 'active' ? 'bg-green-100 text-green-800' :
+          status === 'inactive' ? 'bg-red-100 text-red-800' :
+          'bg-gray-100 text-gray-800'
+        }`}>
+          {status}
+        </span>
+      );
+    },
   },
 
   {

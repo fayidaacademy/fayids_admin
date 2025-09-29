@@ -172,94 +172,104 @@ export default function HomeDashboard() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Dashboard Overview</h1>
+    <div className="relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-primary-400/20 to-secondary-400/20 rounded-full blur-2xl animate-float"></div>
+        <div className="absolute bottom-20 left-20 w-40 h-40 bg-gradient-to-tr from-accent-400/20 to-primary-400/20 rounded-full blur-3xl animate-float" style={{animationDelay: '3s'}}></div>
+      </div>
+
+      <div className="relative z-10">
+        {/* Header Section */}
+        <div className="mb-8 animate-slide-up">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
+            <p className="text-gray-600">Welcome back! Here's what's happening with your academy.</p>
+          </div>
+        </div>
         
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        {/* Enhanced Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {/* Time Card */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center">
-            <div className="rounded-full bg-blue-50 p-3 mr-4">
-              <Clock className="h-6 w-6 text-blue-600" />
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 animate-fade-in">
+            <div className="flex items-center mb-3">
+              <Clock className="h-5 w-5 text-primary-600 mr-3" />
+              <p className="text-sm font-medium text-gray-600">Current Time</p>
             </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">Current Time</p>
-              <p className="text-lg font-semibold text-gray-800">{formatTime(currentTime)}</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatTime(currentTime)}</p>
           </div>
 
           {/* Date Card */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center">
-            <div className="rounded-full bg-indigo-50 p-3 mr-4">
-              <Calendar className="h-6 w-6 text-indigo-600" />
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 animate-fade-in" style={{animationDelay: '0.1s'}}>
+            <div className="flex items-center mb-3">
+              <Calendar className="h-5 w-5 text-secondary-600 mr-3" />
+              <p className="text-sm font-medium text-gray-600">Today's Date</p>
             </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">Today's Date</p>
-              <p className="text-lg font-semibold text-gray-800">{formatDate(currentTime)}</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatDate(currentTime)}</p>
           </div>
 
           {/* Users Stats Card */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center">
-            <div className="rounded-full bg-emerald-50 p-3 mr-4">
-              <Users className="h-6 w-6 text-emerald-600" />
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 animate-fade-in" style={{animationDelay: '0.2s'}}>
+            <div className="flex items-center mb-3">
+              <Users className="h-5 w-5 text-accent-600 mr-3" />
+              <p className="text-sm font-medium text-gray-600">User Statistics</p>
             </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">User Statistics</p>
-              {accountType === "Admin" ? (
-                <div>
-                  <p className="text-lg font-semibold text-gray-800">
-                    {studnets?.length - 2} <span className="text-sm font-normal">Students</span>
-                  </p>
-                  <p className="text-lg font-semibold text-gray-800">
-                    {examTaker?.length} <span className="text-sm font-normal">Exam Takers</span>
-                  </p>
-                </div>
-              ) : accountType === "SubAdmin" ? (
-                <p className="text-lg font-semibold text-gray-800">SubAdmin Access</p>
-              ) : (
-                <p className="text-lg font-semibold text-gray-800">Assistant Access</p>
-              )}
-            </div>
+            {accountType === "Admin" ? (
+              <div>
+                <p className="text-2xl font-bold text-gray-900 mb-1">
+                  {studnets?.length - 2} <span className="text-sm font-normal text-gray-500">Students</span>
+                </p>
+                <p className="text-lg font-semibold text-gray-700">
+                  {examTaker?.length} <span className="text-sm font-normal text-gray-400">Exam Takers</span>
+                </p>
+              </div>
+            ) : accountType === "SubAdmin" ? (
+              <p className="text-2xl font-bold text-gray-900">SubAdmin Access</p>
+            ) : (
+              <p className="text-2xl font-bold text-gray-900">Assistant Access</p>
+            )}
           </div>
 
           {/* System Version Card */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center">
-            <div className="rounded-full bg-purple-50 p-3 mr-4">
-              <svg className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 animate-fade-in" style={{animationDelay: '0.3s'}}>
+            <div className="flex items-center mb-3">
+              <svg className="h-5 w-5 text-purple-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
+              <p className="text-sm font-medium text-gray-600">System Version</p>
             </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">System Version</p>
-              <p className="text-lg font-semibold text-gray-800">v1.0.0</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-900">v2.0.0</p>
           </div>
         </div>
 
         {/* Charts Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Student Analytics</h2>
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8 animate-slide-up" style={{animationDelay: '0.4s'}}>
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Student Analytics</h2>
+            <p className="text-gray-600">Comprehensive insights into student performance and engagement</p>
+          </div>
           <ChartOne />
         </div>
 
         {/* Notifications Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-          <div className="flex items-center mb-4">
-            <Bell className="h-5 w-5 text-gray-500 mr-2" />
-            <h2 className="text-lg font-semibold text-gray-800">Recent Notifications</h2>
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8 animate-slide-up" style={{animationDelay: '0.5s'}}>
+          <div className="flex items-center mb-6">
+            <Bell className="h-5 w-5 text-yellow-600 mr-3" />
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Recent Notifications</h2>
+              <p className="text-gray-600">Stay updated with the latest academy news and alerts</p>
+            </div>
           </div>
           
           <div className="space-y-3">
             {notificationData?.map && notificationData?.map((notification) => (
               <div 
                 key={notification?.notiId}
-                className={`border ${
+                className={`rounded-lg overflow-hidden border transition-all duration-200 ${
                   notification?.status == "0"
-                    ? "border-blue-100 bg-blue-50"
-                    : "border-gray-100 bg-gray-50"
-                } rounded-lg overflow-hidden`}
+                    ? "border-primary-200 bg-primary-50"
+                    : "border-gray-200 bg-gray-50"
+                }`}
               >
                 <Accordion type="single" collapsible>
                   <AccordionItem value="item-1" className="border-none">
@@ -269,9 +279,9 @@ export default function HomeDashboard() {
                     >
                       <div className="w-full pr-4">
                         <div className="flex justify-between items-center">
-                          <h3 className="text-sm font-medium text-gray-800">{notification?.notiHead}</h3>
+                          <h3 className="text-sm font-medium text-gray-900">{notification?.notiHead}</h3>
                           {notification?.status == 0 && (
-                            <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">New</span>
+                            <span className="bg-primary-600 text-white text-xs font-medium px-2 py-1 rounded-full">New</span>
                           )}
                         </div>
                       </div>
@@ -285,8 +295,10 @@ export default function HomeDashboard() {
             ))}
             
             {(!notificationData || notificationData.length === 0) && (
-              <div className="text-center py-6 text-gray-500">
-                No notifications at this time
+              <div className="text-center py-8">
+                <Bell className="h-8 w-8 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-500 font-medium">No notifications at this time</p>
+                <p className="text-gray-400 text-sm">We'll notify you when there's something important</p>
               </div>
             )}
           </div>
@@ -294,8 +306,11 @@ export default function HomeDashboard() {
 
         {/* Exam Takers Analysis Section (Admin only) */}
         {accountType == "Admin" && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Exam Takers Analysis</h2>
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-slide-up" style={{animationDelay: '0.6s'}}>
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Exam Takers Analysis</h2>
+              <p className="text-gray-600">Detailed insights into exam performance and trends</p>
+            </div>
             <ExamTakersAnalysis />
           </div>
         )}

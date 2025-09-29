@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import { Plus } from "lucide-react";
 
 import {
   setAccessToken,
@@ -109,44 +110,59 @@ export default function AddCourseForm() {
 
   return (
     <div>
-      <LoadProfileAuth />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="courseName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Course Name</FormLabel>
-                <FormControl>
-                  <div className="w-1/2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="courseName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold text-gray-700">Course Name</FormLabel>
+                  <FormControl>
                     <Input
-                      placeholder="type the section name here ..."
+                      placeholder="Enter course name..."
                       {...field}
+                      className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
                     />
-                  </div>
-                </FormControl>
-                <FormDescription>...</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="partName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold text-gray-700">Part Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Module, Chapter, Section..."
+                      {...field}
+                      className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
             name="courseDescription"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Course Description</FormLabel>
+                <FormLabel className="text-sm font-semibold text-gray-700">Course Description</FormLabel>
                 <FormControl>
-                  <div className="w-1/2">
-                    <Input
-                      placeholder="type the description here ..."
-                      {...field}
-                    />
-                  </div>
+                  <Input
+                    placeholder="Brief description of the course..."
+                    {...field}
+                    className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                  />
                 </FormControl>
-                <FormDescription>...</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -157,42 +173,29 @@ export default function AddCourseForm() {
             name="parts"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Parts</FormLabel>
+                <FormLabel className="text-sm font-semibold text-gray-700">Number of Parts</FormLabel>
                 <FormControl>
-                  <div className="w-1/2">
-                    <Input
-                      placeholder="how many parts  ..."
-                      {...field}
-                      type="number"
-                    />
-                  </div>
+                  <Input
+                    placeholder="How many parts does this course have?"
+                    {...field}
+                    type="number"
+                    className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg w-full md:w-1/2"
+                  />
                 </FormControl>
-                <FormDescription>...</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="partName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Part Name</FormLabel>
-                <FormControl>
-                  <div className="w-1/2">
-                    <Input
-                      placeholder="how do you want to name the parts ..."
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-                <FormDescription>...</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Add</Button>
+          <div className="pt-6 border-t border-gray-100">
+            <Button
+              type="submit"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Create Course
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

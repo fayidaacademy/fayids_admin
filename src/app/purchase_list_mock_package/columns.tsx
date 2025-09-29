@@ -138,6 +138,10 @@ export const columns: ColumnDef<Purchase>[] = [
       );
     },
     accessorKey: "price",
+    cell: ({ row }) => {
+      const price = row.getValue("price") as string;
+      return <span className="font-semibold text-green-600">₦{parseFloat(price || '0').toLocaleString()}</span>;
+    },
   },
 
   {
@@ -195,5 +199,21 @@ export const columns: ColumnDef<Purchase>[] = [
       );
     },
     accessorKey: "status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+      const getStatusBadge = (status: string) => {
+        switch (status.toLowerCase()) {
+          case 'completed':
+            return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span>;
+          case 'pending':
+            return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span>;
+          case 'processing':
+            return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Processing</span>;
+          default:
+            return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{status}</span>;
+        }
+      };
+      return getStatusBadge(status);
+    },
   },
 ];

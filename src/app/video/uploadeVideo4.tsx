@@ -72,42 +72,95 @@ export default function UploadVideo(params: { videoId: string }) {
   };
 
   return (
-    <div>
-      <div>
-        {uploading && (
-          <div className="my-4">
-            <h1 className="text-lg font-bold">Uploading In Progress...</h1>
-            <Progress value={uploadProgress} max={100} />
-            <p>{uploadProgress.toFixed(2)}%</p> {/* Display numeric progress */}
-          </div>
-        )}
-        {uploadError && <p className="text-red-500">{uploadError}</p>}
+    <div className="space-y-6">
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/30 p-8">
+        <div className="space-y-6">
+          {uploading && (
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                <h1 className="text-xl font-bold text-gray-900">Uploading Video...</h1>
+              </div>
+              <div className="space-y-2">
+                <Progress value={uploadProgress} className="h-3" />
+                <p className="text-sm text-gray-600 text-center font-medium">{uploadProgress.toFixed(1)}% Complete</p>
+              </div>
+            </div>
+          )}
+          
+          {uploadError && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">!</span>
+                </div>
+                <p className="text-red-700 font-medium">{uploadError}</p>
+              </div>
+            </div>
+          )}
+
+          <form
+            method="POST"
+            id="myForm"
+            encType="multipart/form-data"
+            onSubmit={handleSubmit}
+            className="space-y-6"
+          >
+            <div className="space-y-3">
+              <label
+                htmlFor="course_video"
+                className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 group"
+              >
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  <div className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg group-hover:from-blue-600 group-hover:to-blue-700 transition-all duration-300">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-gray-700 group-hover:text-blue-700 transition-colors">
+                      Click to upload video
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      MP4, MOV, AVI up to 500MB
+                    </p>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  className="hidden"
+                  id="course_video"
+                  name="course_video"
+                  required
+                  accept="video/*"
+                />
+              </label>
+            </div>
+
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                disabled={uploading}
+              >
+                {uploading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <span>Uploading...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                    </svg>
+                    <span>Upload Video</span>
+                  </div>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      <form
-        method="POST"
-        id="myForm"
-        encType="multipart/form-data"
-        onSubmit={handleSubmit}
-      >
-        <label
-          htmlFor="course_video"
-          className="px-3 bg-yellow-300 cursor-pointer"
-        >
-          <span className="text-blue-900 font-semibold">Upload Video</span>
-        </label>
-        <input
-          type="file"
-          className="hidden"
-          id="course_video"
-          name="course_video"
-          required
-        />
-        <input
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 mt-4 cursor-pointer"
-          value="Upload"
-        />
-      </form>
     </div>
   );
 }
