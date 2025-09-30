@@ -180,7 +180,7 @@ export default function CreteVideoForm() {
               ></div>
             )}
           />
-          <Button type="submit">Add</Button>
+          <Button type="submit" className="text-black bg-white">Add</Button>
         </form>
       </Form>
     </div>

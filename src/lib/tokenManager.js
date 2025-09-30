@@ -21,3 +21,31 @@ export const clearAccessToken = () => {
     localStorage.removeItem("accessToken"); // Clear from localStorage
   }
 };
+
+// Token validation helper
+export const validateToken = async () => {
+  const token = getAccessToken();
+  if (!token) {
+    return false;
+  }
+  
+  try {
+    const response = await fetch('https://api.fayidaacademy.com/login_register/profile', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+    
+    if (response.status === 401) {
+      clearAccessToken();
+      return false;
+    }
+    
+    return response.ok;
+  } catch (error) {
+    console.error('Token validation failed:', error);
+    return false;
+  }
+};

@@ -182,6 +182,7 @@ export default function CreateMaterial(params: any) {
         <DialogFooter>
           <Button
             type="submit"
+            className="text-black bg-white"
             onClick={() => {
               // console.log(inputIndex);
               handleCreateMaterialClick();

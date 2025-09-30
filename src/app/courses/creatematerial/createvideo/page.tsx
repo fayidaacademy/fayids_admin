@@ -7,8 +7,8 @@ import Link from "next/link";
 
 export default function CreateVideo() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-500 via-pink-600 to-purple-600 relative overflow-hidden">
-      {/* Background Pattern */}
+      <div className="min-h-screen bg-white relative overflow-hidden">
+        {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform rotate-12 scale-150"></div>
         <div className="absolute inset-0 bg-gradient-to-l from-transparent via-red-300/10 to-transparent transform -rotate-12 scale-150"></div>
