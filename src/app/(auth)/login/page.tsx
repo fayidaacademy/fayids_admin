@@ -93,7 +93,8 @@ export default function LoginPage() {
     const formData = new FormData();
     formData.append('email', data.email);
     formData.append('password', data.password);
-    fetch(`${apiUrl}/newlogin/login`, {
+    // Use Next.js rewrite to avoid CORS while still targeting production API
+    fetch(`/api/newlogin/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

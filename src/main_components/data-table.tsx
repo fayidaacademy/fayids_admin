@@ -141,46 +141,40 @@ export function DataTableGenerator<TData, TValue>({
   });
 
   return (
-    <div className="space-y-6">
-      {/* Enhanced Search and Export Bar */}
-      <div className="glass-card rounded-2xl p-6 shadow-soft">
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3 w-full lg:w-auto">
-            <div className="p-2 bg-gradient-primary rounded-xl">
-              <Search className="h-5 w-5 text-white" />
-            </div>
-            <input
-              type="text"
-              className="flex-1 lg:w-80 px-4 py-3 glass rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-transparent transition-all duration-300 placeholder-gray-400"
-              placeholder={`Search ${filterBytoDisplay}...`}
-              value={
-                (table.getColumn(`${filterBy}`)?.getFilterValue() as string) || ""
-              }
-              onChange={(e) => {
-                table.getColumn(`${filterBy}`)?.setFilterValue(e.target.value);
-              }}
-            />
-          </div>
-          <Button
-            onClick={() => exportManage(filterBy)}
-            className="btn-modern flex items-center gap-3 px-6 py-3 text-white font-semibold rounded-xl shadow-glow hover:shadow-glow-lg transition-all duration-300"
-          >
-            <Download className="h-5 w-5" />
-            Export to Excel
-          </Button>
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Search className="h-4 w-4 text-gray-500" />
+          <input
+            type="text"
+            className="flex-1 sm:w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder={`Filter by ${filterBytoDisplay}`}
+            value={
+              (table.getColumn(`${filterBy}`)?.getFilterValue() as string) || ""
+            }
+            onChange={(e) => {
+              table.getColumn(`${filterBy}`)?.setFilterValue(e.target.value);
+            }}
+          />
         </div>
+        <Button
+          onClick={() => exportManage(filterBy)}
+          className="flex items-center gap-2 bg-white border border-primaryColor text-primaryColor hover:bg-primaryColor hover:text-white transition-colors"
+        >
+          <Download className="h-4 w-4" />
+          Export to Excel
+        </Button>
       </div>
 
-      {/* Enhanced Table Container */}
-      <div className="glass-card rounded-2xl overflow-hidden shadow-large">
+      <div className="rounded-lg border border-gray-200 overflow-hidden shadow-sm">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-50">
             {table.getHeaderGroups().map((headerGroup) => {
               return (
-                <TableRow key={headerGroup.id} className="border-b border-white/20 hover:bg-white/5">
+                <TableRow key={headerGroup.id} className="border-b border-gray-200">
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} className="text-gray-700 font-bold py-4 px-6 text-sm uppercase tracking-wide bg-gradient-to-r from-gray-50/50 to-white/30">
+                      <TableHead key={header.id} className="text-gray-700 font-semibold py-3 px-4">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -195,14 +189,14 @@ export function DataTableGenerator<TData, TValue>({
 
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-white/10 transition-all duration-300 border-b border-white/10 group"
+                  className="hover:bg-gray-50 transition-colors border-b border-gray-100"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-4 px-6 group-hover:text-gray-900 transition-colors duration-300">
+                    <TableCell key={cell.id} className="py-3 px-4">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -215,15 +209,9 @@ export function DataTableGenerator<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-32 text-center"
+                  className="h-24 text-center text-gray-500"
                 >
-                  <div className="flex flex-col items-center justify-center py-8">
-                    <div className="p-4 bg-gray-100/50 rounded-2xl mb-4">
-                      <Search className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <p className="text-gray-500 text-lg font-medium">No results found</p>
-                    <p className="text-gray-400 text-sm">Try adjusting your search criteria</p>
-                  </div>
+                  No results found
                 </TableCell>
               </TableRow>
             )}
@@ -231,39 +219,26 @@ export function DataTableGenerator<TData, TValue>({
         </Table>
       </div>
 
-      {/* Enhanced Pagination */}
       {table.getPageCount() > 1 && (
-        <div className="glass-card rounded-2xl p-6 shadow-soft">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-                className="flex items-center gap-2 px-4 py-2 glass rounded-xl text-gray-700 hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Previous
-              </Button>
-              <Button
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-                className="flex items-center gap-2 px-4 py-2 glass rounded-xl text-gray-700 hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="px-4 py-2 glass rounded-xl">
-                <span className="text-sm font-semibold text-gray-700">
-                  Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-                </span>
-              </div>
-            </div>
+        <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200">
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+            >
+              Previous
+            </Button>
+            <Button
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+            >
+              Next
+            </Button>
+          </div>
+          <div className="text-sm text-gray-700">
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
           </div>
         </div>
       )}

@@ -1,8 +1,9 @@
 "use client";
-import { apiUrl } from "@/api_config";
+import { uploadApiUrl, apiUrl } from "@/api_config";
 import React, { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/components/ui/use-toast";
+import { getAccessToken } from "@/lib/tokenManager";
 
 export default function UploadQuestionImage(params: any) {
   const QuestionId = params.questionId;
@@ -61,10 +62,14 @@ export default function UploadQuestionImage(params: any) {
 
     try {
       const formData = new FormData(event.target);
+      const token = getAccessToken();
       const response = await fetch(
-        `${apiUrl}/questionimageupload/upload_question_image/${QuestionId}`,
+        `${uploadApiUrl}/questionimageupload/upload_question_image/${QuestionId}`,
         {
           method: "POST",
+          headers: {
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+          },
           body: formData,
         }
       );
