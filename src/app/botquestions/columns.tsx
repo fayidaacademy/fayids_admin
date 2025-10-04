@@ -58,14 +58,12 @@ export const columns: ColumnDef<Student>[] = [
               <DropdownMenuLabel>{StudentFirstName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem
-                  onClick={() => {
-                    console.log(StudentId);
-                  }}
-                >
-                  <User className="mr-2 h-4 w-4" />
-                  <Link href={`/botquestions/${StudentId}`}>Details</Link>
-                </DropdownMenuItem>
+                <Link href={`/botquestions/${StudentId}`}>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>View Details</span>
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
             </DropdownMenuContent>

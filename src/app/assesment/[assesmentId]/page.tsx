@@ -11,6 +11,17 @@ import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import useRefetchStore from "@/store/autoFetch";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { 
+  FileText, 
+  Clock, 
+  Award, 
+  ArrowLeft, 
+  Edit2, 
+  Trash2, 
+  Image as ImageIcon,
+  CheckCircle2,
+  AlertCircle
+} from "lucide-react";
 
 import UploadQuestionImage from "./uploaduestionImage";
 import UploadCorrectionImage from "./uploadCorrectionImage";
@@ -23,10 +34,17 @@ export default function AssesmentDetails({ params }: any) {
   const [fetchedData, setFetchedData] = useState<any>(null);
   const [data, setData] = useState<any>([]);
   const [question_data, setQuestion_data] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const questionFetch = useRefetchStore((state) => state.questionFetch);
-  const AssesmentId = fetchedData?.assementId?.id;
+  
+  // Try to get AssesmentId from fetched data, or use MaterialId as fallback
+  const AssesmentId = fetchedData?.assementId?.id || fetchedData?.assesmentId || MaterialId;
+
+  console.log("MaterialId from params:", MaterialId);
+  console.log("AssesmentId resolved:", AssesmentId);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(`${apiUrl}/materials/${MaterialId}`, {
       credentials: "include",
       next: {
@@ -36,10 +54,18 @@ export default function AssesmentDetails({ params }: any) {
       .then((res) => res.json())
       .then((data) => {
         setFetchedData(data);
+        setIsLoading(false);
+        console.log("Fetched assessment data:", data);
+        console.log("Assessment ID from data.assementId?.id:", data?.assementId?.id);
+        console.log("Assessment ID from data.assesmentId:", data?.assesmentId);
+        console.log("Material ID (from params):", MaterialId);
       })
       .catch((error) => {
         // Handle any errors that occur during the fetch request
+        setIsLoading(false);
+        console.error("Error fetching material:", error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionFetch]);
 
   useEffect(() => {
@@ -60,6 +86,7 @@ export default function AssesmentDetails({ params }: any) {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionFetch]);
 
   function formatTextToHTML(text: any) {
@@ -180,204 +207,320 @@ export default function AssesmentDetails({ params }: any) {
   // http://localhost:5000/questions/accessquestions/52a33dfd-e3fc-4ab2-ba70-7924a75c78e4
   //to access all questions with a single assesment
   return (
-    <div className="space-y-3">
+    <div className="min-h-screen bg-gray-50 pb-12">
       <LoadProfileAuth />
-      <h1 className="text-blue-800 font-semibold underline w-fit">
-        Assesment Details
-      </h1>
-      <h1>{AssesmentId}</h1>
-      <Link href={`/courses/managematerials/${CourseId}`}>
-        <h1 className=""> To Manage Materials</h1>
-      </Link>
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-blue-800 font-semibold">Material Index:</span>{" "}
-          {MaterialIndex}
-        </h1>
-
-        <EditNumberCellDialog
-          type="materials"
-          field="materialIndex"
-          id={MaterialId}
-          content={MaterialIndex}
-        />
-      </div>
-
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-blue-800 font-semibold">Assesment Part:</span>{" "}
-          {MaterialPart}
-        </h1>
-
-        <EditCellDialog
-          type="materials"
-          field="part"
-          id={MaterialId}
-          content={MaterialPart}
-          dataType="number"
-        />
-      </div>
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-blue-800 font-semibold">Material Type:</span>{" "}
-          {MaterialType}
-        </h1>
-      </div>
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-blue-800 font-semibold">Assessment Title:</span>{" "}
-          {AssesmentTitle}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="assesmentTitle"
-          id={AssesmentId}
-          content={AssesmentTitle}
-          dataType="text"
-        />
-      </div>
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-blue-800 font-semibold">
-            Assessment Description:
-          </span>{" "}
-          {AssesmentDescription}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="assesmentDescription"
-          id={AssesmentId}
-          content={AssesmentDescription}
-          dataType="text"
-        />
-      </div>
-      <div className="flex space-x-6">
-        <h1>
-          <span className="text-blue-800 font-semibold">
-            Assessment Points{" "}
-          </span>{" "}
-          {AssesmentPoints}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="assesmentPoints"
-          id={AssesmentId}
-          content={AssesmentPoints}
-          dataType="number"
-        />
-      </div>
-      <div className="flex space-x-6">
-        <h1>
-          <span className="text-blue-800 font-semibold">
-            Assessment Points in minutes
-          </span>{" "}
-          {AssesmentDuration}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="duration"
-          id={AssesmentId}
-          content={AssesmentDuration}
-          dataType="number"
-        />
-      </div>
-
-      <DeleteMaterialAndAssessment
-        materialId={MaterialId}
-        assessmentId={AssesmentId}
-        courseId={CourseId}
-      />
-
-      {/* <CreateQuestion assesmentId={AssesmentId} /> */}
-      <div className="my-4 w-full flex justify-end   z-50 sticky top-14  ">
-        {" "}
-        <div className=" w-fit  ">
-          <CreateQuestion assesmentId={AssesmentId} />
+      
+      {/* Header Section */}
+      <div className="bg-white border-b sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Link 
+                href={`/courses/managematerials/${CourseId}`}
+                className="flex items-center text-gray-600 hover:text-primaryColor transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                <span className="font-medium">Back to Materials</span>
+              </Link>
+            </div>
+            <div className="flex items-center space-x-3">
+              {isLoading ? (
+                <div className="text-sm text-gray-500">Loading...</div>
+              ) : AssesmentId ? (
+                <CreateQuestion assesmentId={AssesmentId} />
+              ) : (
+                <div className="text-sm text-red-500">Assessment ID not found</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold">
-            Questions in assesment:
-          </span>{" "}
-          {AssesmentTitle}{" "}
-        </h1>
-        {/*question_data*/}
-        {/*fetchedData?.assementId?.question*/}
-        {question_data?.map((q: any, index: number) => {
-          return (
-            <div className="py-5" key={index}>
-              <div className="flex space-x-3">
-                <h2>{q.questionIndex}.</h2>
-                <h2>{formatTextToHTML(q.question)}</h2>
-              </div>
-              <div>
-                <h2 className="flex gap-2">A. {formatTextToHTML(q.choiseA)}</h2>
-                <h2 className="flex gap-2">B. {formatTextToHTML(q.choiseB)}</h2>
-                <h2 className="flex gap-2">C. {formatTextToHTML(q.choiseC)}</h2>
-                <h2 className="flex gap-2">D. {formatTextToHTML(q.choiseD)}</h2>
-                <h2 className="flex gap-2">
-                  Correct Choice: {formatTextToHTML(q.correctChoice)}
-                </h2>
-                <div>
-                  <h1>Exp: {formatTextToHTML(q.correction)}</h1>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Title */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Assessment Details</h1>
+          <p className="text-gray-600">Manage assessment information and questions</p>
+        </div>
+
+        {/* Assessment Info Card */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">Assessment Information</h2>
+            <DeleteMaterialAndAssessment
+              materialId={MaterialId}
+              assessmentId={AssesmentId}
+              courseId={CourseId}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Title */}
+            <div className="col-span-2">
+              <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1 block">
+                    Assessment Title
+                  </label>
+                  <p className="text-lg font-semibold text-gray-900">{AssesmentTitle}</p>
                 </div>
-                <div className="flex space-x-6">
-                  <Link href={`/question_details/${q.id}`}>
-                    <button className="bg-primaryColor text-white px-2 ">
-                      Edit
-                    </button>
-                  </Link>
+                <EditCellDialog
+                  type="assesments"
+                  field="assesmentTitle"
+                  id={AssesmentId}
+                  content={AssesmentTitle}
+                  dataType="text"
+                />
+              </div>
+            </div>
 
-                  <div className="w-full border-2 border-lime-700 p-2 my-3">
-                    <div className="grid grid-cols-2 w-full  gap-4">
-                      <div className="col-span-1">
-                        <div>
-                          {/* <h1>Url: {q?.questionImgUrl}</h1>
-                          <h1>Exam Id:{ExamId}</h1> */}
-                          {q?.questionImage != null && (
-                            <img
-                              //  src={`${apiUrl}/upload_assets/images/question_images/${q?.questionImage}`}
-                              src={q?.questionImgUrl}
-                            />
-                          )}
-                        </div>
+            {/* Description */}
+            <div className="col-span-2">
+              <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1 block">
+                    Description
+                  </label>
+                  <p className="text-gray-900">{AssesmentDescription}</p>
+                </div>
+                <EditCellDialog
+                  type="assesments"
+                  field="assesmentDescription"
+                  id={AssesmentId}
+                  content={AssesmentDescription}
+                  dataType="text"
+                />
+              </div>
+            </div>
 
-                        <div>
-                          <UploadQuestionImage questionId={q?.id} />
-                        </div>
-                      </div>
+            {/* Material Index */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div>
+                <label className="text-sm font-medium text-gray-600 mb-1 block">
+                  Material Index
+                </label>
+                <p className="text-lg font-semibold text-gray-900">{MaterialIndex}</p>
+              </div>
+              <EditNumberCellDialog
+                type="materials"
+                field="materialIndex"
+                id={MaterialId}
+                content={MaterialIndex}
+              />
+            </div>
 
-                      <div className="col-span-1">
-                        <div>
-                          {q?.correctionImage != null && (
-                            <img
-                              //   src={`${apiUrl}/upload_assets/images/correction_images/${q?.correctionImage}`}
-                              src={q?.correctionImageUrl}
-                              alt="Explanation Image"
-                            />
-                          )}
-                        </div>
+            {/* Material Part */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div>
+                <label className="text-sm font-medium text-gray-600 mb-1 block">
+                  Assessment Part
+                </label>
+                <p className="text-lg font-semibold text-gray-900">{MaterialPart}</p>
+              </div>
+              <EditCellDialog
+                type="materials"
+                field="part"
+                id={MaterialId}
+                content={MaterialPart}
+                dataType="number"
+              />
+            </div>
 
-                        <div>
-                          <UploadCorrectionImage questionId={q?.id} />
-                        </div>
+            {/* Material Type */}
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <label className="text-sm font-medium text-gray-600 mb-1 block">
+                Material Type
+              </label>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                {MaterialType}
+              </span>
+            </div>
+
+            {/* Points */}
+            <div className="flex items-center justify-between p-4 bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg border border-amber-200">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-amber-200 rounded-lg">
+                  <Award className="w-5 h-5 text-amber-700" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600 mb-1 block">
+                    Points
+                  </label>
+                  <p className="text-xl font-bold text-amber-700">{AssesmentPoints}</p>
+                </div>
+              </div>
+              <EditCellDialog
+                type="assesments"
+                field="assesmentPoints"
+                id={AssesmentId}
+                content={AssesmentPoints}
+                dataType="number"
+              />
+            </div>
+
+            {/* Duration */}
+            <div className="flex items-center justify-between p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-blue-200 rounded-lg">
+                  <Clock className="w-5 h-5 text-blue-700" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600 mb-1 block">
+                    Duration
+                  </label>
+                  <p className="text-xl font-bold text-blue-700">{AssesmentDuration} min</p>
+                </div>
+              </div>
+              <EditCellDialog
+                type="assesments"
+                field="duration"
+                id={AssesmentId}
+                content={AssesmentDuration}
+                dataType="number"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Questions Section */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">Questions</h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {question_data?.length || 0} question{question_data?.length !== 1 ? 's' : ''} in this assessment
+              </p>
+            </div>
+          </div>
+
+          {/* Questions List */}
+          <div className="space-y-6">
+            {question_data?.map((q: any, index: number) => (
+              <div 
+                key={q.id} 
+                className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow bg-white"
+              >
+                {/* Question Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primaryColor text-white font-semibold">
+                        {q.questionIndex}
+                      </span>
+                      <div className="flex-1 text-gray-900 font-medium text-lg">
+                        {formatTextToHTML(q.question)}
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <DeleteDialog
-                      type="questions"
-                      id={q.id}
-                      backTo={`/assesment/${MaterialId}`}
-                      buttonTitle="Delete Question"
-                    />
+                </div>
+
+                {/* Choices */}
+                <div className="space-y-3 mb-4 ml-11">
+                  {['A', 'B', 'C', 'D'].map((choice) => {
+                    const choiceKey = `choise${choice}` as keyof typeof q;
+                    const isCorrect = q.correctChoice === choice;
+                    return (
+                      <div
+                        key={choice}
+                        className={`flex items-start space-x-3 p-3 rounded-lg ${
+                          isCorrect 
+                            ? 'bg-green-50 border border-green-200' 
+                            : 'bg-gray-50 border border-gray-200'
+                        }`}
+                      >
+                        <span className={`font-semibold min-w-[24px] ${
+                          isCorrect ? 'text-green-700' : 'text-gray-700'
+                        }`}>
+                          {choice}.
+                        </span>
+                        <div className="flex-1">{formatTextToHTML(q[choiceKey])}</div>
+                        {isCorrect && (
+                          <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Explanation */}
+                {q.correction && (
+                  <div className="ml-11 mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-start space-x-2">
+                      <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm font-semibold text-blue-900 mb-1">Explanation</p>
+                        <div className="text-sm text-blue-800">{formatTextToHTML(q.correction)}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Images Section */}
+                <div className="ml-11 grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  {/* Question Image */}
+                  <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <ImageIcon className="w-4 h-4 text-gray-600" />
+                      <h4 className="text-sm font-semibold text-gray-700">Question Image</h4>
+                    </div>
+                    {q?.questionImage != null && (
+                      <img
+                        src={q?.questionImgUrl}
+                        alt="Question"
+                        className="w-full rounded-lg mb-3 border border-gray-300"
+                      />
+                    )}
+                    <UploadQuestionImage questionId={q?.id} />
+                  </div>
+
+                  {/* Correction Image */}
+                  <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <ImageIcon className="w-4 h-4 text-gray-600" />
+                      <h4 className="text-sm font-semibold text-gray-700">Explanation Image</h4>
+                    </div>
+                    {q?.correctionImage != null && (
+                      <img
+                        src={q?.correctionImageUrl}
+                        alt="Explanation"
+                        className="w-full rounded-lg mb-3 border border-gray-300"
+                      />
+                    )}
+                    <UploadCorrectionImage questionId={q?.id} />
                   </div>
                 </div>
+
+                {/* Action Buttons */}
+                <div className="ml-11 flex items-center space-x-3 pt-4 border-t border-gray-200">
+                  <Link href={`/question_details/${q.id}`}>
+                    <Button 
+                      className="bg-primaryColor hover:bg-primaryColor/90 text-white"
+                      size="sm"
+                    >
+                      <Edit2 className="w-4 h-4 mr-2" />
+                      Edit Question
+                    </Button>
+                  </Link>
+                  <DeleteDialog
+                    type="questions"
+                    id={q.id}
+                    backTo={`/assesment/${MaterialId}`}
+                    buttonTitle="Delete Question"
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            ))}
+
+            {(!question_data || question_data.length === 0) && (
+              <div className="text-center py-12">
+                <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No questions yet</h3>
+                <p className="text-gray-600 mb-4">Start building this assessment by adding your first question.</p>
+                <CreateQuestion assesmentId={AssesmentId} />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

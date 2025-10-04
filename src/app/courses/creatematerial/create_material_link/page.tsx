@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function CreateMaterialLink() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-500 via-red-600 to-yellow-600 relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform rotate-12 scale-150"></div>

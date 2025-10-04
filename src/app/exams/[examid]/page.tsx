@@ -13,35 +13,87 @@ import React, { useEffect, useState } from "react";
 import UploadQuestionImage from "./uploaduestionImage";
 import UploadCorrectionImage from "./uploadCorrectionImage";
 import useRefetchStore from "@/store/autoFetch";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  ArrowLeft,
+  FileText,
+  Clock,
+  Award,
+  Hash,
+  Plus,
+  Edit,
+  Trash2,
+  Image as ImageIcon,
+  CheckCircle,
+  HelpCircle,
+  Loader2,
+  BookOpen,
+  ListOrdered,
+} from "lucide-react";
+
+interface Question {
+  id: string;
+  questionIndex: number;
+  question: string;
+  choiseA: string;
+  choiseB: string;
+  choiseC: string;
+  choiseD: string;
+  correctChoice: string;
+  correction: string;
+  questionImage?: string;
+  questionImgUrl?: string;
+  correctionImage?: string;
+  correctionImageUrl?: string;
+}
+
+interface ExamData {
+  assesmentTitle?: string;
+  assesmentDescription?: string;
+  assesmentPoints?: number;
+  duration?: number;
+  assesmentIndex?: number;
+}
 
 export default function ExamDetails({ params }: any) {
   const ExamId = params.examid;
-  console.log("working");
-  console.log("examid: " + ExamId);
 
-  const [data, setData] = useState<any>([]);
-  const [question_data, setQuestion_data] = useState<any>([]);
+  const [data, setData] = useState<ExamData>({});
+  const [question_data, setQuestion_data] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  //const setQuestionFetch = useRefetchStore((state) => state.setQuestionFetch);
   const questionFetch = useRefetchStore((state) => state.questionFetch);
 
   function formatTextToHTML(text: any) {
     if (!text) {
-      return ""; // Return an empty string if text is null or undefined
+      return "";
     }
 
     const formattedText = text
-      .replace(/\^(.*?)\^/g, "<sup>$1</sup>") // Matches ^^superscript^^
-      .replace(/\*\*\*(.*?)\*\*\*/g, "<sub>$1</sub>") // Matches ***subscript***
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Matches **bold**
-      .replace(/\*(.*?)\*/g, "<em>$1</em>") // Matches *italic*
+      .replace(/\^(.*?)\^/g, "<sup>$1</sup>")
+      .replace(/\*\*\*(.*?)\*\*\*/g, "<sub>$1</sub>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>")
       .replace(/_(.*?)_/g, "<u>$1</u>")
-      .replace(/&&8/g, "∞") // &&8  // infinity
+      .replace(/&&8/g, "∞")
       .replace(/&&f/g, "ƒ")
       .replace(/&&arf/g, "→")
       .replace(/&&arb/g, "←")
       .replace(/&&aru/g, "↑")
-      .replace(/&&ard/g, "↓") // &&f   // function f
+      .replace(/&&ard/g, "↓")
       .replace(/&&pi/g, "π")
       .replace(/&&sqrt/g, "√")
       .replace(/&&noteq/g, "≠")
@@ -69,84 +121,39 @@ export default function ExamDetails({ params }: any) {
       .replace(/&&greaterequal/g, "≥")
       .replace(/&&lessequal/g, "≤")
       .replace(/&&plusminus/g, "±")
-      .replace(/&&nl/g, "<br>")
       .replace(/&&dash/g, "________")
       .replace(/&&dashl/g, "______________________")
-      // .replace(/&&r/g, "&#8477;")
-      // .replace(/&&nat/g, "&naturals;")
       .replace(/&&r/g, "<span style='font-size:1.2em'>&#8477;</span>")
       .replace(/&&nat/g, "<span style='font-size:1.2em'>&naturals;</span>")
-
       .replace(/&&rarw&([^&]*)&&/g, function (_: any, text: any) {
         return text + " \u2192";
       })
-      // .replace(
-      //   /(\d+)\/(\d+)/g,
-      //   '<span class="fraction"><sup class="numerator">$1</sup><sub class="denominator">$2</sub></span>'
-      // ) // Matches _underline_
-
       .replace(/&&st(\d+)&&end(\d+)/g, function (_: any, start: any, end: any) {
         return start + "<sub>" + end + "</sub>";
       });
 
-    const renderedHTML = (
-      <div dangerouslySetInnerHTML={{ __html: formattedText }} />
-    );
-    return renderedHTML;
+    return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
   }
-
-  // the first request it to get the assesment id from material list
-  // const res = await fetch(`${apiUrl}/assesments/getexams/${ExamId}`, {
-  //   next: {
-  //     revalidate: 0,
-  //   },
-  // });
-  // const data = await res.json();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(`${apiUrl}/assesments/getexams/${ExamId}`);
         const data = await response.json();
         setData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [ExamId]);
 
-  // const AssesmentId = data?.assementId?.id;
-
-  console.log("data:" + data);
-  // const MaterialIndex = data?.materialIndex;
-  // const MaterialType = data?.materialType;
-  // const MaterialPart = data?.part;
-
-  const AssesmentTitle = data?.assesmentTitle;
-  const AssesmentDescription = data?.assesmentDescription;
-  //  const CourseId = data?.coursesId;
-  const AssesmentPoints = data?.assesmentPoints;
-  const AssesmentDuration = data?.duration;
-  const AssesmentIndex = data?.assesmentIndex;
-
-  console.log("test");
-
-  // const res_questions = await fetch(
-  //   `${apiUrl}/questions/accessquestions/${ExamId}`,
-  //   {
-  //     next: {
-  //       revalidate: 0,
-  //     },
-  //   }
-  // );
-  // const question_data = await res_questions.json();
-
-  const messagesEndRef = React.createRef();
-  const [apiData, setApiData] = useState(null);
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchQuestions = async () => {
       try {
         const response = await fetch(
           `${apiUrl}/questions/accessquestions/${ExamId}`
@@ -154,224 +161,383 @@ export default function ExamDetails({ params }: any) {
         const data = await response.json();
         setQuestion_data(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching questions:", error);
       }
     };
 
-    fetchData();
-  }, [questionFetch]);
+    fetchQuestions();
+  }, [ExamId, questionFetch]);
 
-  //the second request it to access the specific video detail from vidos table using the video id we got from the first request
-  // const res2 = await fetch(`${apiUrl}/videos/${VideoId}`, {
-  //  next: {
-  //    revalidate: 0,
-  //  },
-  //});
-  //const data2 = await res2.json();
-  interface Question {
-    // Define the properties of a question
-    id: number;
-    text: string;
-    // Add additional properties as needed
-  }
-
-  //  const runthis = () => {
-  //     console.log(res_questions);
-  //   };
-
-  console.log("this is data" + data);
-  // questions/accessquestions/:id  - where id is assesment id
-  // http://localhost:5000/questions/accessquestions/52a33dfd-e3fc-4ab2-ba70-7924a75c78e4
-  //to access all questions with a single assesment
-  return (
-    <div className="space-y-3 mx-5">
-      <LoadProfileAuth />
-      <h1 className="text-primaryColor font-semibold underline w-fit">
-        Exam Details
-      </h1>
-      <div className="w-fit border-2 px-3">
-        <Link href={`/exams/examlist`}>
-          <span className=""> To Exams</span>
-          {/* <h1>ExamId: {ExamId}</h1> */}
-        </Link>
-      </div>
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-primaryColor font-semibold">
-            Assessment Index:
-          </span>{" "}
-          {AssesmentIndex}
-        </h1>
-        <EditNumberCellDialog
-          type="assesments"
-          field="assesmentIndex"
-          id={ExamId}
-          content={AssesmentIndex}
-          // dataType="text"
-        />
-      </div>
-
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-primaryColor font-semibold">
-            Assessment Title:
-          </span>{" "}
-          {AssesmentTitle}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="assesmentTitle"
-          id={ExamId}
-          content={AssesmentTitle}
-          dataType="text"
-        />
-      </div>
-      <div className="flex space-x-3">
-        <h1>
-          <span className="text-primaryColor font-semibold">
-            Assessment Description:
-          </span>{" "}
-          {AssesmentDescription}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="assesmentDescription"
-          id={ExamId}
-          content={AssesmentDescription}
-          dataType="text"
-        />
-      </div>
-      <div className="flex space-x-6">
-        <h1>
-          <span className="text-primaryColor font-semibold">
-            Assessment Points{" "}
-          </span>{" "}
-          {AssesmentPoints}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="assesmentPoints"
-          id={ExamId}
-          content={AssesmentPoints}
-          dataType="number"
-        />
-      </div>
-      <div className="flex space-x-6">
-        <h1>
-          <span className="text-primaryColor font-semibold">
-            Assessment Points in minutes
-          </span>{" "}
-          {AssesmentDuration}
-        </h1>
-        <EditCellDialog
-          type="assesments"
-          field="duration"
-          id={ExamId}
-          content={AssesmentDuration}
-          dataType="number"
-        />
-      </div>
-
-      {/* <DeleteMaterialAndAssessment
-        materialId={MaterialId}
-        assessmentId={AssesmentId}
-        courseId={CourseId}
-      /> */}
-
-      <DeleteDialog
-        backTo="/exams/examlist"
-        buttonTitle="Delete Exam"
-        id={ExamId}
-        type="assesments"
-      />
-      <div className="my-4 w-full flex justify-end   z-50 sticky top-14  ">
-        {" "}
-        <div className=" w-fit  ">
-          <CreateQuestion assesmentId={ExamId} />
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-6 max-w-7xl">
+        <LoadProfileAuth />
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
+            <p className="text-gray-600">Loading exam details...</p>
+          </div>
         </div>
       </div>
+    );
+  }
 
-      <div>
-        <h1>
-          <span className="text-primaryColor font-semibold">
-            Questions in assesment:
-          </span>{" "}
-          {AssesmentTitle}{" "}
-        </h1>
-        {question_data?.map((q: any, index: number) => {
-          return (
-            <div className="py-5" key={index}>
-              <div className="flex space-x-3">
-                <h2>{q.questionIndex}.</h2>
+  const getChoiceBadge = (choice: string, correct: string) => {
+    if (choice === correct) {
+      return (
+        <Badge className="bg-green-600 text-white">
+          <CheckCircle className="h-3 w-3 mr-1" />
+          Correct
+        </Badge>
+      );
+    }
+    return null;
+  };
 
-                <h2>{formatTextToHTML(q.question)}</h2>
-              </div>
-              <div>
-                <h2 className="flex gap-2">A. {formatTextToHTML(q.choiseA)}</h2>
-                <h2 className="flex gap-2">B. {formatTextToHTML(q.choiseB)}</h2>
-                <h2 className="flex gap-2">C. {formatTextToHTML(q.choiseC)}</h2>
-                <h2 className="flex gap-2">D. {formatTextToHTML(q.choiseD)}</h2>
-                <h2>Correct Choice: {q.correctChoice}</h2>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+      <LoadProfileAuth />
 
-                <div>
-                  <h1>Exp: {formatTextToHTML(q.correction)}</h1>
+      <div className="container mx-auto max-w-7xl space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <Link href="/exams/examlist">
+                <Button variant="outline" size="sm">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Exams
+                </Button>
+              </Link>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+              <FileText className="h-8 w-8 text-blue-600" />
+              {data?.assesmentTitle || "Exam Details"}
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Manage exam information and questions
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="text-lg px-4 py-2">
+              <ListOrdered className="h-4 w-4 mr-2" />
+              {question_data?.length || 0} Questions
+            </Badge>
+          </div>
+        </div>
+
+        {/* Exam Info Card */}
+        <Card className="shadow-lg border-0 glass-card">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+            <CardTitle className="flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-blue-600" />
+              Exam Information
+            </CardTitle>
+            <CardDescription>
+              Basic details about this examination
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Index */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  <Hash className="h-4 w-4 text-blue-600" />
+                  Assessment Index
                 </div>
-                <div className=" space-x-6">
-                  <Link href={`/question_details/${q.id}`}>
-                    <button className="bg-primaryColor text-white px-2 ">
-                      Edit
-                    </button>
-                  </Link>
-                  <div className="w-full border-2 border-lime-700 p-2 my-3">
-                    <div className="grid grid-cols-2 w-full  gap-4">
-                      <div className="col-span-1">
-                        <div>
-                          {/* <h1>Url: {q?.questionImgUrl}</h1>
-                          <h1>Exam Id:{ExamId}</h1> */}
-                          {q?.questionImage != null && (
-                            <img
-                              //  src={`${apiUrl}/upload_assets/images/question_images/${q?.questionImage}`}
-                              src={q?.questionImgUrl}
-                            />
-                          )}
-                        </div>
+                <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                  <p className="text-2xl font-bold text-blue-900">
+                    {data?.assesmentIndex || "N/A"}
+                  </p>
+                </div>
+                <EditNumberCellDialog
+                  type="assesments"
+                  field="assesmentIndex"
+                  id={ExamId}
+                  content={data?.assesmentIndex?.toString() ?? ""}
+                />
+              </div>
 
-                        <div>
-                          <UploadQuestionImage questionId={q?.id} />
-                        </div>
-                      </div>
+              {/* Points */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  <Award className="h-4 w-4 text-blue-600" />
+                  Total Points
+                </div>
+                <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                  <p className="text-2xl font-bold text-purple-900">
+                    {data?.assesmentPoints || "0"}
+                  </p>
+                </div>
+                <EditCellDialog
+                  type="assesments"
+                  field="assesmentPoints"
+                  id={ExamId}
+                  content={data?.assesmentPoints?.toString() ?? ""}
+                  dataType="number"
+                />
+              </div>
 
-                      <div className="col-span-1">
-                        <div>
-                          {q?.correctionImage != null && (
-                            <img
-                              //   src={`${apiUrl}/upload_assets/images/correction_images/${q?.correctionImage}`}
-                              src={q?.correctionImageUrl}
-                              alt="Explanation Image"
-                            />
-                          )}
-                        </div>
+              {/* Duration */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  <Clock className="h-4 w-4 text-blue-600" />
+                  Duration (Minutes)
+                </div>
+                <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                  <p className="text-2xl font-bold text-green-900">
+                    {data?.duration || "0"}
+                  </p>
+                </div>
+                <EditCellDialog
+                  type="assesments"
+                  field="duration"
+                  id={ExamId}
+                  content={data?.duration?.toString() ?? ""}
+                  dataType="number"
+                />
+              </div>
 
-                        <div>
-                          <UploadCorrectionImage questionId={q?.id} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <DeleteDialog
-                      type="questions"
-                      id={q.id}
-                      backTo={`/exams/${ExamId}`}
-                      buttonTitle="Delete Question"
-                    />
-                  </div>
+              {/* Questions Count */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  <HelpCircle className="h-4 w-4 text-blue-600" />
+                  Questions
+                </div>
+                <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
+                  <p className="text-2xl font-bold text-orange-900">
+                    {question_data?.length || "0"}
+                  </p>
                 </div>
               </div>
             </div>
-          );
-        })}
+
+            {/* Title & Description */}
+            <div className="mt-6 space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold text-gray-700">
+                    Assessment Title
+                  </label>
+                  <EditCellDialog
+                    type="assesments"
+                    field="assesmentTitle"
+                    id={ExamId}
+                    content={data?.assesmentTitle ?? ""}
+                    dataType="text"
+                  />
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4 border">
+                  <p className="text-lg font-medium text-gray-900">
+                    {data?.assesmentTitle || "No title"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold text-gray-700">
+                    Assessment Description
+                  </label>
+                  <EditCellDialog
+                    type="assesments"
+                    field="assesmentDescription"
+                    id={ExamId}
+                    content={data?.assesmentDescription ?? ""}
+                    dataType="text"
+                  />
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4 border">
+                  <p className="text-gray-700">
+                    {data?.assesmentDescription || "No description"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-6 pt-6 border-t flex items-center justify-between">
+              <DeleteDialog
+                backTo="/exams/examlist"
+                buttonTitle="Delete Exam"
+                id={ExamId}
+                type="assesments"
+              />
+              <div className="text-sm text-gray-500">
+                ID: {ExamId}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Questions Section */}
+        <Card className="shadow-lg border-0 glass-card">
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <HelpCircle className="h-5 w-5 text-purple-600" />
+                  Questions
+                  <Badge variant="secondary" className="ml-2">
+                    {question_data?.length || 0}
+                  </Badge>
+                </CardTitle>
+                <CardDescription>
+                  All questions in this examination
+                </CardDescription>
+              </div>
+              <div className="sticky top-20 z-50">
+                <CreateQuestion assesmentId={ExamId} />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            {question_data && question_data.length > 0 ? (
+              <Accordion type="single" collapsible className="space-y-4">
+                {question_data.map((q, index) => (
+                  <AccordionItem
+                    key={q.id}
+                    value={`question-${index}`}
+                    className="border rounded-lg shadow-sm bg-white"
+                  >
+                    <AccordionTrigger className="px-6 py-4 hover:bg-gray-50">
+                      <div className="flex items-center gap-4 text-left w-full">
+                        <Badge variant="outline" className="text-lg px-3 py-1">
+                          {q.questionIndex}
+                        </Badge>
+                        <div className="flex-1">
+                          {formatTextToHTML(q.question)}
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 pb-6">
+                      <div className="space-y-6">
+                        {/* Choices */}
+                        <div className="space-y-3">
+                          <h3 className="font-semibold text-gray-700 mb-3">Answer Choices</h3>
+                          <div className="grid gap-3">
+                            <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
+                              <span className="font-bold text-blue-600">A.</span>
+                              <div className="flex-1">{formatTextToHTML(q.choiseA)}</div>
+                              {getChoiceBadge("A", q.correctChoice)}
+                            </div>
+                            <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
+                              <span className="font-bold text-blue-600">B.</span>
+                              <div className="flex-1">{formatTextToHTML(q.choiseB)}</div>
+                              {getChoiceBadge("B", q.correctChoice)}
+                            </div>
+                            <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
+                              <span className="font-bold text-blue-600">C.</span>
+                              <div className="flex-1">{formatTextToHTML(q.choiseC)}</div>
+                              {getChoiceBadge("C", q.correctChoice)}
+                            </div>
+                            <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
+                              <span className="font-bold text-blue-600">D.</span>
+                              <div className="flex-1">{formatTextToHTML(q.choiseD)}</div>
+                              {getChoiceBadge("D", q.correctChoice)}
+                            </div>
+                          </div>
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <p className="text-sm font-semibold text-green-800">
+                              Correct Answer: <span className="text-xl">{q.correctChoice}</span>
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Explanation */}
+                        {q.correction && (
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 className="font-semibold text-blue-900 mb-2">Explanation:</h4>
+                            <div className="text-blue-800">{formatTextToHTML(q.correction)}</div>
+                          </div>
+                        )}
+
+                        {/* Images */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Question Image */}
+                          <Card className="border-2 border-purple-200">
+                            <CardHeader className="bg-purple-50">
+                              <CardTitle className="text-sm flex items-center gap-2">
+                                <ImageIcon className="h-4 w-4 text-purple-600" />
+                                Question Image
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-4">
+                              {q.questionImage && (
+                                <div className="mb-4">
+                                  <img
+                                    src={q.questionImgUrl}
+                                    alt="Question"
+                                    className="w-full rounded-lg border"
+                                  />
+                                </div>
+                              )}
+                              <UploadQuestionImage questionId={q.id} />
+                            </CardContent>
+                          </Card>
+
+                          {/* Correction Image */}
+                          <Card className="border-2 border-green-200">
+                            <CardHeader className="bg-green-50">
+                              <CardTitle className="text-sm flex items-center gap-2">
+                                <ImageIcon className="h-4 w-4 text-green-600" />
+                                Explanation Image
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-4">
+                              {q.correctionImage && (
+                                <div className="mb-4">
+                                  <img
+                                    src={q.correctionImageUrl}
+                                    alt="Explanation"
+                                    className="w-full rounded-lg border"
+                                  />
+                                </div>
+                              )}
+                              <UploadCorrectionImage questionId={q.id} />
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex items-center gap-3 pt-4 border-t">
+                          <Link href={`/question_details/${q.id}`}>
+                            <Button variant="outline" size="sm">
+                              <Edit className="mr-2 h-4 w-4" />
+                              Edit Question
+                            </Button>
+                          </Link>
+                          <DeleteDialog
+                            type="questions"
+                            id={q.id}
+                            backTo={`/exams/${ExamId}`}
+                            buttonTitle="Delete Question"
+                          />
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            ) : (
+              <Card className="border-dashed">
+                <CardContent className="p-12 text-center">
+                  <HelpCircle className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+                  <p className="text-lg font-medium text-gray-900 mb-2">
+                    No questions yet
+                  </p>
+                  <p className="text-gray-500 mb-4">
+                    Start by adding questions to this exam
+                  </p>
+                  <CreateQuestion assesmentId={ExamId} />
+                </CardContent>
+              </Card>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 }
+
+

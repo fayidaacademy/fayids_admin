@@ -73,12 +73,6 @@ export default function MenuBar() {
       permissions: ["Admin", "SubAdmin", "Assistant"] 
     },
     { 
-      icon: <BarChart3 size={20} className="mr-3 text-gray-500" />, 
-      label: "Reports", 
-      href: "/reports", 
-      permissions: ["Admin"] 
-    },
-    { 
       icon: <Settings size={20} className="mr-3 text-gray-500" />, 
       label: "Settings", 
       href: "/settings", 

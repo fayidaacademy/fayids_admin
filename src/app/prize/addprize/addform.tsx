@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { apiUrl } from "../../../api_config";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,62 +14,59 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Gift, Hash, Star, Eye, FileText, Loader2 } from "lucide-react";
+import { useState } from "react";
 
-const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
 const formSchema = z.object({
   itemName: z
     .string()
     .min(1, { message: "Prize name cannot be empty!" })
-    .refine((value) => noSymbolsRegex.test(value), {
-      message: "Item name can not contain symbols!",
-    }),
-
-  // prizeIndex: z
-  //   .number()
-  //   .min(1, { message: "Prize index cannot be empty!" })
-  //   .refine((value) => noSymbolsRegex.test(value), {
-  //     message: "Item name can not contain symbols!",
-  //   }),
-  prizeIndex: z.coerce.number().min(1, { message: "Index cannot be empty!" }),
-
-  itemDecription: z.string(),
-
-  points: z
+    .max(100, { message: "Prize name is too long!" }),
+  prizeIndex: z.coerce
+    .number()
+    .min(1, { message: "Index must be at least 1!" })
+    .max(1000, { message: "Index is too large!" }),
+  itemDecription: z
     .string()
-    .min(1, { message: "Prize Point cannot be empty!" })
-    .refine((value) => noSymbolsRegex.test(value), {
-      message: "Prize point can not contain symbols!",
-    }),
-
-  visibleAtPoint: z
-    .string()
-
-    .refine((value) => noSymbolsRegex.test(value), {
-      message: "Item name can not contain symbols!",
-    }),
+    .min(1, { message: "Description cannot be empty!" })
+    .max(500, { message: "Description is too long!" }),
+  points: z.coerce
+    .number()
+    .min(1, { message: "Points must be at least 1!" })
+    .max(1000000, { message: "Points value is too large!" }),
+  visibleAtPoint: z.coerce
+    .number()
+    .min(0, { message: "Visible at point cannot be negative!" })
+    .max(1000000, { message: "Value is too large!" }),
 });
-
-/// api call to post
-
-////////////////////
 
 export default function AddPrizeForm() {
   const { push } = useRouter();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      itemName: "",
+      prizeIndex: 1,
+      itemDecription: "",
+      points: 100,
+      visibleAtPoint: 0,
+    },
   });
 
-  /// api call to post
   const handleSectionPost = async (formData: any) => {
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${apiUrl}/prizes/`, {
-        method: "post",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -79,132 +75,215 @@ export default function AddPrizeForm() {
       });
 
       if (response.ok) {
-        push("/prize");
-        console.log("Section Added");
         toast({
           title: "Success!",
-          description: "Prize Added!",
+          description: "Prize has been added successfully!",
+          variant: "default",
         });
+        push("/prize");
       } else {
-        // File deletion failed
-        console.error("Failed to add prize");
+        const errorData = await response.json();
+        toast({
+          title: "Error",
+          description: errorData.message || "Failed to add prize",
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      console.error("Error adding prize", error);
+      console.error("Error adding prize:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  ////////////////////
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log(values.sectionName);
     handleSectionPost(values);
   }
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto">
       <LoadProfileAuth />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="itemName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Item Name</FormLabel>
-                <FormControl>
-                  <div className="w-1/2">
-                    <Input
-                      placeholder="type the prize name here ..."
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-                <FormDescription>...</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Gift className="h-6 w-6 text-primary" />
+            Prize Information
+          </CardTitle>
+          <CardDescription>
+            Fill in the details for the new prize. All fields are required.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Item Name */}
+              <FormField
+                control={form.control}
+                name="itemName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Gift className="h-4 w-4" />
+                      Prize Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., Premium Headphones, Gift Card, etc."
+                        {...field}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      The name of the prize as it will appear to students
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="prizeIndex"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Prize Index</FormLabel>
-                <FormControl>
-                  <div className="w-1/2">
-                    <Input placeholder="type the index here ..." {...field} />
-                  </div>
-                </FormControl>
-                <FormDescription>...</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              {/* Prize Index */}
+              <FormField
+                control={form.control}
+                name="prizeIndex"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Hash className="h-4 w-4" />
+                      Display Order
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="1"
+                        {...field}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      The order in which this prize will be displayed (lower numbers appear first)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="itemDecription"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Item Description</FormLabel>
-                <FormControl>
-                  <div className="w-1/2">
-                    <Input
-                      placeholder="type the description here ..."
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-                <FormDescription>...</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              {/* Description */}
+              <FormField
+                control={form.control}
+                name="itemDecription"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      Description
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe the prize and what makes it special..."
+                        className="min-h-[100px]"
+                        {...field}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      A detailed description of the prize
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="points"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Points</FormLabel>
-                <FormControl>
-                  <div className="w-1/2">
-                    <Input
-                      placeholder="type points that equals the prize ..."
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-                <FormDescription>...</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <div className="grid gap-6 md:grid-cols-2">
+                {/* Points */}
+                <FormField
+                  control={form.control}
+                  name="points"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Star className="h-4 w-4 text-yellow-600" />
+                        Points Required
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="100"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Points needed to redeem
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <FormField
-            control={form.control}
-            name="visibleAtPoint"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Visiblilty Point</FormLabel>
-                <FormControl>
-                  <div className="w-1/2">
-                    <Input
-                      placeholder="type a visiblity point here ..."
-                      {...field}
-                      type="number"
-                    />
-                  </div>
-                </FormControl>
-                <FormDescription>...</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Add</Button>
-        </form>
-      </Form>
+                {/* Visible at Point */}
+                <FormField
+                  control={form.control}
+                  name="visibleAtPoint"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Eye className="h-4 w-4" />
+                        Visible at Points
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Points when prize becomes visible
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Adding Prize...
+                    </>
+                  ) : (
+                    <>
+                      <Gift className="h-4 w-4" />
+                      Add Prize
+                    </>
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => push("/prize")}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

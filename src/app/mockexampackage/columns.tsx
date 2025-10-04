@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { ArrowUpDown, MoreVertical, Eye, Edit, Download, CheckCircle, XCircle, Clock } from "lucide-react";
+import { ArrowUpDown, MoreVertical, Eye, Edit, Download, CheckCircle, XCircle, Clock, Link2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -64,7 +64,7 @@ export const columns: ColumnDef<Package>[] = [
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href={`/mockexampackage/connectexam/${packageId}`}>
-                    <User className="mr-2 h-4 w-4" />
+                    <Link2 className="mr-2 h-4 w-4" />
                     Connect Exams
                   </Link>
                 </DropdownMenuItem>

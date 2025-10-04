@@ -54,12 +54,12 @@ export const columns: ColumnDef<Exam>[] = [
               <DropdownMenuLabel>Exam Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
-                  <Link href={`/exams/${examId}`}>
+                <Link href={`/exams/${examId}`}>
+                  <DropdownMenuItem>
                     <Eye className="mr-2 h-4 w-4" />
                     View Details
-                  </Link>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem>
                   <Users className="mr-2 h-4 w-4" />
                   View Takers

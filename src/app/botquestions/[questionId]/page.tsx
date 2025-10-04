@@ -8,11 +8,75 @@ import SwitchDialog from "@/my_components/switch_dialog";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import UploadBotQuestionImage from "./imageUpload";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  ArrowLeft,
+  MessageSquare,
+  Clock,
+  Users,
+  GraduationCap,
+  CheckCircle2,
+  XCircle,
+  Image as ImageIcon,
+  Calendar,
+  Loader2,
+  Edit,
+  ToggleLeft,
+  ToggleRight,
+  ListChecks,
+  AlertCircle,
+  TrendingUp,
+  User,
+} from "lucide-react";
 
-export default function StudentDetails({ params }: any) {
+interface Answer {
+  id: string;
+  text: string;
+  correct: string;
+  createdAt: string;
+  isCorrect?: boolean;
+  student: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    grandName: string;
+  };
+}
+
+interface QuestionData {
+  text?: string;
+  period?: number;
+  studentLimit?: number;
+  grade?: string;
+  choice?: boolean;
+  correct_choice?: string;
+  image?: boolean;
+  imgUrl?: string;
+  status?: string;
+  createdAt?: string;
+  answers?: Answer[];
+}
+
+export default function QuestionDetails({ params }: any) {
   const QuestionId = params.questionId;
 
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<QuestionData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
 
@@ -32,7 +96,7 @@ export default function StudentDetails({ params }: any) {
 
           jsonData.answers?.forEach((answer: any) => {
             if (answer.text.trim() === correctChoice) {
-              answer.isCorrect = true; // Mark answer as correct
+              answer.isCorrect = true;
               correctAnswers += 1;
             } else {
               answer.isCorrect = false;
@@ -49,231 +113,479 @@ export default function StudentDetails({ params }: any) {
     };
 
     fetchData();
-  }, []);
+  }, [QuestionId]);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-6 max-w-7xl">
+        <LoadProfileAuth />
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
+            <p className="text-gray-600">Loading question details...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-2 mx-10 my-5">
+    <div className="container mx-auto p-6 max-w-7xl space-y-6">
       <LoadProfileAuth />
-      <div>
-        <h1 className="text-lg text-blue-800 underline font-semibold">
-          Question Details
-        </h1>
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Question Text:</span>{" "}
-          {data?.text}
-        </h1>
-      </div>
-      <EditCellDialog
-        content={data?.text}
-        dataType="text"
-        field="text"
-        id={QuestionId}
-        type="botquestions"
-      />
 
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold">
-            Period In Minutes:
-          </span>{" "}
-          {data?.period}
-        </h1>
-        <EditCellDialog
-          content={data?.period}
-          dataType="text"
-          field="period"
-          id={QuestionId}
-          type="botquestions"
-        />
-      </div>
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Students Limit:</span>{" "}
-          {data?.studentLimit}
-        </h1>
-      </div>
-      <EditCellDialog
-        content={data?.studentLimit}
-        dataType="text"
-        field="studentLimit"
-        id={QuestionId}
-        type="botquestions"
-      />
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Target Grade:</span>{" "}
-          {data?.grade}
-        </h1>
-      </div>
-      <EditCellDialog
-        content={data?.grade}
-        dataType="text"
-        field="grade"
-        id={QuestionId}
-        type="botquestions"
-      />
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Choice: </span>
-          {data?.choice ? "Active" : "Not Active"}
-        </h1>
-      </div>
-      {data?.choice === false || data?.choice === null ? (
+      {/* Header Section */}
+      <div className="flex items-center justify-between">
         <div>
-          <SwitchDialog
-            backTo=""
-            buttonTitle="Activate Choice"
-            content={false}
-            field="choice"
-            id={QuestionId}
-            type="botquestions"
-          />
+          <div className="flex items-center gap-3 mb-2">
+            <Link href="/botquestions">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Questions
+              </Button>
+            </Link>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <MessageSquare className="h-8 w-8 text-blue-600" />
+            Question Details
+          </h1>
+          <p className="text-gray-500 mt-1">
+            Manage and review question information
+          </p>
         </div>
-      ) : (
-        <div>
-          <SwitchDialog
-            backTo=""
-            buttonTitle="Deactivate Choice"
-            content={true}
-            field="choice"
-            id={QuestionId}
-            type="botquestions"
-          />
-        </div>
-      )}
-
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Correct Choice:</span>{" "}
-          {data?.correct_choice}
-        </h1>
-      </div>
-      <EditCellDialog
-        content={data?.correct_choice}
-        dataType="text"
-        field="correct_choice"
-        id={QuestionId}
-        type="botquestions"
-      />
-
-      <div>
-        <div>{data?.image && <img src={data.imgUrl} alt="Image" />}</div>
-        <UploadBotQuestionImage questionId={QuestionId} />
+        <Badge
+          variant={data?.status === "active" ? "default" : "secondary"}
+          className="text-lg px-4 py-2"
+        >
+          {data?.status === "active" ? (
+            <CheckCircle2 className="mr-2 h-4 w-4" />
+          ) : (
+            <XCircle className="mr-2 h-4 w-4" />
+          )}
+          {data?.status || "Unknown"}
+        </Badge>
       </div>
 
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold"> Status: </span>
-          {data?.status}
-        </h1>
-      </div>
+      {/* Main Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Question Info */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Question Text Card */}
+          <Card className="shadow-lg border-l-4 border-l-blue-600">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-blue-600" />
+                Question Text
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="bg-white rounded-lg border-2 border-blue-100 p-6">
+                <p className="text-lg text-gray-900 leading-relaxed">
+                  {data?.text || "No question text available"}
+                </p>
+              </div>
+              <div className="mt-4">
+                <EditCellDialog
+                  content={data?.text ?? ""}
+                  dataType="text"
+                  field="text"
+                  id={QuestionId}
+                  type="botquestions"
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-      <div>
-        <h1>
-          <span className="text-blue-800 font-semibold">Created At:</span>{" "}
-          {data?.createdAt ? new Date(data.createdAt).toLocaleString() : "N/A"}
-        </h1>
-      </div>
+          {/* Question Settings Card */}
+          <Card className="shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
+              <CardTitle className="flex items-center gap-2">
+                <ListChecks className="h-5 w-5 text-purple-600" />
+                Question Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Period */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                    <Clock className="h-4 w-4 text-purple-600" />
+                    Period (Minutes)
+                  </div>
+                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                    <p className="text-2xl font-bold text-purple-900">
+                      {data?.period || "N/A"}
+                    </p>
+                  </div>
+                  <EditCellDialog
+                    content={data?.period?.toString() ?? ""}
+                    dataType="text"
+                    field="period"
+                    id={QuestionId}
+                    type="botquestions"
+                  />
+                </div>
 
-      {data?.status === "down" ? (
-        <div>
-          <EditSwitch
-            buttonTitle="Activate"
-            changeTo="active"
-            id={QuestionId}
-            recivedField="status"
-            type="botquestions"
-          />
+                {/* Student Limit */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                    <Users className="h-4 w-4 text-purple-600" />
+                    Student Limit
+                  </div>
+                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                    <p className="text-2xl font-bold text-purple-900">
+                      {data?.studentLimit || "N/A"}
+                    </p>
+                  </div>
+                  <EditCellDialog
+                    content={data?.studentLimit?.toString() ?? ""}
+                    dataType="text"
+                    field="studentLimit"
+                    id={QuestionId}
+                    type="botquestions"
+                  />
+                </div>
+
+                {/* Target Grade */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                    <GraduationCap className="h-4 w-4 text-purple-600" />
+                    Target Grade
+                  </div>
+                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                    <p className="text-2xl font-bold text-purple-900">
+                      {data?.grade || "N/A"}
+                    </p>
+                  </div>
+                  <EditCellDialog
+                    content={data?.grade ?? ""}
+                    dataType="text"
+                    field="grade"
+                    id={QuestionId}
+                    type="botquestions"
+                  />
+                </div>
+
+                {/* Correct Choice */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                    <CheckCircle2 className="h-4 w-4 text-purple-600" />
+                    Correct Choice
+                  </div>
+                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                    <p className="text-2xl font-bold text-purple-900">
+                      {data?.correct_choice || "N/A"}
+                    </p>
+                  </div>
+                  <EditCellDialog
+                    content={data?.correct_choice ?? ""}
+                    dataType="text"
+                    field="correct_choice"
+                    id={QuestionId}
+                    type="botquestions"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Image Card */}
+          {data?.image && (
+            <Card className="shadow-lg border-l-4 border-l-green-600">
+              <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
+                <CardTitle className="flex items-center gap-2">
+                  <ImageIcon className="h-5 w-5 text-green-600" />
+                  Question Image
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="rounded-lg border-2 border-green-200 overflow-hidden">
+                  <img
+                    src={data.imgUrl}
+                    alt="Question"
+                    className="w-full h-auto"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Upload Image Section */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ImageIcon className="h-5 w-5 text-gray-600" />
+                Upload Image
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <UploadBotQuestionImage questionId={QuestionId} />
+            </CardContent>
+          </Card>
+
+          {/* Answers List Card */}
+          <Card className="shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-orange-50 to-amber-50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5 text-orange-600" />
+                    Student Answers
+                    <Badge variant="secondary" className="ml-2">
+                      {data?.answers?.length || 0}
+                    </Badge>
+                  </CardTitle>
+                  {data?.choice && (
+                    <CardDescription className="mt-2">
+                      Correct Answers: {correctCount} / {data?.answers?.length || 0}
+                    </CardDescription>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6">
+              {data?.answers && data.answers.length > 0 ? (
+                <div className="space-y-4">
+                  {data.answers.map((answer) => (
+                    <Card key={answer.id} className="border-l-4 border-l-blue-400">
+                      <CardContent className="p-6">
+                        <div className="space-y-4">
+                          {/* Answer Status */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              {data?.choice ? (
+                                answer.isCorrect ? (
+                                  <>
+                                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                                    <Badge className="bg-green-600 text-white">Correct</Badge>
+                                  </>
+                                ) : (
+                                  <>
+                                    <XCircle className="h-5 w-5 text-red-600" />
+                                    <Badge variant="destructive">Incorrect</Badge>
+                                  </>
+                                )
+                              ) : (
+                                <Badge variant={answer.correct === "correct" ? "default" : "secondary"}>
+                                  {answer.correct}
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="text-sm text-gray-500 flex items-center gap-1">
+                              <Calendar className="h-4 w-4" />
+                              {new Date(answer.createdAt).toLocaleDateString()}
+                            </div>
+                          </div>
+
+                          {/* Student Info */}
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-2">
+                              <User className="h-4 w-4 text-gray-600" />
+                              <p className="font-semibold text-gray-900">
+                                {`${answer.student.firstName} ${answer.student.lastName} ${answer.student.grandName}`}
+                              </p>
+                            </div>
+                            <p className="text-sm text-gray-600">
+                              ID: {answer.student.id}
+                            </p>
+                          </div>
+
+                          {/* Answer Text */}
+                          <div>
+                            <p className="text-sm font-medium text-gray-600 mb-2">
+                              Student's Answer:
+                            </p>
+                            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                              <p className="text-gray-900 whitespace-pre-wrap">
+                                {answer.text}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex gap-3 pt-2">
+                            <EditSwitch
+                              buttonTitle="Mark Correct"
+                              changeTo="correct"
+                              id={answer.id}
+                              recivedField="correct"
+                              type="botquestions/botquestionanswer"
+                            />
+                            <EditSwitch
+                              buttonTitle="Mark Incorrect"
+                              changeTo="incorrect"
+                              id={answer.id}
+                              recivedField="correct"
+                              type="botquestions/botquestionanswer"
+                            />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 text-gray-500">
+                  <Users className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+                  <p className="text-lg font-medium">No answers yet</p>
+                  <p className="text-sm">Student answers will appear here</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
-      ) : (
-        <div>
-          <EditSwitch
-            buttonTitle="Deactivate"
-            changeTo="down"
-            id={QuestionId}
-            recivedField="status"
-            type="botquestions"
-          />
-        </div>
-      )}
 
-      <div className="my-8 py-2 mx-5">
-        <h1>Answers Given:</h1>
-        {data?.answers?.length > 0 ? (
-          <>
-            {/* Summary of answers */}
-            {data?.choice && (
-              <p>
-                Total Answers: {data.answers.length} | Correct Answers:{" "}
-                {correctCount}
-              </p>
-            )}
-            <ul>
-              {data.answers.map((answer: any) => (
-                <li
-                  key={answer.id}
-                  style={{
-                    marginBottom: "20px",
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    borderRadius: "5px",
-                  }}
+        {/* Right Column - Controls & Info */}
+        <div className="space-y-6">
+          {/* Status Control Card */}
+          <Card className="shadow-lg border-l-4 border-l-green-600">
+            <CardHeader className="bg-gradient-to-br from-green-50 to-green-100">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <ToggleRight className="h-5 w-5 text-green-600" />
+                Status Control
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <div className="bg-white rounded-lg border-2 border-green-200 p-4 text-center">
+                <p className="text-sm text-gray-600 mb-2">Current Status</p>
+                <Badge
+                  variant={data?.status === "active" ? "default" : "secondary"}
+                  className="text-lg px-4 py-2"
+                >
+                  {data?.status || "Unknown"}
+                </Badge>
+              </div>
+              {data?.status === "down" ? (
+                <EditSwitch
+                  buttonTitle="Activate Question"
+                  changeTo="active"
+                  id={QuestionId}
+                  recivedField="status"
+                  type="botquestions"
+                />
+              ) : (
+                <EditSwitch
+                  buttonTitle="Deactivate Question"
+                  changeTo="down"
+                  id={QuestionId}
+                  recivedField="status"
+                  type="botquestions"
+                />
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Choice Mode Card */}
+          <Card className="shadow-lg border-l-4 border-l-purple-600">
+            <CardHeader className="bg-gradient-to-br from-purple-50 to-purple-100">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <ListChecks className="h-5 w-5 text-purple-600" />
+                Choice Mode
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <div className="bg-white rounded-lg border-2 border-purple-200 p-4 text-center">
+                <p className="text-sm text-gray-600 mb-2">Mode Status</p>
+                <Badge
+                  variant={data?.choice ? "default" : "secondary"}
+                  className="text-lg px-4 py-2"
                 >
                   {data?.choice ? (
-                    <h3>
-                      Status: {answer.isCorrect ? "Correct" : "Incorrect"}
-                    </h3>
+                    <>
+                      <CheckCircle2 className="mr-2 h-4 w-4" />
+                      Active
+                    </>
                   ) : (
-                    <h1>Status:{answer.correct} </h1>
+                    <>
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Inactive
+                    </>
                   )}
-                  <div className="space-x-4 flex py-4">
-                    <EditSwitch
-                      buttonTitle="Change to Correct"
-                      changeTo="correct"
-                      id={answer.id}
-                      recivedField="correct"
-                      type="botquestions/botquestionanswer"
-                    />
-                    <EditSwitch
-                      buttonTitle="Change to Incorrect"
-                      changeTo="incorrect"
-                      id={answer.id}
-                      recivedField="correct"
-                      type="botquestions/botquestionanswer"
-                    />
+                </Badge>
+              </div>
+              {data?.choice === false || data?.choice === null ? (
+                <SwitchDialog
+                  backTo=""
+                  buttonTitle="Activate Choice Mode"
+                  content={false}
+                  field="choice"
+                  id={QuestionId}
+                  type="botquestions"
+                />
+              ) : (
+                <SwitchDialog
+                  backTo=""
+                  buttonTitle="Deactivate Choice Mode"
+                  content={true}
+                  field="choice"
+                  id={QuestionId}
+                  type="botquestions"
+                />
+              )}
+              <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-purple-900">
+                    Choice mode enables multiple choice answers with automatic grading
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Stats Card */}
+          <Card className="shadow-md">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-gray-600" />
+                Quick Stats
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm font-medium">Total Answers</span>
+                </div>
+                <span className="text-lg font-bold text-blue-600">
+                  {data?.answers?.length || 0}
+                </span>
+              </div>
+              {data?.choice && (
+                <>
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span className="text-sm font-medium">Correct</span>
+                    </div>
+                    <span className="text-lg font-bold text-green-600">
+                      {correctCount}
+                    </span>
                   </div>
-                  <p>
-                    <strong>Answer Posted:</strong>{" "}
-                    {new Date(answer.createdAt).toLocaleString()}
-                  </p>
-                  <p>
-                    <strong>Student Full Name:</strong>{" "}
-                    {`${answer.student.firstName} ${answer.student.lastName} ${answer.student.grandName}`}
-                  </p>
-                  <p>
-                    <strong>Student ID:</strong> {answer.student.id}
-                  </p>
-                  <p>
-                    <strong>Student Answers:</strong>
-                    <br />
-                    {answer.text.split("\n").map((line: any, index: any) => (
-                      <span key={index}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <p>No answers available.</p>
-        )}
+                  <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <XCircle className="h-4 w-4 text-red-600" />
+                      <span className="text-sm font-medium">Incorrect</span>
+                    </div>
+                    <span className="text-lg font-bold text-red-600">
+                      {(data?.answers?.length || 0) - correctCount}
+                    </span>
+                  </div>
+                </>
+              )}
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-gray-600" />
+                  <span className="text-sm font-medium">Created</span>
+                </div>
+                <span className="text-sm font-semibold text-gray-600">
+                  {data?.createdAt
+                    ? new Date(data.createdAt).toLocaleDateString()
+                    : "N/A"}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

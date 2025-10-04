@@ -59,14 +59,12 @@ export const columns: ColumnDef<Student>[] = [
               <DropdownMenuLabel>{PhoneNumber}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem
-                  onClick={() => {
-                    console.log(PhoneNumber);
-                  }}
-                >
-                  <User className="mr-2 h-4 w-4" />
-                  <Link href={`/examtaker/${ExamTakerId}`}>Details</Link>
-                </DropdownMenuItem>
+                <Link href={`/examtaker/${ExamTakerId}`}>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>View Details</span>
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
             </DropdownMenuContent>
