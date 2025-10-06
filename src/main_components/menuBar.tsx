@@ -9,7 +9,8 @@ import {
   BookOpen, 
   FileText, 
   Settings, 
-  BarChart3
+  BarChart3,
+  Trophy
 } from "lucide-react";
 import {
   setAccessToken,
@@ -64,6 +65,12 @@ export default function MenuBar() {
       icon: <FileText size={20} className="mr-3 text-gray-500" />, 
       label: "Exams", 
       href: "/exams", 
+      permissions: ["Admin", "SubAdmin"] 
+    },
+    { 
+      icon: <Trophy size={20} className="mr-3 text-gray-500" />, 
+      label: "Competitions", 
+      href: "/competitions", 
       permissions: ["Admin", "SubAdmin"] 
     },
     { 
