@@ -45,8 +45,32 @@ export default function VideoDetail({ params }: any) {
 
     getMaterial();
   }, []);
-  // const data = await res.json();
-  console.log("This :" + data);
+
+  const refreshMaterial = async (newVideoId?: string) => {
+    if (newVideoId) {
+      // Update the video record with the material ID (correct association)
+      await fetch(`${apiUrl}/videos/${newVideoId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          materialId: MaterialId
+        }),
+      });
+    }
+    
+    // Refresh the material data
+    const res = await fetch(`${apiUrl}/materials/${MaterialId}`, {
+      next: {
+        revalidate: 0,
+      },
+      credentials: "include",
+    });
+    const material = await res.json();
+    setData(material);
+  };
   const MaterialIndex = data?.materialIndex;
   const MaterialType = data?.materialType;
   const MaterialPart = data?.part;
@@ -244,7 +268,7 @@ export default function VideoDetail({ params }: any) {
             </div>
           </div>
           <div className="p-8">
-            <UploadVideo videoId={VideoIds} />
+            <UploadVideo videoId={VideoIds || ""} onSuccess={(videoId) => refreshMaterial(videoId)} />
           </div>
         </div>
 

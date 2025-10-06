@@ -4,11 +4,23 @@ import React, { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/components/ui/use-toast";
 
-export default function UploadVideo(params: { videoId: string }) {
-  const VideoId = params.videoId;
+export default function UploadVideo({ videoId, onSuccess }: { videoId: string; onSuccess?: (videoId?: string) => void }) {
+  const VideoId = videoId;
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedFile(file);
+    if (file) {
+      toast({
+        title: "File Added",
+        description: `${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`,
+      });
+    }
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,7 +36,8 @@ export default function UploadVideo(params: { videoId: string }) {
     }
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", `${apiUrl}/videos/upload_video/${VideoId}`, true);
+    const uploadUrl = VideoId ? `${apiUrl}/videos/upload_video/${VideoId}` : `${apiUrl}/videos/upload_video/new`;
+    xhr.open("POST", uploadUrl, true);
 
     // Handle response
     xhr.onload = () => {
@@ -36,6 +49,7 @@ export default function UploadVideo(params: { videoId: string }) {
           description: "File Uploaded",
         });
         setUploadProgress(100); // Set to 100% on success
+        onSuccess?.(data.videoId || data.id); // Call the success callback with the video ID
       } else {
         setUploadError(`Upload failed with status: ${xhr.status}`);
         console.error("Upload error:", xhr.statusText);
@@ -133,8 +147,25 @@ export default function UploadVideo(params: { videoId: string }) {
                   name="course_video"
                   required
                   accept="video/*"
+                  onChange={handleFileChange}
                 />
               </label>
+              
+              {selectedFile && (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-green-800 font-medium">File Added</p>
+                      <p className="text-green-600 text-sm">{selectedFile.name} ({(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-center">
