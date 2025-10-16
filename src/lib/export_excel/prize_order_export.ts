@@ -30,7 +30,7 @@ export async function downloadPrizeOrderToExcel() {
         { label: "PrizeId", value: "Prize.id" },
         { label: "Date", value: "createdAt" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

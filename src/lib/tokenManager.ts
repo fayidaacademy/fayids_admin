@@ -1,21 +1,21 @@
-// src/utils/tokenManager.js
+// src/lib/tokenManager.ts
 
-let accessToken = null;
+let accessToken: string | null = null;
 
 if (typeof window !== "undefined") {
   accessToken = localStorage.getItem("accessToken"); // Check localStorage only in the browser
 }
 
-export const setAccessToken = (token) => {
+export const setAccessToken = (token: string): void => {
   accessToken = token;
   if (typeof window !== "undefined") {
     localStorage.setItem("accessToken", token); // Persist to localStorage
   }
 };
 
-export const getAccessToken = () => accessToken;
+export const getAccessToken = (): string | null => accessToken;
 
-export const clearAccessToken = () => {
+export const clearAccessToken = (): void => {
   accessToken = null;
   if (typeof window !== "undefined") {
     localStorage.removeItem("accessToken"); // Clear from localStorage
@@ -23,7 +23,7 @@ export const clearAccessToken = () => {
 };
 
 // Token validation helper
-export const validateToken = async () => {
+export const validateToken = async (): Promise<boolean> => {
   const token = getAccessToken();
   if (!token) {
     return false;

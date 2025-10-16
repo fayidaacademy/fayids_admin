@@ -6,6 +6,7 @@ import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditSwitch from "@/my_components/edit_switch";
 import SwitchDialog from "@/my_components/switch_dialog";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import UploadBotQuestionImage from "./imageUpload";
 import {
@@ -299,9 +300,11 @@ export default function QuestionDetails({ params }: any) {
               </CardHeader>
               <CardContent className="p-6">
                 <div className="rounded-lg border-2 border-green-200 overflow-hidden">
-                  <img
-                    src={data.imgUrl}
+                  <Image
+                    src={data.imgUrl || ""}
                     alt="Question"
+                    width={500}
+                    height={300}
                     className="w-full h-auto"
                   />
                 </div>
@@ -336,7 +339,8 @@ export default function QuestionDetails({ params }: any) {
                   </CardTitle>
                   {data?.choice && (
                     <CardDescription className="mt-2">
-                      Correct Answers: {correctCount} / {data?.answers?.length || 0}
+                      Correct Answers: {correctCount} /{" "}
+                      {data?.answers?.length || 0}
                     </CardDescription>
                   )}
                 </div>
@@ -346,7 +350,10 @@ export default function QuestionDetails({ params }: any) {
               {data?.answers && data.answers.length > 0 ? (
                 <div className="space-y-4">
                   {data.answers.map((answer) => (
-                    <Card key={answer.id} className="border-l-4 border-l-blue-400">
+                    <Card
+                      key={answer.id}
+                      className="border-l-4 border-l-blue-400"
+                    >
                       <CardContent className="p-6">
                         <div className="space-y-4">
                           {/* Answer Status */}
@@ -356,16 +363,26 @@ export default function QuestionDetails({ params }: any) {
                                 answer.isCorrect ? (
                                   <>
                                     <CheckCircle2 className="h-5 w-5 text-green-600" />
-                                    <Badge className="bg-green-600 text-white">Correct</Badge>
+                                    <Badge className="bg-green-600 text-white">
+                                      Correct
+                                    </Badge>
                                   </>
                                 ) : (
                                   <>
                                     <XCircle className="h-5 w-5 text-red-600" />
-                                    <Badge variant="destructive">Incorrect</Badge>
+                                    <Badge variant="destructive">
+                                      Incorrect
+                                    </Badge>
                                   </>
                                 )
                               ) : (
-                                <Badge variant={answer.correct === "correct" ? "default" : "secondary"}>
+                                <Badge
+                                  variant={
+                                    answer.correct === "correct"
+                                      ? "default"
+                                      : "secondary"
+                                  }
+                                >
                                   {answer.correct}
                                 </Badge>
                               )}
@@ -392,7 +409,7 @@ export default function QuestionDetails({ params }: any) {
                           {/* Answer Text */}
                           <div>
                             <p className="text-sm font-medium text-gray-600 mb-2">
-                              Student's Answer:
+                              Student&apos;s Answer:
                             </p>
                             <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                               <p className="text-gray-900 whitespace-pre-wrap">
@@ -525,7 +542,8 @@ export default function QuestionDetails({ params }: any) {
                 <div className="flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
                   <p className="text-xs text-purple-900">
-                    Choice mode enables multiple choice answers with automatic grading
+                    Choice mode enables multiple choice answers with automatic
+                    grading
                   </p>
                 </div>
               </div>

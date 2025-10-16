@@ -5,9 +5,11 @@ import DataTableGenerator from "@/main_components/data-table";
 import { apiUrl } from "@/api_config";
 import axios from "axios";
 
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
-
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../lib/tokenManager";
 
 export default function StudentsList() {
   const [data, setData] = useState([]);
@@ -17,8 +19,8 @@ export default function StudentsList() {
       const response = await axios.get(`${apiUrl}/students/list`, {
         method: "GET",
         headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
         },
         withCredentials: true, // Include credentials in the request
       });
@@ -27,8 +29,10 @@ export default function StudentsList() {
       setData(data);
     };
 
-    getData();
-  }, []);
+    if (accessToken) {
+      getData();
+    }
+  }, [accessToken]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -37,7 +41,9 @@ export default function StudentsList() {
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Students List
           </h1>
-          <p className="text-gray-600">Manage and view all registered students</p>
+          <p className="text-gray-600">
+            Manage and view all registered students
+          </p>
         </div>
         <div className="bg-white">
           <DataTableGenerator

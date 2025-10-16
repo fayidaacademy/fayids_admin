@@ -45,7 +45,7 @@ export default function CreteMaterialLinkForm() {
       //router.push('/signin');
       push("/courses");
     }
-  }, []);
+  }, [courseId, push]);
 
   const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
   const formSchema = z.object({

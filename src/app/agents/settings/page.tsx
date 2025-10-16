@@ -4,7 +4,11 @@ import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../../lib/tokenManager";
 import {
   Card,
   CardContent,
@@ -106,7 +110,9 @@ export default function Settings() {
                 <Percent className="h-6 w-6 text-white" />
               </div>
               <div>
-                <CardTitle className="text-2xl">Commission Configuration</CardTitle>
+                <CardTitle className="text-2xl">
+                  Commission Configuration
+                </CardTitle>
                 <CardDescription className="mt-1">
                   Manage the commission rate for all agents
                 </CardDescription>
@@ -129,7 +135,9 @@ export default function Settings() {
                     <span className="text-5xl font-bold text-blue-900">
                       {data?.agentCommisionRate ?? "N/A"}
                     </span>
-                    <span className="text-3xl font-semibold text-blue-700">%</span>
+                    <span className="text-3xl font-semibold text-blue-700">
+                      %
+                    </span>
                   </div>
                   <p className="text-sm text-blue-600">
                     Applied to all agent transactions
@@ -152,7 +160,8 @@ export default function Settings() {
                     Important Information
                   </p>
                   <p className="text-sm text-amber-700">
-                    This commission rate applies to all active agents. Changes will take effect immediately for new transactions.
+                    This commission rate applies to all active agents. Changes
+                    will take effect immediately for new transactions.
                   </p>
                 </div>
               </div>
@@ -166,8 +175,12 @@ export default function Settings() {
                     <Users className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-gray-600">Applies To</p>
-                    <p className="text-lg font-bold text-gray-900">All Agents</p>
+                    <p className="text-xs font-medium text-gray-600">
+                      Applies To
+                    </p>
+                    <p className="text-lg font-bold text-gray-900">
+                      All Agents
+                    </p>
                   </div>
                 </div>
               </div>
@@ -179,7 +192,10 @@ export default function Settings() {
                   </div>
                   <div>
                     <p className="text-xs font-medium text-gray-600">Status</p>
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       Active
                     </Badge>
                   </div>
@@ -223,19 +239,22 @@ export default function Settings() {
           <div className="flex items-start gap-3">
             <div className="mt-1 h-2 w-2 rounded-full bg-blue-600 flex-shrink-0"></div>
             <p className="text-sm text-gray-700">
-              Agents earn a percentage of each successful transaction made through their referral code
+              Agents earn a percentage of each successful transaction made
+              through their referral code
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="mt-1 h-2 w-2 rounded-full bg-blue-600 flex-shrink-0"></div>
             <p className="text-sm text-gray-700">
-              The commission is automatically calculated and added to the agent's balance
+              The commission is automatically calculated and added to the
+              agent&apos;s balance
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="mt-1 h-2 w-2 rounded-full bg-blue-600 flex-shrink-0"></div>
             <p className="text-sm text-gray-700">
-              Agents can track their earnings and transaction history in their dashboard
+              Agents can track their earnings and transaction history in their
+              dashboard
             </p>
           </div>
         </CardContent>

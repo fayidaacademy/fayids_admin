@@ -47,7 +47,7 @@ export async function downloadStudentsToExcel() {
 
         { label: "Id", value: "id" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

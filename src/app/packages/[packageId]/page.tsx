@@ -123,7 +123,7 @@ export default function PackageDetails({ params }: any) {
         // Handle any errors that occurred during the fetch
         console.error(error);
       });
-  }, [fetchPackageStatus]);
+  }, [fetchPackageStatus, PackageId]);
 
   //const discountExpiryDate: Date = /* retrieve your expiry date */;
 

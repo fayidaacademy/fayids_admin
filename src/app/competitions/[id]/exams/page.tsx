@@ -1,9 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   FileText,
   ArrowLeft,
   Plus,
@@ -14,7 +20,7 @@ import {
   Clock,
   Target,
   Users,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
@@ -34,28 +40,31 @@ interface Exam {
   createdAt: string;
 }
 
-export default function CompetitionExams({ params }: { params: { id: string } }) {
+export default function CompetitionExams({
+  params,
+}: {
+  params: { id: string };
+}) {
   const [competition, setCompetition] = useState<any>(null);
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchExamsData();
-  }, [params.id]);
-
-  const fetchExamsData = async () => {
+  const fetchExamsData = useCallback(async () => {
     try {
       setLoading(true);
       const token = getAccessToken();
 
       // Fetch competition details
-      const response = await fetch(`${apiUrl}/admin/competitions/${params.id}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${apiUrl}/admin/competitions/${params.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch competition details");
@@ -70,22 +79,33 @@ export default function CompetitionExams({ params }: { params: { id: string } })
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchExamsData();
+  }, [params.id, fetchExamsData]);
 
   const handleDeleteExam = async (examId: string) => {
-    if (!confirm("Are you sure you want to delete this exam? This action cannot be undone.")) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this exam? This action cannot be undone."
+      )
+    ) {
       return;
     }
 
     try {
       const token = getAccessToken();
-      const response = await fetch(`${apiUrl}/admin/competitions/${params.id}/exams/${examId}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${apiUrl}/admin/competitions/${params.id}/exams/${examId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete exam");
@@ -100,12 +120,15 @@ export default function CompetitionExams({ params }: { params: { id: string } })
   };
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, { variant: "default" | "secondary" | "outline", class: string }> = {
+    const config: Record<
+      string,
+      { variant: "default" | "secondary" | "outline"; class: string }
+    > = {
       locked: { variant: "secondary", class: "bg-gray-100 text-gray-800" },
       active: { variant: "default", class: "bg-green-100 text-green-800" },
-      completed: { variant: "outline", class: "bg-blue-100 text-blue-800" }
+      completed: { variant: "outline", class: "bg-blue-100 text-blue-800" },
     };
-    
+
     const statusConfig = config[status] || config.locked;
     return (
       <Badge variant={statusConfig.variant} className={statusConfig.class}>
@@ -117,7 +140,7 @@ export default function CompetitionExams({ params }: { params: { id: string } })
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -129,9 +152,13 @@ export default function CompetitionExams({ params }: { params: { id: string } })
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Competition Exams</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Competition Exams
+              </h1>
               {competition && (
-                <p className="text-gray-600">{competition.title} • Grade {competition.grade}</p>
+                <p className="text-gray-600">
+                  {competition.title} • Grade {competition.grade}
+                </p>
               )}
             </div>
           </div>
@@ -150,8 +177,12 @@ export default function CompetitionExams({ params }: { params: { id: string } })
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Exams</p>
-                <p className="text-2xl font-bold text-gray-900">{exams.length}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Exams
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {exams.length}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-blue-100">
                 <FileText className="h-6 w-6 text-blue-600" />
@@ -164,9 +195,11 @@ export default function CompetitionExams({ params }: { params: { id: string } })
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Active Exams</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Active Exams
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {exams.filter(e => e.status === "active").length}
+                  {exams.filter((e: any) => e.status === "active").length}
                 </p>
               </div>
               <div className="p-3 rounded-xl bg-green-100">
@@ -180,9 +213,11 @@ export default function CompetitionExams({ params }: { params: { id: string } })
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Completed</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Completed
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {exams.filter(e => e.status === "completed").length}
+                  {exams.filter((e: any) => e.status === "completed").length}
                 </p>
               </div>
               <div className="p-3 rounded-xl bg-purple-100">
@@ -196,9 +231,14 @@ export default function CompetitionExams({ params }: { params: { id: string } })
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Questions</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Questions
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {exams.reduce((sum, e) => sum + e.totalQuestions, 0)}
+                  {exams.reduce(
+                    (sum: number, e: any) => sum + e.totalQuestions,
+                    0
+                  )}
                 </p>
               </div>
               <div className="p-3 rounded-xl bg-orange-100">
@@ -216,7 +256,9 @@ export default function CompetitionExams({ params }: { params: { id: string } })
             <FileText className="h-5 w-5 mr-2 text-blue-600" />
             All Exams ({exams.length})
           </CardTitle>
-          <CardDescription>Manage exams and questions for this competition</CardDescription>
+          <CardDescription>
+            Manage exams and questions for this competition
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -228,8 +270,8 @@ export default function CompetitionExams({ params }: { params: { id: string } })
             <div className="space-y-4">
               {exams.length > 0 ? (
                 exams.map((exam) => (
-                  <div 
-                    key={exam.id} 
+                  <div
+                    key={exam.id}
                     className="p-4 rounded-lg bg-gray-50/50 hover:bg-gray-100/50 transition-colors"
                   >
                     <div className="flex items-start justify-between">
@@ -239,8 +281,12 @@ export default function CompetitionExams({ params }: { params: { id: string } })
                             {exam.day}
                           </div>
                           <div>
-                            <h3 className="font-semibold text-gray-900 text-lg">{exam.title}</h3>
-                            <p className="text-sm text-gray-600">{exam.description || "No description"}</p>
+                            <h3 className="font-semibold text-gray-900 text-lg">
+                              {exam.title}
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              {exam.description || "No description"}
+                            </p>
                           </div>
                         </div>
 
@@ -250,10 +296,17 @@ export default function CompetitionExams({ params }: { params: { id: string } })
                             <div>
                               <p className="text-gray-600">Scheduled</p>
                               <p className="text-gray-900 font-medium">
-                                {new Date(exam.scheduledDateTime).toLocaleDateString()}
+                                {new Date(
+                                  exam.scheduledDateTime
+                                ).toLocaleDateString()}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {new Date(exam.scheduledDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                {new Date(
+                                  exam.scheduledDateTime
+                                ).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
                               </p>
                             </div>
                           </div>
@@ -262,7 +315,9 @@ export default function CompetitionExams({ params }: { params: { id: string } })
                             <Clock className="h-4 w-4 text-gray-400" />
                             <div>
                               <p className="text-gray-600">Duration</p>
-                              <p className="text-gray-900 font-medium">{exam.duration} min</p>
+                              <p className="text-gray-900 font-medium">
+                                {exam.duration} min
+                              </p>
                             </div>
                           </div>
 
@@ -270,7 +325,9 @@ export default function CompetitionExams({ params }: { params: { id: string } })
                             <Target className="h-4 w-4 text-gray-400" />
                             <div>
                               <p className="text-gray-600">Questions</p>
-                              <p className="text-gray-900 font-medium">{exam.totalQuestions}</p>
+                              <p className="text-gray-900 font-medium">
+                                {exam.totalQuestions}
+                              </p>
                             </div>
                           </div>
 
@@ -287,21 +344,25 @@ export default function CompetitionExams({ params }: { params: { id: string } })
                       </div>
 
                       <div className="flex items-center space-x-2 ml-4">
-                        <Link href={`/competitions/${params.id}/exams/${exam.id}`}>
+                        <Link
+                          href={`/competitions/${params.id}/exams/${exam.id}`}
+                        >
                           <Button variant="outline" size="sm">
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Button>
                         </Link>
-                        <Link href={`/competitions/${params.id}/exams/${exam.id}/edit`}>
+                        <Link
+                          href={`/competitions/${params.id}/exams/${exam.id}/edit`}
+                        >
                           <Button variant="outline" size="sm">
                             <Edit className="h-4 w-4 mr-1" />
                             Edit
                           </Button>
                         </Link>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleDeleteExam(exam.id)}
                           className="text-red-600 hover:bg-red-50"
                         >

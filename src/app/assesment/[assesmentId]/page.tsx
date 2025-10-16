@@ -10,17 +10,18 @@ import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import useRefetchStore from "@/store/autoFetch";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { 
-  FileText, 
-  Clock, 
-  Award, 
-  ArrowLeft, 
-  Edit2, 
-  Trash2, 
+import {
+  FileText,
+  Clock,
+  Award,
+  ArrowLeft,
+  Edit2,
+  Trash2,
   Image as ImageIcon,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
 import UploadQuestionImage from "./uploaduestionImage";
@@ -36,9 +37,10 @@ export default function AssesmentDetails({ params }: any) {
   const [question_data, setQuestion_data] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   const questionFetch = useRefetchStore((state) => state.questionFetch);
-  
+
   // Try to get AssesmentId from fetched data, or use MaterialId as fallback
-  const AssesmentId = fetchedData?.assementId?.id || fetchedData?.assesmentId || MaterialId;
+  const AssesmentId =
+    fetchedData?.assementId?.id || fetchedData?.assesmentId || MaterialId;
 
   console.log("MaterialId from params:", MaterialId);
   console.log("AssesmentId resolved:", AssesmentId);
@@ -56,7 +58,10 @@ export default function AssesmentDetails({ params }: any) {
         setFetchedData(data);
         setIsLoading(false);
         console.log("Fetched assessment data:", data);
-        console.log("Assessment ID from data.assementId?.id:", data?.assementId?.id);
+        console.log(
+          "Assessment ID from data.assementId?.id:",
+          data?.assementId?.id
+        );
         console.log("Assessment ID from data.assesmentId:", data?.assesmentId);
         console.log("Material ID (from params):", MaterialId);
       })
@@ -209,13 +214,13 @@ export default function AssesmentDetails({ params }: any) {
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
       <LoadProfileAuth />
-      
+
       {/* Header Section */}
       <div className="bg-white border-b sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link 
+              <Link
                 href={`/courses/managematerials/${CourseId}`}
                 className="flex items-center text-gray-600 hover:text-primaryColor transition-colors"
               >
@@ -229,7 +234,9 @@ export default function AssesmentDetails({ params }: any) {
               ) : AssesmentId ? (
                 <CreateQuestion assesmentId={AssesmentId} />
               ) : (
-                <div className="text-sm text-red-500">Assessment ID not found</div>
+                <div className="text-sm text-red-500">
+                  Assessment ID not found
+                </div>
               )}
             </div>
           </div>
@@ -239,14 +246,20 @@ export default function AssesmentDetails({ params }: any) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Title */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Assessment Details</h1>
-          <p className="text-gray-600">Manage assessment information and questions</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Assessment Details
+          </h1>
+          <p className="text-gray-600">
+            Manage assessment information and questions
+          </p>
         </div>
 
         {/* Assessment Info Card */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Assessment Information</h2>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Assessment Information
+            </h2>
             <DeleteMaterialAndAssessment
               materialId={MaterialId}
               assessmentId={AssesmentId}
@@ -262,7 +275,9 @@ export default function AssesmentDetails({ params }: any) {
                   <label className="text-sm font-medium text-gray-600 mb-1 block">
                     Assessment Title
                   </label>
-                  <p className="text-lg font-semibold text-gray-900">{AssesmentTitle}</p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {AssesmentTitle}
+                  </p>
                 </div>
                 <EditCellDialog
                   type="assesments"
@@ -299,7 +314,9 @@ export default function AssesmentDetails({ params }: any) {
                 <label className="text-sm font-medium text-gray-600 mb-1 block">
                   Material Index
                 </label>
-                <p className="text-lg font-semibold text-gray-900">{MaterialIndex}</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {MaterialIndex}
+                </p>
               </div>
               <EditNumberCellDialog
                 type="materials"
@@ -315,7 +332,9 @@ export default function AssesmentDetails({ params }: any) {
                 <label className="text-sm font-medium text-gray-600 mb-1 block">
                   Assessment Part
                 </label>
-                <p className="text-lg font-semibold text-gray-900">{MaterialPart}</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {MaterialPart}
+                </p>
               </div>
               <EditCellDialog
                 type="materials"
@@ -346,7 +365,9 @@ export default function AssesmentDetails({ params }: any) {
                   <label className="text-sm font-medium text-gray-600 mb-1 block">
                     Points
                   </label>
-                  <p className="text-xl font-bold text-amber-700">{AssesmentPoints}</p>
+                  <p className="text-xl font-bold text-amber-700">
+                    {AssesmentPoints}
+                  </p>
                 </div>
               </div>
               <EditCellDialog
@@ -368,7 +389,9 @@ export default function AssesmentDetails({ params }: any) {
                   <label className="text-sm font-medium text-gray-600 mb-1 block">
                     Duration
                   </label>
-                  <p className="text-xl font-bold text-blue-700">{AssesmentDuration} min</p>
+                  <p className="text-xl font-bold text-blue-700">
+                    {AssesmentDuration} min
+                  </p>
                 </div>
               </div>
               <EditCellDialog
@@ -388,7 +411,8 @@ export default function AssesmentDetails({ params }: any) {
             <div>
               <h2 className="text-xl font-semibold text-gray-900">Questions</h2>
               <p className="text-sm text-gray-600 mt-1">
-                {question_data?.length || 0} question{question_data?.length !== 1 ? 's' : ''} in this assessment
+                {question_data?.length || 0} question
+                {question_data?.length !== 1 ? "s" : ""} in this assessment
               </p>
             </div>
           </div>
@@ -396,8 +420,8 @@ export default function AssesmentDetails({ params }: any) {
           {/* Questions List */}
           <div className="space-y-6">
             {question_data?.map((q: any, index: number) => (
-              <div 
-                key={q.id} 
+              <div
+                key={q.id}
                 className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow bg-white"
               >
                 {/* Question Header */}
@@ -416,24 +440,28 @@ export default function AssesmentDetails({ params }: any) {
 
                 {/* Choices */}
                 <div className="space-y-3 mb-4 ml-11">
-                  {['A', 'B', 'C', 'D'].map((choice) => {
+                  {["A", "B", "C", "D"].map((choice) => {
                     const choiceKey = `choise${choice}` as keyof typeof q;
                     const isCorrect = q.correctChoice === choice;
                     return (
                       <div
                         key={choice}
                         className={`flex items-start space-x-3 p-3 rounded-lg ${
-                          isCorrect 
-                            ? 'bg-green-50 border border-green-200' 
-                            : 'bg-gray-50 border border-gray-200'
+                          isCorrect
+                            ? "bg-green-50 border border-green-200"
+                            : "bg-gray-50 border border-gray-200"
                         }`}
                       >
-                        <span className={`font-semibold min-w-[24px] ${
-                          isCorrect ? 'text-green-700' : 'text-gray-700'
-                        }`}>
+                        <span
+                          className={`font-semibold min-w-[24px] ${
+                            isCorrect ? "text-green-700" : "text-gray-700"
+                          }`}
+                        >
                           {choice}.
                         </span>
-                        <div className="flex-1">{formatTextToHTML(q[choiceKey])}</div>
+                        <div className="flex-1">
+                          {formatTextToHTML(q[choiceKey])}
+                        </div>
                         {isCorrect && (
                           <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
                         )}
@@ -448,8 +476,12 @@ export default function AssesmentDetails({ params }: any) {
                     <div className="flex items-start space-x-2">
                       <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                       <div>
-                        <p className="text-sm font-semibold text-blue-900 mb-1">Explanation</p>
-                        <div className="text-sm text-blue-800">{formatTextToHTML(q.correction)}</div>
+                        <p className="text-sm font-semibold text-blue-900 mb-1">
+                          Explanation
+                        </p>
+                        <div className="text-sm text-blue-800">
+                          {formatTextToHTML(q.correction)}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -461,12 +493,16 @@ export default function AssesmentDetails({ params }: any) {
                   <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
                     <div className="flex items-center space-x-2 mb-3">
                       <ImageIcon className="w-4 h-4 text-gray-600" />
-                      <h4 className="text-sm font-semibold text-gray-700">Question Image</h4>
+                      <h4 className="text-sm font-semibold text-gray-700">
+                        Question Image
+                      </h4>
                     </div>
                     {q?.questionImage != null && (
-                      <img
+                      <Image
                         src={q?.questionImgUrl}
                         alt="Question"
+                        width={500}
+                        height={300}
                         className="w-full rounded-lg mb-3 border border-gray-300"
                       />
                     )}
@@ -477,12 +513,16 @@ export default function AssesmentDetails({ params }: any) {
                   <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
                     <div className="flex items-center space-x-2 mb-3">
                       <ImageIcon className="w-4 h-4 text-gray-600" />
-                      <h4 className="text-sm font-semibold text-gray-700">Explanation Image</h4>
+                      <h4 className="text-sm font-semibold text-gray-700">
+                        Explanation Image
+                      </h4>
                     </div>
                     {q?.correctionImage != null && (
-                      <img
+                      <Image
                         src={q?.correctionImageUrl}
                         alt="Explanation"
+                        width={500}
+                        height={300}
                         className="w-full rounded-lg mb-3 border border-gray-300"
                       />
                     )}
@@ -493,7 +533,7 @@ export default function AssesmentDetails({ params }: any) {
                 {/* Action Buttons */}
                 <div className="ml-11 flex items-center space-x-3 pt-4 border-t border-gray-200">
                   <Link href={`/question_details/${q.id}`}>
-                    <Button 
+                    <Button
                       className="bg-primaryColor hover:bg-primaryColor/90 text-white"
                       size="sm"
                     >
@@ -514,8 +554,12 @@ export default function AssesmentDetails({ params }: any) {
             {(!question_data || question_data.length === 0) && (
               <div className="text-center py-12">
                 <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">No questions yet</h3>
-                <p className="text-gray-600 mb-4">Start building this assessment by adding your first question.</p>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  No questions yet
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Start building this assessment by adding your first question.
+                </p>
                 <CreateQuestion assesmentId={AssesmentId} />
               </div>
             )}

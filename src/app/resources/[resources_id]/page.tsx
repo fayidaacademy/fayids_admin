@@ -37,7 +37,7 @@ export default function FileDetail({ params }: any) {
     };
 
     getMaterial();
-  }, []);
+  }, [ResourceId]);
   // const data = await res.json();
   console.log("This :" + data);
   const Title = data?.title;

@@ -39,8 +39,10 @@ export default function StudentDetails({ params }: any) {
       }
     };
 
-    fetchData();
-  }, []);
+    if (accessToken && StudentId) {
+      fetchData();
+    }
+  }, [accessToken, StudentId]);
 
   return (
     <div className="min-h-screen bg-white">

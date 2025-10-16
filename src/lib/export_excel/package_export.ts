@@ -25,7 +25,7 @@ export async function downloadPackagesToExcel() {
         { label: "Price", value: "price" },
         { label: "Status", value: "status" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

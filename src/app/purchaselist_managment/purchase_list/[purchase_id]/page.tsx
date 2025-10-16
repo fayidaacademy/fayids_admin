@@ -3,20 +3,25 @@ import { apiUrl } from "@/api_config";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import EditSwitch from "@/my_components/edit_switch";
 import UpdateExpiryDate from "@/my_components/updateExpiryDate";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Package, 
-  User, 
-  Calendar, 
-  ArrowLeft 
-} from "lucide-react";
+import { Package, User, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import useRefetchStore from "@/store/autoFetch";
 
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../../../lib/tokenManager";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../../../lib/tokenManager";
 
 const accessToken = getAccessToken();
 
@@ -41,8 +46,8 @@ export default function PurchaseInfo({ params }: any) {
           {
             method: "GET",
             headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
             },
           }
         );
@@ -63,7 +68,7 @@ export default function PurchaseInfo({ params }: any) {
     };
 
     fetchData();
-  }, []);
+  }, [accessToken, purchaseId, setPackageId, setStudentId, setPurchaseId]);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -72,7 +77,7 @@ export default function PurchaseInfo({ params }: any) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -84,14 +89,23 @@ export default function PurchaseInfo({ params }: any) {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Purchase Details</h1>
-              <p className="text-gray-600">View and manage purchase information</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Purchase Details
+              </h1>
+              <p className="text-gray-600">
+                View and manage purchase information
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <Badge 
-              variant={data.paymentStatus === 'active' ? 'default' : 
-                       data.paymentStatus === 'done' ? 'secondary' : 'outline'}
+            <Badge
+              variant={
+                data.paymentStatus === "active"
+                  ? "default"
+                  : data.paymentStatus === "done"
+                  ? "secondary"
+                  : "outline"
+              }
               className="px-3 py-1"
             >
               {data.paymentStatus?.toUpperCase()}
@@ -115,15 +129,25 @@ export default function PurchaseInfo({ params }: any) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Request ID</label>
-                    <p className="text-lg font-semibold text-gray-900">{data?.id}</p>
+                    <label className="text-sm font-medium text-gray-600">
+                      Request ID
+                    </label>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {data?.id}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Request Type</label>
-                    <p className="text-lg font-semibold text-gray-900">{data?.type}</p>
+                    <label className="text-sm font-medium text-gray-600">
+                      Request Type
+                    </label>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {data?.type}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Request Date</label>
+                    <label className="text-sm font-medium text-gray-600">
+                      Request Date
+                    </label>
                     <p className="text-lg font-semibold text-gray-900">
                       {new Date(data.createdAt).toLocaleDateString("en-GB", {
                         day: "2-digit",
@@ -133,20 +157,35 @@ export default function PurchaseInfo({ params }: any) {
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Payment Method</label>
-                    <p className="text-lg font-semibold text-gray-900">{data.method}</p>
+                    <label className="text-sm font-medium text-gray-600">
+                      Payment Method
+                    </label>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {data.method}
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Package</label>
-                    <p className="text-lg font-semibold text-gray-900">{data.Package?.packageName}</p>
+                    <label className="text-sm font-medium text-gray-600">
+                      Package
+                    </label>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {data.Package?.packageName}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Payment Status</label>
-                    <Badge 
-                      variant={data.paymentStatus === 'active' ? 'default' : 
-                               data.paymentStatus === 'done' ? 'secondary' : 'outline'}
+                    <label className="text-sm font-medium text-gray-600">
+                      Payment Status
+                    </label>
+                    <Badge
+                      variant={
+                        data.paymentStatus === "active"
+                          ? "default"
+                          : data.paymentStatus === "done"
+                          ? "secondary"
+                          : "outline"
+                      }
                       className="ml-2"
                     >
                       {data.paymentStatus}
@@ -154,9 +193,20 @@ export default function PurchaseInfo({ params }: any) {
                   </div>
                   {data?.type === "update" && (
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Update Status</label>
-                      <Badge variant={data?.updatePackageStatus === "on" ? "outline" : "default"} className="ml-2">
-                        {data?.updatePackageStatus === "on" ? "Pending" : "Done"}
+                      <label className="text-sm font-medium text-gray-600">
+                        Update Status
+                      </label>
+                      <Badge
+                        variant={
+                          data?.updatePackageStatus === "on"
+                            ? "outline"
+                            : "default"
+                        }
+                        className="ml-2"
+                      >
+                        {data?.updatePackageStatus === "on"
+                          ? "Pending"
+                          : "Done"}
                       </Badge>
                     </div>
                   )}
@@ -180,14 +230,17 @@ export default function PurchaseInfo({ params }: any) {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    <Link 
+                    <Link
                       href={`/students/${data?.Student?.id}`}
                       className="hover:text-blue-600 hover:underline transition-colors"
                     >
-                      {data?.Student?.firstName} {data?.Student?.lastName} {data?.Student?.grandName}
+                      {data?.Student?.firstName} {data?.Student?.lastName}{" "}
+                      {data?.Student?.grandName}
                     </Link>
                   </h3>
-                  <p className="text-sm text-gray-600">Student ID: {data?.Student?.id}</p>
+                  <p className="text-sm text-gray-600">
+                    Student ID: {data?.Student?.id}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -204,19 +257,26 @@ export default function PurchaseInfo({ params }: any) {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Activated Date</label>
+                  <label className="text-sm font-medium text-gray-600">
+                    Activated Date
+                  </label>
                   <p className="text-lg font-semibold text-gray-900">
                     {data.activatedDate
-                      ? new Date(data.activatedDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        })
+                      ? new Date(data.activatedDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )
                       : "Not Set"}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Expiry Date</label>
+                  <label className="text-sm font-medium text-gray-600">
+                    Expiry Date
+                  </label>
                   <p className="text-lg font-semibold text-gray-900">
                     {data.expiryDate
                       ? new Date(data.expiryDate).toLocaleDateString("en-GB", {
@@ -242,18 +302,33 @@ export default function PurchaseInfo({ params }: any) {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Payment Status</span>
-                  <Badge 
-                    variant={data.paymentStatus === 'active' ? 'default' : 
-                             data.paymentStatus === 'done' ? 'secondary' : 'outline'}
+                  <span className="text-sm font-medium text-gray-600">
+                    Payment Status
+                  </span>
+                  <Badge
+                    variant={
+                      data.paymentStatus === "active"
+                        ? "default"
+                        : data.paymentStatus === "done"
+                        ? "secondary"
+                        : "outline"
+                    }
                   >
                     {data.paymentStatus}
                   </Badge>
                 </div>
                 {data?.type === "update" && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-600">Update Status</span>
-                    <Badge variant={data?.updatePackageStatus === "on" ? "outline" : "default"}>
+                    <span className="text-sm font-medium text-gray-600">
+                      Update Status
+                    </span>
+                    <Badge
+                      variant={
+                        data?.updatePackageStatus === "on"
+                          ? "outline"
+                          : "default"
+                      }
+                    >
                       {data?.updatePackageStatus === "on" ? "Pending" : "Done"}
                     </Badge>
                   </div>
@@ -269,7 +344,8 @@ export default function PurchaseInfo({ params }: any) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {(data.paymentStatus === "done" || data.paymentStatus === "active") && (
+                {(data.paymentStatus === "done" ||
+                  data.paymentStatus === "active") && (
                   <Link href={`/purchaselist_managment/material_mgmt`}>
                     <Button className="w-full bg-green-600 hover:bg-green-700">
                       <Package className="h-4 w-4 mr-2" />
@@ -277,7 +353,7 @@ export default function PurchaseInfo({ params }: any) {
                     </Button>
                   </Link>
                 )}
-                
+
                 {data.paymentStatus === "pending" && (
                   <div className="bg-green-600 text-white p-3 rounded-lg">
                     <UpdateExpiryDate
@@ -311,7 +387,9 @@ export default function PurchaseInfo({ params }: any) {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Package</span>
-                  <span className="font-semibold">{data.Package?.packageName}</span>
+                  <span className="font-semibold">
+                    {data.Package?.packageName}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Payment Method</span>

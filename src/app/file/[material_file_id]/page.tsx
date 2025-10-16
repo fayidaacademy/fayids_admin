@@ -42,8 +42,10 @@ export default function FileDetail({ params }: any) {
       setData(material);
     };
 
-    getMaterial();
-  }, []);
+    if (MaterialId) {
+      getMaterial();
+    }
+  }, [MaterialId]);
   // const data = await res.json();
   console.log("This :" + data);
   const MaterialIndex = data?.materialIndex;

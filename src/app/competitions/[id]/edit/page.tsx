@@ -1,11 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
+import {
   Trophy,
   ArrowLeft,
   Save,
@@ -17,7 +23,7 @@ import {
   FileText,
   Award,
   Building,
-  Loader2
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -84,12 +90,16 @@ interface CompetitionFormData {
   sponsors: Sponsor[];
 }
 
-export default function EditCompetition({ params }: { params: { id: string } }) {
+export default function EditCompetition({
+  params,
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  
+
   const [formData, setFormData] = useState<CompetitionFormData>({
     title: "",
     description: "",
@@ -105,25 +115,24 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
     status: "upcoming",
     exams: [],
     prizes: [],
-    sponsors: []
+    sponsors: [],
   });
 
-  useEffect(() => {
-    fetchCompetitionData();
-  }, [params.id]);
-
-  const fetchCompetitionData = async () => {
+  const fetchCompetitionData = useCallback(async () => {
     try {
       setLoading(true);
       const token = getAccessToken();
 
-      const response = await fetch(`${apiUrl}/admin/competitions/${params.id}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${apiUrl}/admin/competitions/${params.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch competition details");
@@ -133,7 +142,7 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
       const competition = data.competition;
 
       // Convert dates to datetime-local format
-      const startDate = competition.startDate 
+      const startDate = competition.startDate
         ? new Date(competition.startDate).toISOString().slice(0, 16)
         : "";
       const endDate = competition.endDate
@@ -145,7 +154,7 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
         ...exam,
         scheduledDateTime: exam.scheduledDateTime
           ? new Date(exam.scheduledDateTime).toISOString().slice(0, 16)
-          : ""
+          : "",
       }));
 
       setFormData({
@@ -163,7 +172,7 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
         status: competition.status || "upcoming",
         exams,
         prizes: competition.prizes || [],
-        sponsors: competition.sponsors || []
+        sponsors: competition.sponsors || [],
       });
     } catch (error) {
       console.error("Error fetching competition:", error);
@@ -171,13 +180,22 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  useEffect(() => {
+    fetchCompetitionData();
+  }, [params.id, fetchCompetitionData]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value
+      [name]:
+        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -189,27 +207,27 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
       scheduledDateTime: "",
       duration: 20,
       totalQuestions: 20,
-      questions: []
+      questions: [],
     };
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      exams: [...prev.exams, newExam]
+      exams: [...prev.exams, newExam],
     }));
   };
 
   const removeExam = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      exams: prev.exams.filter((_, i) => i !== index)
+      exams: prev.exams.filter((_, i) => i !== index),
     }));
   };
 
   const updateExam = (index: number, field: keyof Exam, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      exams: prev.exams.map((exam, i) => 
+      exams: prev.exams.map((exam, i) =>
         i === index ? { ...exam, [field]: value } : exam
-      )
+      ),
     }));
   };
 
@@ -219,30 +237,32 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
       prizeName: "",
       description: "",
       image: "",
-      value: ""
+      value: "",
     };
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      prizes: [...prev.prizes, newPrize]
+      prizes: [...prev.prizes, newPrize],
     }));
   };
 
   const removePrize = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      prizes: prev.prizes.filter((_, i) => i !== index).map((prize, i) => ({
-        ...prize,
-        rank: i + 1
-      }))
+      prizes: prev.prizes
+        .filter((_, i) => i !== index)
+        .map((prize, i) => ({
+          ...prize,
+          rank: i + 1,
+        })),
     }));
   };
 
   const updatePrize = (index: number, field: keyof Prize, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      prizes: prev.prizes.map((prize, i) => 
+      prizes: prev.prizes.map((prize, i) =>
         i === index ? { ...prize, [field]: value } : prize
-      )
+      ),
     }));
   };
 
@@ -251,33 +271,33 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
       name: "",
       logo: "",
       website: "",
-      description: ""
+      description: "",
     };
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      sponsors: [...prev.sponsors, newSponsor]
+      sponsors: [...prev.sponsors, newSponsor],
     }));
   };
 
   const removeSponsor = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      sponsors: prev.sponsors.filter((_, i) => i !== index)
+      sponsors: prev.sponsors.filter((_, i) => i !== index),
     }));
   };
 
   const updateSponsor = (index: number, field: keyof Sponsor, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      sponsors: prev.sponsors.map((sponsor, i) => 
+      sponsors: prev.sponsors.map((sponsor, i) =>
         i === index ? { ...sponsor, [field]: value } : sponsor
-      )
+      ),
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       setSaving(true);
       const token = getAccessToken();
@@ -285,25 +305,32 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
       // Prepare data for update (convert dates back to ISO format)
       const updateData = {
         ...formData,
-        startDate: formData.startDate ? new Date(formData.startDate).toISOString() : undefined,
-        endDate: formData.endDate ? new Date(formData.endDate).toISOString() : undefined,
-        exams: formData.exams.map(exam => ({
+        startDate: formData.startDate
+          ? new Date(formData.startDate).toISOString()
+          : undefined,
+        endDate: formData.endDate
+          ? new Date(formData.endDate).toISOString()
+          : undefined,
+        exams: formData.exams.map((exam) => ({
           ...exam,
-          scheduledDateTime: exam.scheduledDateTime 
-            ? new Date(exam.scheduledDateTime).toISOString() 
-            : undefined
-        }))
+          scheduledDateTime: exam.scheduledDateTime
+            ? new Date(exam.scheduledDateTime).toISOString()
+            : undefined,
+        })),
       };
 
-      const response = await fetch(`${apiUrl}/admin/competitions/${params.id}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(updateData)
-      });
+      const response = await fetch(
+        `${apiUrl}/admin/competitions/${params.id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(updateData),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -335,7 +362,7 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -347,8 +374,12 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Competition</h1>
-              <p className="text-gray-600">Update competition details, exams, prizes, and sponsors</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Edit Competition
+              </h1>
+              <p className="text-gray-600">
+                Update competition details, exams, prizes, and sponsors
+              </p>
             </div>
           </div>
         </div>
@@ -359,19 +390,30 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
         <div className="flex items-center justify-between max-w-3xl mx-auto">
           {["Basic Info", "Exams", "Prizes", "Sponsors"].map((step, index) => (
             <div key={index} className="flex items-center">
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                currentStep > index + 1 ? "bg-green-600" : 
-                currentStep === index + 1 ? "bg-blue-600" : "bg-gray-300"
-              } text-white font-semibold`}>
+              <div
+                className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                  currentStep > index + 1
+                    ? "bg-green-600"
+                    : currentStep === index + 1
+                    ? "bg-blue-600"
+                    : "bg-gray-300"
+                } text-white font-semibold`}
+              >
                 {index + 1}
               </div>
-              <span className={`ml-2 ${currentStep === index + 1 ? "font-semibold" : ""}`}>
+              <span
+                className={`ml-2 ${
+                  currentStep === index + 1 ? "font-semibold" : ""
+                }`}
+              >
                 {step}
               </span>
               {index < 3 && (
-                <div className={`w-24 h-1 mx-4 ${
-                  currentStep > index + 1 ? "bg-green-600" : "bg-gray-300"
-                }`}></div>
+                <div
+                  className={`w-24 h-1 mx-4 ${
+                    currentStep > index + 1 ? "bg-green-600" : "bg-gray-300"
+                  }`}
+                ></div>
               )}
             </div>
           ))}
@@ -387,7 +429,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                 <Trophy className="h-5 w-5 mr-2 text-blue-600" />
                 Basic Information
               </CardTitle>
-              <CardDescription>Update the basic details of your competition</CardDescription>
+              <CardDescription>
+                Update the basic details of your competition
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -430,7 +474,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                     required
                   >
-                    <option value="tournament">Tournament (Multiple Days)</option>
+                    <option value="tournament">
+                      Tournament (Multiple Days)
+                    </option>
                     <option value="one-time">One-Time Competition</option>
                   </select>
                 </div>
@@ -501,7 +547,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="packageDuration">Package Duration (Months)</Label>
+                  <Label htmlFor="packageDuration">
+                    Package Duration (Months)
+                  </Label>
                   <Input
                     id="packageDuration"
                     name="packageDuration"
@@ -552,7 +600,11 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
               </div>
 
               <div className="flex justify-end">
-                <Button type="button" onClick={() => setCurrentStep(2)} className="bg-blue-600 hover:bg-blue-700">
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep(2)}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
                   Next: Edit Exams
                 </Button>
               </div>
@@ -570,7 +622,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                     <FileText className="h-5 w-5 mr-2 text-blue-600" />
                     Competition Exams
                   </CardTitle>
-                  <CardDescription>Add or update exams/quizzes for your competition</CardDescription>
+                  <CardDescription>
+                    Add or update exams/quizzes for your competition
+                  </CardDescription>
                 </div>
                 <Button type="button" onClick={addExam} variant="outline">
                   <Plus className="h-4 w-4 mr-2" />
@@ -580,10 +634,15 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
             </CardHeader>
             <CardContent className="space-y-6">
               {formData.exams.map((exam, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-gray-50/50 space-y-4">
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg bg-gray-50/50 space-y-4"
+                >
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-gray-900">
-                      {exam.id ? `Existing Exam - Day ${exam.day}` : `New Exam - Day ${exam.day}`}
+                      {exam.id
+                        ? `Existing Exam - Day ${exam.day}`
+                        : `New Exam - Day ${exam.day}`}
                     </h3>
                     <Button
                       type="button"
@@ -601,7 +660,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Label>Exam Title *</Label>
                       <Input
                         value={exam.title}
-                        onChange={(e) => updateExam(index, "title", e.target.value)}
+                        onChange={(e) =>
+                          updateExam(index, "title", e.target.value)
+                        }
                         placeholder="e.g., Day 1: Foundation & Warm-Up"
                         required
                       />
@@ -612,7 +673,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Input
                         type="number"
                         value={exam.day}
-                        onChange={(e) => updateExam(index, "day", parseInt(e.target.value))}
+                        onChange={(e) =>
+                          updateExam(index, "day", parseInt(e.target.value))
+                        }
                         required
                       />
                     </div>
@@ -622,7 +685,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Input
                         type="datetime-local"
                         value={exam.scheduledDateTime}
-                        onChange={(e) => updateExam(index, "scheduledDateTime", e.target.value)}
+                        onChange={(e) =>
+                          updateExam(index, "scheduledDateTime", e.target.value)
+                        }
                         required
                       />
                     </div>
@@ -632,7 +697,13 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Input
                         type="number"
                         value={exam.duration}
-                        onChange={(e) => updateExam(index, "duration", parseInt(e.target.value))}
+                        onChange={(e) =>
+                          updateExam(
+                            index,
+                            "duration",
+                            parseInt(e.target.value)
+                          )
+                        }
                         required
                       />
                     </div>
@@ -642,7 +713,13 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Input
                         type="number"
                         value={exam.totalQuestions}
-                        onChange={(e) => updateExam(index, "totalQuestions", parseInt(e.target.value))}
+                        onChange={(e) =>
+                          updateExam(
+                            index,
+                            "totalQuestions",
+                            parseInt(e.target.value)
+                          )
+                        }
                         required
                       />
                     </div>
@@ -652,7 +729,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                     <Label>Description</Label>
                     <Textarea
                       value={exam.description}
-                      onChange={(e) => updateExam(index, "description", e.target.value)}
+                      onChange={(e) =>
+                        updateExam(index, "description", e.target.value)
+                      }
                       placeholder="Enter exam description..."
                       rows={2}
                     />
@@ -660,7 +739,10 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
 
                   {exam.id && (
                     <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded">
-                      <p><strong>Note:</strong> This is an existing exam. Changes will update the exam details.</p>
+                      <p>
+                        <strong>Note:</strong> This is an existing exam. Changes
+                        will update the exam details.
+                      </p>
                     </div>
                   )}
                 </div>
@@ -678,10 +760,18 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
               )}
 
               <div className="flex justify-between pt-4">
-                <Button type="button" onClick={() => setCurrentStep(1)} variant="outline">
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep(1)}
+                  variant="outline"
+                >
                   Previous
                 </Button>
-                <Button type="button" onClick={() => setCurrentStep(3)} className="bg-blue-600 hover:bg-blue-700">
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep(3)}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
                   Next: Edit Prizes
                 </Button>
               </div>
@@ -699,7 +789,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                     <Award className="h-5 w-5 mr-2 text-blue-600" />
                     Competition Prizes
                   </CardTitle>
-                  <CardDescription>Update prizes for top performers</CardDescription>
+                  <CardDescription>
+                    Update prizes for top performers
+                  </CardDescription>
                 </div>
                 <Button type="button" onClick={addPrize} variant="outline">
                   <Plus className="h-4 w-4 mr-2" />
@@ -709,10 +801,14 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
             </CardHeader>
             <CardContent className="space-y-6">
               {formData.prizes.map((prize, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-gray-50/50 space-y-4">
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg bg-gray-50/50 space-y-4"
+                >
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-gray-900">
-                      Rank {prize.rank} Prize {prize.winnerId && "(Winner Assigned)"}
+                      Rank {prize.rank} Prize{" "}
+                      {prize.winnerId && "(Winner Assigned)"}
                     </h3>
                     <Button
                       type="button"
@@ -728,7 +824,8 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
 
                   {prize.winnerId && (
                     <div className="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm text-yellow-800">
-                      <strong>Warning:</strong> This prize has been assigned to a winner. Deleting is disabled.
+                      <strong>Warning:</strong> This prize has been assigned to
+                      a winner. Deleting is disabled.
                     </div>
                   )}
 
@@ -737,7 +834,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Label>Prize Name *</Label>
                       <Input
                         value={prize.prizeName}
-                        onChange={(e) => updatePrize(index, "prizeName", e.target.value)}
+                        onChange={(e) =>
+                          updatePrize(index, "prizeName", e.target.value)
+                        }
                         placeholder="e.g., Dell Inspiron Laptop"
                         required
                       />
@@ -747,7 +846,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Label>Prize Value (₦)</Label>
                       <Input
                         value={prize.value}
-                        onChange={(e) => updatePrize(index, "value", e.target.value)}
+                        onChange={(e) =>
+                          updatePrize(index, "value", e.target.value)
+                        }
                         placeholder="25000"
                       />
                     </div>
@@ -757,7 +858,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Input
                         type="url"
                         value={prize.image}
-                        onChange={(e) => updatePrize(index, "image", e.target.value)}
+                        onChange={(e) =>
+                          updatePrize(index, "image", e.target.value)
+                        }
                         placeholder="https://example.com/prize-image.jpg"
                       />
                     </div>
@@ -767,7 +870,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                     <Label>Description</Label>
                     <Textarea
                       value={prize.description}
-                      onChange={(e) => updatePrize(index, "description", e.target.value)}
+                      onChange={(e) =>
+                        updatePrize(index, "description", e.target.value)
+                      }
                       placeholder="Enter prize description..."
                       rows={2}
                     />
@@ -787,10 +892,18 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
               )}
 
               <div className="flex justify-between pt-4">
-                <Button type="button" onClick={() => setCurrentStep(2)} variant="outline">
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep(2)}
+                  variant="outline"
+                >
                   Previous
                 </Button>
-                <Button type="button" onClick={() => setCurrentStep(4)} className="bg-blue-600 hover:bg-blue-700">
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep(4)}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
                   Next: Edit Sponsors
                 </Button>
               </div>
@@ -808,7 +921,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                     <Building className="h-5 w-5 mr-2 text-blue-600" />
                     Competition Sponsors
                   </CardTitle>
-                  <CardDescription>Update sponsors supporting this competition</CardDescription>
+                  <CardDescription>
+                    Update sponsors supporting this competition
+                  </CardDescription>
                 </div>
                 <Button type="button" onClick={addSponsor} variant="outline">
                   <Plus className="h-4 w-4 mr-2" />
@@ -818,9 +933,14 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
             </CardHeader>
             <CardContent className="space-y-6">
               {formData.sponsors.map((sponsor, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-gray-50/50 space-y-4">
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg bg-gray-50/50 space-y-4"
+                >
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-gray-900">Sponsor {index + 1}</h3>
+                    <h3 className="font-semibold text-gray-900">
+                      Sponsor {index + 1}
+                    </h3>
                     <Button
                       type="button"
                       onClick={() => removeSponsor(index)}
@@ -837,7 +957,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Label>Sponsor Name *</Label>
                       <Input
                         value={sponsor.name}
-                        onChange={(e) => updateSponsor(index, "name", e.target.value)}
+                        onChange={(e) =>
+                          updateSponsor(index, "name", e.target.value)
+                        }
                         placeholder="e.g., ABC Corporation"
                         required
                       />
@@ -848,7 +970,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Input
                         type="url"
                         value={sponsor.website}
-                        onChange={(e) => updateSponsor(index, "website", e.target.value)}
+                        onChange={(e) =>
+                          updateSponsor(index, "website", e.target.value)
+                        }
                         placeholder="https://example.com"
                       />
                     </div>
@@ -858,7 +982,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                       <Input
                         type="url"
                         value={sponsor.logo}
-                        onChange={(e) => updateSponsor(index, "logo", e.target.value)}
+                        onChange={(e) =>
+                          updateSponsor(index, "logo", e.target.value)
+                        }
                         placeholder="https://example.com/logo.png"
                       />
                     </div>
@@ -868,7 +994,9 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
                     <Label>Description</Label>
                     <Textarea
                       value={sponsor.description}
-                      onChange={(e) => updateSponsor(index, "description", e.target.value)}
+                      onChange={(e) =>
+                        updateSponsor(index, "description", e.target.value)
+                      }
                       placeholder="Enter sponsor description..."
                       rows={2}
                     />
@@ -888,11 +1016,15 @@ export default function EditCompetition({ params }: { params: { id: string } }) 
               )}
 
               <div className="flex justify-between pt-4">
-                <Button type="button" onClick={() => setCurrentStep(3)} variant="outline">
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep(3)}
+                  variant="outline"
+                >
                   Previous
                 </Button>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={saving}
                   className="bg-green-600 hover:bg-green-700"
                 >

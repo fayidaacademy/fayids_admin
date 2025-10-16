@@ -46,9 +46,11 @@ export default function OrderedPrizeList() {
         setData(orders);
 
         // Calculate stats
-        const pending = orders.filter((o: any) => o.status === "pending").length;
+        const pending = orders.filter(
+          (o: any) => o.status === "pending"
+        ).length;
         const done = orders.filter((o: any) => o.status === "Done").length;
-        
+
         // Count today's orders
         const today = new Date().toDateString();
         const todayOrders = orders.filter((o: any) => {
@@ -114,9 +116,7 @@ export default function OrderedPrizeList() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">
-              All time orders
-            </p>
+            <p className="text-xs text-muted-foreground">All time orders</p>
           </CardContent>
         </Card>
 
@@ -126,7 +126,9 @@ export default function OrderedPrizeList() {
             <Clock className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
+            <div className="text-2xl font-bold text-yellow-600">
+              {stats.pending}
+            </div>
             <p className="text-xs text-muted-foreground">
               Awaiting fulfillment
             </p>
@@ -139,7 +141,9 @@ export default function OrderedPrizeList() {
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.done}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {stats.done}
+            </div>
             <p className="text-xs text-muted-foreground">
               Successfully fulfilled
             </p>
@@ -148,14 +152,16 @@ export default function OrderedPrizeList() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today's Orders</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Today&apos;s Orders
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{stats.todayOrders}</div>
-            <p className="text-xs text-muted-foreground">
-              Orders placed today
-            </p>
+            <div className="text-2xl font-bold text-blue-600">
+              {stats.todayOrders}
+            </div>
+            <p className="text-xs text-muted-foreground">Orders placed today</p>
           </CardContent>
         </Card>
       </div>
@@ -172,8 +178,13 @@ export default function OrderedPrizeList() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Needs attention</span>
-                <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+                <span className="text-sm text-muted-foreground">
+                  Needs attention
+                </span>
+                <Badge
+                  variant="outline"
+                  className="bg-yellow-50 text-yellow-700 border-yellow-200"
+                >
                   {stats.pending} orders
                 </Badge>
               </div>
@@ -194,9 +205,17 @@ export default function OrderedPrizeList() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Success rate</span>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                  {stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0}%
+                <span className="text-sm text-muted-foreground">
+                  Success rate
+                </span>
+                <Badge
+                  variant="outline"
+                  className="bg-green-50 text-green-700 border-green-200"
+                >
+                  {stats.total > 0
+                    ? Math.round((stats.done / stats.total) * 100)
+                    : 0}
+                  %
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">

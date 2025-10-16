@@ -32,7 +32,7 @@ export default function PurchaseList() {
     };
 
     getData();
-  }, []);
+  }, [accessToken]);
 
   return (
     <div className="mx-3">

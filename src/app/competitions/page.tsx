@@ -1,9 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   Trophy,
   Users,
   Calendar,
@@ -15,7 +22,7 @@ import {
   Award,
   Target,
   Clock,
-  DollarSign
+  DollarSign,
 } from "lucide-react";
 import Link from "next/link";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
@@ -58,10 +65,10 @@ export default function CompetitionsManagementDashboard() {
     try {
       setLoading(true);
       const token = getAccessToken();
-      
+
       const response = await fetch(`${apiUrl}/admin/competitions`, {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         credentials: "include",
@@ -73,16 +80,26 @@ export default function CompetitionsManagementDashboard() {
 
       const data = await response.json();
       const competitionsList = data.competitions || [];
-      
+
       setCompetitions(competitionsList);
-      
+
       // Calculate stats
-      const active = competitionsList.filter((c: Competition) => c.status === "active").length;
-      const upcoming = competitionsList.filter((c: Competition) => c.status === "upcoming").length;
-      const completed = competitionsList.filter((c: Competition) => c.status === "completed").length;
-      const totalPrizes = competitionsList.reduce((sum: number, c: Competition) => 
-        sum + (parseFloat(c.totalPrizes || "0")), 0
-      ).toFixed(2);
+      const active = competitionsList.filter(
+        (c: Competition) => c.status === "active"
+      ).length;
+      const upcoming = competitionsList.filter(
+        (c: Competition) => c.status === "upcoming"
+      ).length;
+      const completed = competitionsList.filter(
+        (c: Competition) => c.status === "completed"
+      ).length;
+      const totalPrizes = competitionsList
+        .reduce(
+          (sum: number, c: Competition) =>
+            sum + parseFloat(c.totalPrizes || "0"),
+          0
+        )
+        .toFixed(2);
 
       setStats({
         totalCompetitions: competitionsList.length,
@@ -107,7 +124,7 @@ export default function CompetitionsManagementDashboard() {
       trend: "up",
       icon: Trophy,
       color: "text-blue-600",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-blue-100",
     },
     {
       title: "Active Competitions",
@@ -116,7 +133,7 @@ export default function CompetitionsManagementDashboard() {
       trend: "up",
       icon: Target,
       color: "text-green-600",
-      bgColor: "bg-green-100"
+      bgColor: "bg-green-100",
     },
     {
       title: "Total Participants",
@@ -125,7 +142,7 @@ export default function CompetitionsManagementDashboard() {
       trend: "up",
       icon: Users,
       color: "text-purple-600",
-      bgColor: "bg-purple-100"
+      bgColor: "bg-purple-100",
     },
     {
       title: "Total Prizes",
@@ -134,8 +151,8 @@ export default function CompetitionsManagementDashboard() {
       trend: "up",
       icon: DollarSign,
       color: "text-orange-600",
-      bgColor: "bg-orange-100"
-    }
+      bgColor: "bg-orange-100",
+    },
   ];
 
   const quickActions = [
@@ -145,7 +162,7 @@ export default function CompetitionsManagementDashboard() {
       href: "/competitions/create",
       icon: Plus,
       color: "bg-blue-500",
-      count: "New"
+      count: "New",
     },
     {
       title: "Active Competitions",
@@ -153,7 +170,7 @@ export default function CompetitionsManagementDashboard() {
       href: "/competitions/active",
       icon: Trophy,
       color: "bg-green-500",
-      count: stats.activeCompetitions.toString()
+      count: stats.activeCompetitions.toString(),
     },
     {
       title: "Upcoming Competitions",
@@ -161,7 +178,7 @@ export default function CompetitionsManagementDashboard() {
       href: "/competitions/upcoming",
       icon: Calendar,
       color: "bg-purple-500",
-      count: stats.upcomingCompetitions.toString()
+      count: stats.upcomingCompetitions.toString(),
     },
     {
       title: "Prize Management",
@@ -169,18 +186,24 @@ export default function CompetitionsManagementDashboard() {
       href: "/competitions/prizes",
       icon: Award,
       color: "bg-orange-500",
-      count: stats.completedCompetitions.toString()
-    }
+      count: stats.completedCompetitions.toString(),
+    },
   ];
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline", class: string }> = {
+    const variants: Record<
+      string,
+      {
+        variant: "default" | "secondary" | "destructive" | "outline";
+        class: string;
+      }
+    > = {
       upcoming: { variant: "secondary", class: "bg-blue-100 text-blue-800" },
       active: { variant: "default", class: "bg-green-100 text-green-800" },
       completed: { variant: "outline", class: "bg-gray-100 text-gray-800" },
-      cancelled: { variant: "destructive", class: "bg-red-100 text-red-800" }
+      cancelled: { variant: "destructive", class: "bg-red-100 text-red-800" },
     };
-    
+
     const config = variants[status] || variants.upcoming;
     return (
       <Badge variant={config.variant} className={config.class}>
@@ -192,13 +215,17 @@ export default function CompetitionsManagementDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Competition Management</h1>
-            <p className="text-gray-600">Create and manage quiz competitions and tournaments</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Competition Management
+            </h1>
+            <p className="text-gray-600">
+              Create and manage quiz competitions and tournaments
+            </p>
           </div>
           <div className="flex items-center space-x-3">
             <Badge variant="outline" className="px-3 py-1">
@@ -220,13 +247,24 @@ export default function CompetitionsManagementDashboard() {
         {competitionStats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <Card key={index} className="glass-card border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card
+              key={index}
+              className="glass-card border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                    <p className={`text-sm font-medium ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                    <p className="text-sm font-medium text-gray-600 mb-1">
+                      {stat.title}
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stat.value}
+                    </p>
+                    <p
+                      className={`text-sm font-medium ${
+                        stat.trend === "up" ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
                       {stat.change} from last month
                     </p>
                   </div>
@@ -242,7 +280,9 @@ export default function CompetitionsManagementDashboard() {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Quick Actions
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {quickActions.map((action, index) => {
             const Icon = action.icon;
@@ -251,7 +291,9 @@ export default function CompetitionsManagementDashboard() {
                 <Card className="glass-card border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <div className={`p-3 rounded-xl ${action.color} text-white group-hover:scale-110 transition-transform duration-300`}>
+                      <div
+                        className={`p-3 rounded-xl ${action.color} text-white group-hover:scale-110 transition-transform duration-300`}
+                      >
                         <Icon className="h-6 w-6" />
                       </div>
                       <Badge variant="secondary" className="text-xs">
@@ -261,9 +303,12 @@ export default function CompetitionsManagementDashboard() {
                     <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                       {action.title}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">{action.description}</p>
+                    <p className="text-sm text-gray-600 mb-3">
+                      {action.description}
+                    </p>
                     <div className="flex items-center text-sm text-blue-600 font-medium">
-                      Manage <Eye className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      Manage{" "}
+                      <Eye className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </CardContent>
                 </Card>
@@ -282,7 +327,9 @@ export default function CompetitionsManagementDashboard() {
                 <Trophy className="h-5 w-5 mr-2 text-blue-600" />
                 All Competitions
               </CardTitle>
-              <CardDescription>Manage all quiz competitions and tournaments</CardDescription>
+              <CardDescription>
+                Manage all quiz competitions and tournaments
+              </CardDescription>
             </div>
             <Button variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
@@ -300,15 +347,17 @@ export default function CompetitionsManagementDashboard() {
             <div className="space-y-4">
               {competitions.length > 0 ? (
                 competitions.map((competition) => (
-                  <div 
-                    key={competition.id} 
+                  <div
+                    key={competition.id}
                     className="flex items-center justify-between p-4 rounded-lg bg-gray-50/50 hover:bg-gray-100/50 transition-colors"
                   >
                     <div className="flex items-center space-x-4">
                       {competition.thumbnail ? (
-                        <img 
-                          src={competition.thumbnail} 
+                        <Image
+                          src={competition.thumbnail}
                           alt={competition.title}
+                          width={64}
+                          height={64}
                           className="w-16 h-16 rounded-lg object-cover"
                         />
                       ) : (
@@ -317,20 +366,26 @@ export default function CompetitionsManagementDashboard() {
                         </div>
                       )}
                       <div>
-                        <p className="font-semibold text-gray-900">{competition.title}</p>
+                        <p className="font-semibold text-gray-900">
+                          {competition.title}
+                        </p>
                         <div className="flex items-center space-x-3 mt-1">
-                          <span className="text-sm text-gray-600">Grade {competition.grade}</span>
+                          <span className="text-sm text-gray-600">
+                            Grade {competition.grade}
+                          </span>
                           <span className="text-sm text-gray-400">•</span>
                           <span className="text-sm text-gray-600 flex items-center">
                             <Calendar className="h-3 w-3 mr-1" />
-                            {new Date(competition.startDate).toLocaleDateString()}
+                            {new Date(
+                              competition.startDate
+                            ).toLocaleDateString()}
                           </span>
                           {competition.totalPrizes && (
                             <>
                               <span className="text-sm text-gray-400">•</span>
                               <span className="text-sm text-gray-600 flex items-center">
-                                <DollarSign className="h-3 w-3 mr-1" />
-                                ₦{competition.totalPrizes}
+                                <DollarSign className="h-3 w-3 mr-1" />₦
+                                {competition.totalPrizes}
                               </span>
                             </>
                           )}

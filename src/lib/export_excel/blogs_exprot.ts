@@ -28,7 +28,7 @@ export async function downloadBlogsToExcel() {
         { label: "Index", value: "blogIndex" },
         { label: "Time", value: "createdAt" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

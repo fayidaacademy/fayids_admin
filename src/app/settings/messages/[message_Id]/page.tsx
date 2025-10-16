@@ -29,7 +29,7 @@ export default function MessageDetails({ params }: any) {
     };
 
     fetchData();
-  }, []);
+  }, [MessageId]);
 
   return (
     <div className="mx-10 my-5">

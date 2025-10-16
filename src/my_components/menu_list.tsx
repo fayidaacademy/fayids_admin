@@ -53,19 +53,25 @@ export function AccordionMenu() {
   // }, []);
 
   useEffect(() => {
-    fetch(`${apiUrl}/newlogin/profile`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.accountType);
-        setLoading(false);
-      });
-  }, []);
+    if (accessToken) {
+      fetch(`${apiUrl}/newlogin/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data.accountType);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching profile:", error);
+          setLoading(false);
+        });
+    }
+  }, [accessToken]);
 
   // Show full accordion - always expanded
   return (

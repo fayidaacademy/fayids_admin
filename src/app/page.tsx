@@ -3,6 +3,7 @@ import { apiUrl } from "@/api_config";
 import HomeDashboard from "@/main_components/home_dashboard";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   setAccessToken,
   getAccessToken,
@@ -12,6 +13,7 @@ import {
 export default function Home() {
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   const accessToken = getAccessToken();
 
@@ -28,8 +30,7 @@ export default function Home() {
 
         const jsonData = await response.json();
         setData(jsonData);
-        console.log("first");
-        console.log("Data: ", jsonData);
+        // Removed console.log statements for production
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -37,8 +38,10 @@ export default function Home() {
       }
     };
 
-    fetchData();
-  }, []);
+    if (accessToken) {
+      fetchData();
+    }
+  }, [accessToken]);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -48,7 +51,7 @@ export default function Home() {
     data?.accountType != "SubAdmin" &&
     data?.accountType != "Assistant"
   ) {
-    window.location.href = "/login";
+    router.push("/login");
   } else {
     return (
       <div>

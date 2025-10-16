@@ -11,20 +11,22 @@ export default function MaterialLink({ params }: any) {
   const [fetchedData, setFetchedData] = useState<any>(null);
 
   useEffect(() => {
-    fetch(`${apiUrl}/materials/${MaterialId}`, {
-      credentials: "include",
-      next: {
-        revalidate: 0,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setFetchedData(data);
+    if (MaterialId) {
+      fetch(`${apiUrl}/materials/${MaterialId}`, {
+        credentials: "include",
+        next: {
+          revalidate: 0,
+        },
       })
-      .catch((error) => {
-        // Handle any errors that occur during the fetch request
-      });
-  }, []);
+        .then((res) => res.json())
+        .then((data) => {
+          setFetchedData(data);
+        })
+        .catch((error) => {
+          // Handle any errors that occur during the fetch request
+        });
+    }
+  }, [MaterialId]);
 
   const MaterialLinkId = fetchedData?.link?.id;
 

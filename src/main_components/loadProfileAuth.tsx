@@ -35,8 +35,10 @@ export default function LoadProfileAuth() {
       }
     };
 
-    fetchData();
-  }, []);
+    if (accessToken) {
+      fetchData();
+    }
+  }, [accessToken]);
 
   if (isLoading) {
     return <p>Loading...</p>;

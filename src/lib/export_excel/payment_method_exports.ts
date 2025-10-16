@@ -27,7 +27,7 @@ export async function downloadPaymentMethodsToExcel() {
         { label: "Account Number", value: "accountNumber" },
         { label: "Status", value: "status" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

@@ -1,6 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { 
+import {
   Award,
   ArrowLeft,
   CheckCircle,
@@ -23,7 +29,7 @@ import {
   Trophy,
   User,
   School,
-  DollarSign
+  DollarSign,
 } from "lucide-react";
 import Link from "next/link";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
@@ -61,11 +67,13 @@ interface PrizeVerification {
 export default function PrizeManagement() {
   const [prizes, setPrizes] = useState<PrizeVerification[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPrize, setSelectedPrize] = useState<PrizeVerification | null>(null);
+  const [selectedPrize, setSelectedPrize] = useState<PrizeVerification | null>(
+    null
+  );
   const [verifyDialogOpen, setVerifyDialogOpen] = useState(false);
   const [verificationData, setVerificationData] = useState({
     schoolId: "",
-    verificationNotes: ""
+    verificationNotes: "",
   });
 
   useEffect(() => {
@@ -80,7 +88,7 @@ export default function PrizeManagement() {
       // Fetch all competitions to get their prizes
       const competitionsResponse = await fetch(`${apiUrl}/admin/competitions`, {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         credentials: "include",
@@ -97,14 +105,14 @@ export default function PrizeManagement() {
 
       // Fetch prize verification status for each completed competition
       const allPrizes: PrizeVerification[] = [];
-      
+
       for (const competition of completedCompetitions) {
         try {
           const prizeResponse = await fetch(
             `${apiUrl}/admin/competitions/${competition.id}/prize-verification`,
             {
               headers: {
-                "Authorization": `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
               },
               credentials: "include",
@@ -113,18 +121,23 @@ export default function PrizeManagement() {
 
           if (prizeResponse.ok) {
             const prizeData = await prizeResponse.json();
-            const prizesWithCompetition = (prizeData.verificationStatus || []).map((prize: any) => ({
+            const prizesWithCompetition = (
+              prizeData.verificationStatus || []
+            ).map((prize: any) => ({
               ...prize,
               competition: {
                 id: competition.id,
                 title: competition.title,
-                grade: competition.grade
-              }
+                grade: competition.grade,
+              },
             }));
             allPrizes.push(...prizesWithCompetition);
           }
         } catch (error) {
-          console.error(`Error fetching prizes for competition ${competition.id}:`, error);
+          console.error(
+            `Error fetching prizes for competition ${competition.id}:`,
+            error
+          );
         }
       }
 
@@ -147,7 +160,7 @@ export default function PrizeManagement() {
         {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           credentials: "include",
@@ -155,8 +168,8 @@ export default function PrizeManagement() {
             prizeId: selectedPrize.id,
             studentId: selectedPrize.winnerId,
             schoolId: verificationData.schoolId,
-            verificationNotes: verificationData.verificationNotes
-          })
+            verificationNotes: verificationData.verificationNotes,
+          }),
         }
       );
 
@@ -165,11 +178,13 @@ export default function PrizeManagement() {
       }
 
       const data = await response.json();
-      
+
       if (data.verificationResult === "success") {
         alert("Prize winner verified successfully!");
       } else {
-        alert(`Verification failed: ${data.reason}. Prize has been reassigned if available.`);
+        alert(
+          `Verification failed: ${data.reason}. Prize has been reassigned if available.`
+        );
       }
 
       setVerifyDialogOpen(false);
@@ -183,14 +198,34 @@ export default function PrizeManagement() {
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { icon: any; class: string; text: string }> = {
-      pending: { icon: AlertCircle, class: "bg-yellow-100 text-yellow-800", text: "Pending" },
-      claimed: { icon: AlertCircle, class: "bg-blue-100 text-blue-800", text: "Claimed" },
-      verified: { icon: CheckCircle, class: "bg-green-100 text-green-800", text: "Verified" },
-      cancelled: { icon: XCircle, class: "bg-red-100 text-red-800", text: "Cancelled" }
+      pending: {
+        icon: AlertCircle,
+        class: "bg-yellow-100 text-yellow-800",
+        text: "Pending",
+      },
+      claimed: {
+        icon: AlertCircle,
+        class: "bg-blue-100 text-blue-800",
+        text: "Claimed",
+      },
+      verified: {
+        icon: CheckCircle,
+        class: "bg-green-100 text-green-800",
+        text: "Verified",
+      },
+      cancelled: {
+        icon: XCircle,
+        class: "bg-red-100 text-red-800",
+        text: "Cancelled",
+      },
     };
 
-    const { icon: Icon, class: className, text } = config[status] || config.pending;
-    
+    const {
+      icon: Icon,
+      class: className,
+      text,
+    } = config[status] || config.pending;
+
     return (
       <Badge className={className}>
         <Icon className="h-3 w-3 mr-1" />
@@ -201,20 +236,21 @@ export default function PrizeManagement() {
 
   const filterPrizes = (filterStatus?: string) => {
     if (!filterStatus) return prizes;
-    return prizes.filter(p => p.claimStatus === filterStatus);
+    return prizes.filter((p) => p.claimStatus === filterStatus);
   };
 
   const stats = {
     total: prizes.length,
-    pending: prizes.filter(p => p.claimStatus === "pending").length,
-    verified: prizes.filter(p => p.claimStatus === "verified").length,
-    needsVerification: prizes.filter(p => p.winnerId && !p.schoolIdVerified).length
+    pending: prizes.filter((p) => p.claimStatus === "pending").length,
+    verified: prizes.filter((p) => p.claimStatus === "verified").length,
+    needsVerification: prizes.filter((p) => p.winnerId && !p.schoolIdVerified)
+      .length,
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -226,8 +262,12 @@ export default function PrizeManagement() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Prize Management</h1>
-              <p className="text-gray-600">Verify winners and manage prize distribution</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Prize Management
+              </h1>
+              <p className="text-gray-600">
+                Verify winners and manage prize distribution
+              </p>
             </div>
           </div>
         </div>
@@ -239,8 +279,12 @@ export default function PrizeManagement() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Prizes</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Prizes
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.total}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-blue-100">
                 <Award className="h-6 w-6 text-blue-600" />
@@ -253,8 +297,12 @@ export default function PrizeManagement() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Needs Verification</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.needsVerification}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Needs Verification
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.needsVerification}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-yellow-100">
                 <AlertCircle className="h-6 w-6 text-yellow-600" />
@@ -267,8 +315,12 @@ export default function PrizeManagement() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Verified</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.verified}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Verified
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.verified}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-green-100">
                 <CheckCircle className="h-6 w-6 text-green-600" />
@@ -281,8 +333,12 @@ export default function PrizeManagement() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Pending</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Pending
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.pending}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-orange-100">
                 <Trophy className="h-6 w-6 text-orange-600" />
@@ -299,7 +355,9 @@ export default function PrizeManagement() {
             <Award className="h-5 w-5 mr-2 text-blue-600" />
             All Prizes
           </CardTitle>
-          <CardDescription>Manage prize verification and distribution</CardDescription>
+          <CardDescription>
+            Manage prize verification and distribution
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -311,8 +369,8 @@ export default function PrizeManagement() {
             <div className="space-y-4">
               {prizes.length > 0 ? (
                 prizes.map((prize) => (
-                  <div 
-                    key={prize.id} 
+                  <div
+                    key={prize.id}
                     className="p-4 rounded-lg bg-gray-50/50 hover:bg-gray-100/50 transition-colors"
                   >
                     <div className="flex items-start justify-between">
@@ -321,12 +379,16 @@ export default function PrizeManagement() {
                           <h3 className="font-semibold text-gray-900">
                             {prize.competition.title}
                           </h3>
-                          <Badge variant="outline">Grade {prize.competition.grade}</Badge>
+                          <Badge variant="outline">
+                            Grade {prize.competition.grade}
+                          </Badge>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                           <div>
-                            <p className="text-sm font-medium text-gray-600">Prize</p>
+                            <p className="text-sm font-medium text-gray-600">
+                              Prize
+                            </p>
                             <p className="text-gray-900">
                               Rank {prize.rank}: {prize.prizeName}
                               {prize.value && ` (₦${prize.value})`}
@@ -336,27 +398,45 @@ export default function PrizeManagement() {
                           {prize.winnerDetails && (
                             <>
                               <div>
-                                <p className="text-sm font-medium text-gray-600">Winner</p>
-                                <p className="text-gray-900">
-                                  {prize.winnerDetails.firstName} {prize.winnerDetails.lastName}
+                                <p className="text-sm font-medium text-gray-600">
+                                  Winner
                                 </p>
-                                <p className="text-sm text-gray-600">{prize.winnerDetails.email}</p>
+                                <p className="text-gray-900">
+                                  {prize.winnerDetails.firstName}{" "}
+                                  {prize.winnerDetails.lastName}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  {prize.winnerDetails.email}
+                                </p>
                               </div>
 
                               <div>
-                                <p className="text-sm font-medium text-gray-600">School</p>
-                                <p className="text-gray-900">{prize.winnerDetails.schoolName}</p>
-                                <p className="text-sm text-gray-600">Grade {prize.winnerDetails.gread}</p>
+                                <p className="text-sm font-medium text-gray-600">
+                                  School
+                                </p>
+                                <p className="text-gray-900">
+                                  {prize.winnerDetails.schoolName}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  Grade {prize.winnerDetails.gread}
+                                </p>
                               </div>
 
                               {prize.winnerDetails.schoolId && (
                                 <div>
-                                  <p className="text-sm font-medium text-gray-600">School ID</p>
-                                  <p className="text-gray-900">{prize.winnerDetails.schoolId}</p>
+                                  <p className="text-sm font-medium text-gray-600">
+                                    School ID
+                                  </p>
+                                  <p className="text-gray-900">
+                                    {prize.winnerDetails.schoolId}
+                                  </p>
                                   {prize.schoolIdVerified && (
                                     <p className="text-sm text-green-600 flex items-center">
                                       <CheckCircle className="h-3 w-3 mr-1" />
-                                      Verified on {new Date(prize.schoolIdVerifiedAt!).toLocaleDateString()}
+                                      Verified on{" "}
+                                      {new Date(
+                                        prize.schoolIdVerifiedAt!
+                                      ).toLocaleDateString()}
                                     </p>
                                   )}
                                 </div>
@@ -367,8 +447,12 @@ export default function PrizeManagement() {
 
                         {prize.verificationNotes && (
                           <div className="mb-3">
-                            <p className="text-sm font-medium text-gray-600">Verification Notes</p>
-                            <p className="text-sm text-gray-900">{prize.verificationNotes}</p>
+                            <p className="text-sm font-medium text-gray-600">
+                              Verification Notes
+                            </p>
+                            <p className="text-sm text-gray-900">
+                              {prize.verificationNotes}
+                            </p>
                           </div>
                         )}
 
@@ -376,7 +460,10 @@ export default function PrizeManagement() {
                           {getStatusBadge(prize.claimStatus)}
                           {prize.winnerAssignedAt && (
                             <span className="text-sm text-gray-600">
-                              Assigned {new Date(prize.winnerAssignedAt).toLocaleDateString()}
+                              Assigned{" "}
+                              {new Date(
+                                prize.winnerAssignedAt
+                              ).toLocaleDateString()}
                             </span>
                           )}
                         </div>
@@ -384,18 +471,26 @@ export default function PrizeManagement() {
 
                       <div className="flex items-center space-x-2 ml-4">
                         {prize.winnerId && !prize.schoolIdVerified && (
-                          <Dialog open={verifyDialogOpen && selectedPrize?.id === prize.id} onOpenChange={(open) => {
-                            setVerifyDialogOpen(open);
-                            if (open) {
-                              setSelectedPrize(prize);
-                              setVerificationData({
-                                schoolId: prize.winnerDetails?.schoolId || "",
-                                verificationNotes: ""
-                              });
+                          <Dialog
+                            open={
+                              verifyDialogOpen && selectedPrize?.id === prize.id
                             }
-                          }}>
+                            onOpenChange={(open) => {
+                              setVerifyDialogOpen(open);
+                              if (open) {
+                                setSelectedPrize(prize);
+                                setVerificationData({
+                                  schoolId: prize.winnerDetails?.schoolId || "",
+                                  verificationNotes: "",
+                                });
+                              }
+                            }}
+                          >
                             <DialogTrigger asChild>
-                              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                              <Button
+                                size="sm"
+                                className="bg-blue-600 hover:bg-blue-700"
+                              >
                                 <CheckCircle className="h-4 w-4 mr-2" />
                                 Verify Winner
                               </Button>
@@ -404,14 +499,15 @@ export default function PrizeManagement() {
                               <DialogHeader>
                                 <DialogTitle>Verify Prize Winner</DialogTitle>
                                 <DialogDescription>
-                                  Verify the winner's school ID for {prize.prizeName}
+                                  Verify the winner&apos;s school ID for{" "}
+                                  {prize.prizeName}
                                 </DialogDescription>
                               </DialogHeader>
-                              
+
                               <div className="space-y-4 py-4">
                                 <div className="space-y-2">
                                   <Label>Winner Name</Label>
-                                  <Input 
+                                  <Input
                                     value={`${prize.winnerDetails?.firstName} ${prize.winnerDetails?.lastName}`}
                                     disabled
                                   />
@@ -419,8 +515,10 @@ export default function PrizeManagement() {
 
                                 <div className="space-y-2">
                                   <Label>School Name</Label>
-                                  <Input 
-                                    value={prize.winnerDetails?.schoolName || ""}
+                                  <Input
+                                    value={
+                                      prize.winnerDetails?.schoolName || ""
+                                    }
                                     disabled
                                   />
                                 </div>
@@ -430,18 +528,30 @@ export default function PrizeManagement() {
                                   <Input
                                     id="schoolId"
                                     value={verificationData.schoolId}
-                                    onChange={(e) => setVerificationData(prev => ({ ...prev, schoolId: e.target.value }))}
+                                    onChange={(e) =>
+                                      setVerificationData((prev) => ({
+                                        ...prev,
+                                        schoolId: e.target.value,
+                                      }))
+                                    }
                                     placeholder="Enter school ID to verify"
                                     required
                                   />
                                 </div>
 
                                 <div className="space-y-2">
-                                  <Label htmlFor="notes">Verification Notes</Label>
+                                  <Label htmlFor="notes">
+                                    Verification Notes
+                                  </Label>
                                   <Textarea
                                     id="notes"
                                     value={verificationData.verificationNotes}
-                                    onChange={(e) => setVerificationData(prev => ({ ...prev, verificationNotes: e.target.value }))}
+                                    onChange={(e) =>
+                                      setVerificationData((prev) => ({
+                                        ...prev,
+                                        verificationNotes: e.target.value,
+                                      }))
+                                    }
                                     placeholder="Add any verification notes..."
                                     rows={3}
                                   />
@@ -449,17 +559,22 @@ export default function PrizeManagement() {
 
                                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                                   <p className="text-sm text-yellow-800">
-                                    <strong>Warning:</strong> If the school ID doesn't match or the grade is incorrect, 
-                                    the prize will be cancelled and reassigned to the next runner-up.
+                                    <strong>Warning:</strong> If the school ID
+                                    doesn&apos;t match or the grade is
+                                    incorrect, the prize will be cancelled and
+                                    reassigned to the next runner-up.
                                   </p>
                                 </div>
                               </div>
 
                               <div className="flex justify-end space-x-2">
-                                <Button variant="outline" onClick={() => setVerifyDialogOpen(false)}>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setVerifyDialogOpen(false)}
+                                >
                                   Cancel
                                 </Button>
-                                <Button 
+                                <Button
                                   onClick={handleVerifyPrize}
                                   disabled={!verificationData.schoolId}
                                   className="bg-green-600 hover:bg-green-700"
@@ -470,7 +585,7 @@ export default function PrizeManagement() {
                             </DialogContent>
                           </Dialog>
                         )}
-                        
+
                         <Link href={`/competitions/${prize.competition.id}`}>
                           <Button variant="outline" size="sm">
                             View Competition
@@ -484,7 +599,9 @@ export default function PrizeManagement() {
                 <div className="text-center py-12">
                   <Award className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-500 mb-4">No prizes to manage yet</p>
-                  <p className="text-sm text-gray-400">Prizes will appear here when competitions are completed</p>
+                  <p className="text-sm text-gray-400">
+                    Prizes will appear here when competitions are completed
+                  </p>
                 </div>
               )}
             </div>

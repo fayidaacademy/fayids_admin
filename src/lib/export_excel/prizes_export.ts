@@ -29,7 +29,7 @@ export async function downloadPrizesToExcel() {
         { label: "Visiblety Point", value: "visibleAtPoint" },
         { label: "Image", value: "image" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

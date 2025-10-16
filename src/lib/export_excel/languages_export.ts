@@ -25,7 +25,7 @@ export async function downloadLanguagesToExcel() {
         { label: "Short Form", value: "shortForm" },
         { label: "Full Form", value: "fullForm" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

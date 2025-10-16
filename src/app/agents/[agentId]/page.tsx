@@ -204,14 +204,20 @@ export default function AgentDetails({ params }: any) {
                 </div>
                 <div>
                   <CardTitle className="text-2xl">
-                    {`${data?.firstName || ""} ${data?.lastName || ""} ${data?.grandName || ""}`.trim() || "N/A"}
+                    {`${data?.firstName || ""} ${data?.lastName || ""} ${
+                      data?.grandName || ""
+                    }`.trim() || "N/A"}
                   </CardTitle>
                   <CardDescription className="flex items-center gap-2 mt-1">
                     <Badge variant="outline" className="text-sm">
                       Agent
                     </Badge>
                     <Badge
-                      variant={data?.studentStatus === "active" ? "default" : "secondary"}
+                      variant={
+                        data?.studentStatus === "active"
+                          ? "default"
+                          : "secondary"
+                      }
                       className="text-sm"
                     >
                       {data?.studentStatus || "N/A"}
@@ -233,7 +239,9 @@ export default function AgentDetails({ params }: any) {
                     <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
                       <Mail className="h-5 w-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Email</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Email
+                        </p>
                         <p className="text-base font-semibold text-gray-900 break-all">
                           {data?.agent_email || "Not provided"}
                         </p>
@@ -242,7 +250,9 @@ export default function AgentDetails({ params }: any) {
                     <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
                       <Phone className="h-5 w-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Phone</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Phone
+                        </p>
                         <p className="text-base font-semibold text-gray-900">
                           {data?.phoneNumber || "Not provided"}
                         </p>
@@ -251,7 +261,9 @@ export default function AgentDetails({ params }: any) {
                     <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
                       <Globe className="h-5 w-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Language</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Language
+                        </p>
                         <p className="text-base font-semibold text-gray-900">
                           {data?.prefferdLanguage || "Not specified"}
                         </p>
@@ -270,7 +282,9 @@ export default function AgentDetails({ params }: any) {
                     <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
                       <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Region</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Region
+                        </p>
                         <p className="text-base font-semibold text-gray-900">
                           {data?.region || "Not provided"}
                         </p>
@@ -279,7 +293,9 @@ export default function AgentDetails({ params }: any) {
                     <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
                       <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-gray-600">City</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          City
+                        </p>
                         <p className="text-base font-semibold text-gray-900">
                           {data?.city || "Not provided"}
                         </p>
@@ -288,9 +304,13 @@ export default function AgentDetails({ params }: any) {
                     <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
                       <Calendar className="h-5 w-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Joined</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Joined
+                        </p>
                         <p className="text-base font-semibold text-gray-900">
-                          {data?.createdAt ? new Date(data.createdAt).toLocaleDateString() : "N/A"}
+                          {data?.createdAt
+                            ? new Date(data.createdAt).toLocaleDateString()
+                            : "N/A"}
                         </p>
                       </div>
                     </div>
@@ -322,7 +342,9 @@ export default function AgentDetails({ params }: any) {
                 <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-4">
                   <Hash className="h-5 w-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Account Number</p>
+                    <p className="text-sm font-medium text-gray-600">
+                      Account Number
+                    </p>
                     <p className="text-base font-semibold text-gray-900 font-mono">
                       {data?.backaccountnumber || "Not provided"}
                     </p>
@@ -343,7 +365,7 @@ export default function AgentDetails({ params }: any) {
                 </Badge>
               </CardTitle>
               <CardDescription>
-                Students registered using this agent's promo code
+                Students registered using this agent&apos;s promo code
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6">
@@ -352,18 +374,26 @@ export default function AgentDetails({ params }: any) {
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-gray-50">
-                        <TableHead className="font-semibold">First Name</TableHead>
-                        <TableHead className="font-semibold">Last Name</TableHead>
+                        <TableHead className="font-semibold">
+                          First Name
+                        </TableHead>
+                        <TableHead className="font-semibold">
+                          Last Name
+                        </TableHead>
                         <TableHead className="font-semibold">Grade</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {list.map((student, index) => (
                         <TableRow key={index} className="hover:bg-gray-50">
-                          <TableCell className="font-medium">{student?.firstName || "N/A"}</TableCell>
+                          <TableCell className="font-medium">
+                            {student?.firstName || "N/A"}
+                          </TableCell>
                           <TableCell>{student?.lastName || "N/A"}</TableCell>
                           <TableCell>
-                            <Badge variant="outline">{student?.gread || "N/A"}</Badge>
+                            <Badge variant="outline">
+                              {student?.gread || "N/A"}
+                            </Badge>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -445,7 +475,9 @@ export default function AgentDetails({ params }: any) {
                 <p className="text-2xl font-bold font-mono text-purple-900 tracking-wider">
                   {data?.promocode || "N/A"}
                 </p>
-                <p className="text-xs text-purple-600 mt-2">Share this code with students</p>
+                <p className="text-xs text-purple-600 mt-2">
+                  Share this code with students
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -493,7 +525,9 @@ export default function AgentDetails({ params }: any) {
                   <Users className="h-4 w-4 text-blue-600" />
                   <span className="text-sm font-medium">Students</span>
                 </div>
-                <span className="text-lg font-bold text-blue-600">{list?.length || 0}</span>
+                <span className="text-lg font-bold text-blue-600">
+                  {list?.length || 0}
+                </span>
               </div>
               <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
                 <div className="flex items-center gap-2">
@@ -509,7 +543,11 @@ export default function AgentDetails({ params }: any) {
                   <UserCheck className="h-4 w-4 text-green-600" />
                   <span className="text-sm font-medium">Status</span>
                 </div>
-                <Badge variant={data?.studentStatus === "active" ? "default" : "secondary"}>
+                <Badge
+                  variant={
+                    data?.studentStatus === "active" ? "default" : "secondary"
+                  }
+                >
                   {data?.studentStatus || "N/A"}
                 </Badge>
               </div>

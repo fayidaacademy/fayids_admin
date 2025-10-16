@@ -1,28 +1,38 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Purchase, columns } from "./columns";
+import { Transaction, columns } from "./columns";
 import DataTableGenerator from "@/main_components/data-table";
 import { apiUrl } from "@/api_config";
 import axios from "axios";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  CheckCircle2, 
-  Users, 
-  CreditCard, 
-  TrendingUp, 
+import {
+  CheckCircle2,
+  Users,
+  CreditCard,
+  TrendingUp,
   Filter,
   Download,
   RefreshCw,
   ArrowLeft,
   DollarSign,
-  Calendar
+  Calendar,
 } from "lucide-react";
 import Link from "next/link";
 
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../lib/tokenManager";
 
 export default function CompletedTransactionTable() {
   const [data, setData] = useState([]);
@@ -31,7 +41,7 @@ export default function CompletedTransactionTable() {
     total: 0,
     completed: 0,
     totalRevenue: 0,
-    thisMonth: 0
+    thisMonth: 0,
   });
 
   const accessToken = getAccessToken();
@@ -40,28 +50,39 @@ export default function CompletedTransactionTable() {
     const getData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`${apiUrl}/inforeciver/transactionlist_completed/`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${apiUrl}/inforeciver/transactionlist_completed/`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            withCredentials: true,
+          }
+        );
 
         const responseData = response.data;
         setData(responseData);
 
         // Calculate stats
         const total = responseData.length;
-        const completed = responseData.filter(item => item.status === 'completed').length;
-        const totalRevenue = responseData.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
-        
+        const completed = responseData.filter(
+          (item: any) => item.status === "completed"
+        ).length;
+        const totalRevenue = responseData.reduce(
+          (sum: number, item: any) => sum + (parseFloat(item.amount) || 0),
+          0
+        );
+
         // Calculate this month's transactions
         const currentMonth = new Date().getMonth();
         const currentYear = new Date().getFullYear();
-        const thisMonth = responseData.filter(item => {
+        const thisMonth = responseData.filter((item: any) => {
           const itemDate = new Date(item.createdAt || item.date);
-          return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+          return (
+            itemDate.getMonth() === currentMonth &&
+            itemDate.getFullYear() === currentYear
+          );
         }).length;
 
         setStats({ total, completed, totalRevenue, thisMonth });
@@ -73,7 +94,7 @@ export default function CompletedTransactionTable() {
     };
 
     getData();
-  }, []);
+  }, [accessToken]);
 
   const handleRefresh = () => {
     window.location.reload();
@@ -82,7 +103,7 @@ export default function CompletedTransactionTable() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -94,18 +115,24 @@ export default function CompletedTransactionTable() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Completed Transactions</h1>
-              <p className="text-gray-600">View completed transaction history and analytics</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Completed Transactions
+              </h1>
+              <p className="text-gray-600">
+                View completed transaction history and analytics
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={handleRefresh}
               disabled={isLoading}
               className="flex items-center"
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+              />
               Refresh
             </Button>
             <Badge variant="outline" className="px-3 py-1">
@@ -121,8 +148,12 @@ export default function CompletedTransactionTable() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Transactions</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Transactions
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.total}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-emerald-100">
                 <CheckCircle2 className="h-6 w-6 text-emerald-600" />
@@ -135,8 +166,12 @@ export default function CompletedTransactionTable() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.completed}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Completed
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.completed}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-green-100">
                 <CreditCard className="h-6 w-6 text-green-600" />
@@ -149,8 +184,12 @@ export default function CompletedTransactionTable() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">₦{stats.totalRevenue.toLocaleString()}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Revenue
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  ₦{stats.totalRevenue.toLocaleString()}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-blue-100">
                 <DollarSign className="h-6 w-6 text-blue-600" />
@@ -163,8 +202,12 @@ export default function CompletedTransactionTable() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">This Month</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.thisMonth}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  This Month
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.thisMonth}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-purple-100">
                 <Calendar className="h-6 w-6 text-purple-600" />
@@ -188,16 +231,19 @@ export default function CompletedTransactionTable() {
               </CardDescription>
             </div>
             <div className="flex items-center space-x-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => {
                   // Filter by this month
                   const currentMonth = new Date().getMonth();
                   const currentYear = new Date().getFullYear();
-                  const thisMonthData = data.filter(item => {
+                  const thisMonthData = data.filter((item: any) => {
                     const itemDate = new Date(item.createdAt || item.date);
-                    return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+                    return (
+                      itemDate.getMonth() === currentMonth &&
+                      itemDate.getFullYear() === currentYear
+                    );
                   });
                   setData(thisMonthData);
                 }}
@@ -205,8 +251,8 @@ export default function CompletedTransactionTable() {
                 <Filter className="h-4 w-4 mr-2" />
                 This Month
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => {
                   // Reset to all data

@@ -25,7 +25,7 @@ export async function downloadCoursesToExcel() {
         { label: "Course Name", value: "courseName" },
         { label: "Created At", value: "createdAt" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

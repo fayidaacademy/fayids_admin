@@ -30,7 +30,7 @@ export async function downloadLeaderBoardToExcel() {
         { label: "Grade", value: "gread" },
         { label: "Points", value: "points" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

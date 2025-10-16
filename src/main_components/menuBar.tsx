@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import { AccordionMenu } from "../my_components/menu_list";
 import Link from "next/link";
 import { apiUrl } from "@/api_config";
-import { 
-  Home, 
-  Users, 
-  BookOpen, 
-  FileText, 
-  Settings, 
+import {
+  Home,
+  Users,
+  BookOpen,
+  FileText,
+  Settings,
   BarChart3,
-  Trophy
+  Trophy,
 } from "lucide-react";
 import {
   setAccessToken,
@@ -23,75 +23,80 @@ export default function MenuBar() {
 
   const [accountType, setAccountType] = useState(null);
   const [isLoading, setLoading] = useState(true);
-  
+
   useEffect(() => {
-    fetch(`${apiUrl}/newlogin/profile`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setAccountType(data.accountType);
-        setLoading(false);
-        console.log("message: " + data.firstName);
-      });
-  }, []);
+    if (accessToken) {
+      fetch(`${apiUrl}/newlogin/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setAccountType(data.accountType);
+          setLoading(false);
+          // Removed console.log for production
+        })
+        .catch((error) => {
+          console.error("Error fetching profile:", error);
+          setLoading(false);
+        });
+    }
+  }, [accessToken]);
 
   // Define menu items for different account types
   const menuItems = [
-    { 
-      icon: <Home size={20} className="mr-3 text-blue-600" />, 
-      label: "Dashboard", 
-      href: "/", 
+    {
+      icon: <Home size={20} className="mr-3 text-blue-600" />,
+      label: "Dashboard",
+      href: "/",
       permissions: ["Admin", "SubAdmin", "Assistant"],
-      active: true // assuming dashboard is default active
+      active: true, // assuming dashboard is default active
     },
-    { 
-      icon: <Users size={20} className="mr-3 text-gray-500" />, 
-      label: "Students", 
-      href: "/students", 
-      permissions: ["Admin", "SubAdmin"] 
+    {
+      icon: <Users size={20} className="mr-3 text-gray-500" />,
+      label: "Students",
+      href: "/students",
+      permissions: ["Admin", "SubAdmin"],
     },
-    { 
-      icon: <Users size={20} className="mr-3 text-gray-500" />, 
-      label: "Exam Takers", 
-      href: "/examtakers", 
-      permissions: ["Admin"] 
+    {
+      icon: <Users size={20} className="mr-3 text-gray-500" />,
+      label: "Exam Takers",
+      href: "/examtakers",
+      permissions: ["Admin"],
     },
-    { 
-      icon: <FileText size={20} className="mr-3 text-gray-500" />, 
-      label: "Exams", 
-      href: "/exams", 
-      permissions: ["Admin", "SubAdmin"] 
+    {
+      icon: <FileText size={20} className="mr-3 text-gray-500" />,
+      label: "Exams",
+      href: "/exams",
+      permissions: ["Admin", "SubAdmin"],
     },
-    { 
-      icon: <Trophy size={20} className="mr-3 text-gray-500" />, 
-      label: "Competitions", 
-      href: "/competitions", 
-      permissions: ["Admin", "SubAdmin"] 
+    {
+      icon: <Trophy size={20} className="mr-3 text-gray-500" />,
+      label: "Competitions",
+      href: "/competitions",
+      permissions: ["Admin", "SubAdmin"],
     },
-    { 
-      icon: <BookOpen size={20} className="mr-3 text-gray-500" />, 
-      label: "Courses", 
-      href: "/courses", 
-      permissions: ["Admin", "SubAdmin", "Assistant"] 
+    {
+      icon: <BookOpen size={20} className="mr-3 text-gray-500" />,
+      label: "Courses",
+      href: "/courses",
+      permissions: ["Admin", "SubAdmin", "Assistant"],
     },
-    { 
-      icon: <Settings size={20} className="mr-3 text-gray-500" />, 
-      label: "Settings", 
-      href: "/settings", 
-      permissions: ["Admin"] 
+    {
+      icon: <Settings size={20} className="mr-3 text-gray-500" />,
+      label: "Settings",
+      href: "/settings",
+      permissions: ["Admin"],
     },
   ];
 
   // Filter menu items based on user's account type
-  const filteredMenuItems = menuItems.filter(item => 
-    accountType && item.permissions.includes(accountType)
+  const filteredMenuItems = menuItems.filter(
+    (item) => accountType && item.permissions.includes(accountType)
   );
-
 
   if (isLoading) {
     return (
@@ -110,21 +115,24 @@ export default function MenuBar() {
     <div className="h-full flex flex-col">
       {/* Menu list */}
       <nav className="flex-1">
-        {(accountType === "Admin" || accountType === "SubAdmin" || accountType === "Assistant") && (
+        {(accountType === "Admin" ||
+          accountType === "SubAdmin" ||
+          accountType === "Assistant") && (
           <div className="space-y-1">
             {filteredMenuItems.map((item, index) => (
               <Link href={item.href} key={index}>
-                <div className="flex items-center px-3 py-2.5 rounded-xl hover:bg-primary-50 transition-all duration-200 cursor-pointer text-gray-700 font-medium group relative"> 
+                <div className="flex items-center px-3 py-2.5 rounded-xl hover:bg-primary-50 transition-all duration-200 cursor-pointer text-gray-700 font-medium group relative">
                   <div className="p-1.5 mr-3 rounded-lg transition-all duration-200 group-hover:bg-primary-100/50">
-                    {React.cloneElement(item.icon, { 
+                    {React.cloneElement(item.icon, {
                       size: 20,
-                      className: "mr-3 text-gray-600 group-hover:text-primary-700 transition-colors duration-200"
+                      className:
+                        "mr-3 text-gray-600 group-hover:text-primary-700 transition-colors duration-200",
                     })}
                   </div>
                   <span className="truncate text-sm font-medium text-gray-700 group-hover:text-primary-700 transition-colors duration-200">
                     {item.label}
                   </span>
-                  
+
                   {/* Active Indicator */}
                   {item.active && (
                     <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-primary rounded-r-full"></div>
@@ -132,7 +140,7 @@ export default function MenuBar() {
                 </div>
               </Link>
             ))}
-            
+
             {/* AccordionMenu - Always expanded */}
             <div className="mt-6 pt-4 border-t border-white/10">
               <AccordionMenu />

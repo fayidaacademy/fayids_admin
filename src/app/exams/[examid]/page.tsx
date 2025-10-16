@@ -9,6 +9,7 @@ import DeleteMaterialAndVideo from "@/my_components/delete_material_and_video";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditNumberCellDialog from "@/my_components/edit_number_cell_dialog";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import UploadQuestionImage from "./uploaduestionImage";
 import UploadCorrectionImage from "./uploadCorrectionImage";
@@ -363,9 +364,7 @@ export default function ExamDetails({ params }: any) {
                 id={ExamId}
                 type="assesments"
               />
-              <div className="text-sm text-gray-500">
-                ID: {ExamId}
-              </div>
+              <div className="text-sm text-gray-500">ID: {ExamId}</div>
             </div>
           </CardContent>
         </Card>
@@ -414,32 +413,51 @@ export default function ExamDetails({ params }: any) {
                       <div className="space-y-6">
                         {/* Choices */}
                         <div className="space-y-3">
-                          <h3 className="font-semibold text-gray-700 mb-3">Answer Choices</h3>
+                          <h3 className="font-semibold text-gray-700 mb-3">
+                            Answer Choices
+                          </h3>
                           <div className="grid gap-3">
                             <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
-                              <span className="font-bold text-blue-600">A.</span>
-                              <div className="flex-1">{formatTextToHTML(q.choiseA)}</div>
+                              <span className="font-bold text-blue-600">
+                                A.
+                              </span>
+                              <div className="flex-1">
+                                {formatTextToHTML(q.choiseA)}
+                              </div>
                               {getChoiceBadge("A", q.correctChoice)}
                             </div>
                             <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
-                              <span className="font-bold text-blue-600">B.</span>
-                              <div className="flex-1">{formatTextToHTML(q.choiseB)}</div>
+                              <span className="font-bold text-blue-600">
+                                B.
+                              </span>
+                              <div className="flex-1">
+                                {formatTextToHTML(q.choiseB)}
+                              </div>
                               {getChoiceBadge("B", q.correctChoice)}
                             </div>
                             <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
-                              <span className="font-bold text-blue-600">C.</span>
-                              <div className="flex-1">{formatTextToHTML(q.choiseC)}</div>
+                              <span className="font-bold text-blue-600">
+                                C.
+                              </span>
+                              <div className="flex-1">
+                                {formatTextToHTML(q.choiseC)}
+                              </div>
                               {getChoiceBadge("C", q.correctChoice)}
                             </div>
                             <div className="flex items-start gap-3 p-3 rounded-lg border bg-gray-50">
-                              <span className="font-bold text-blue-600">D.</span>
-                              <div className="flex-1">{formatTextToHTML(q.choiseD)}</div>
+                              <span className="font-bold text-blue-600">
+                                D.
+                              </span>
+                              <div className="flex-1">
+                                {formatTextToHTML(q.choiseD)}
+                              </div>
                               {getChoiceBadge("D", q.correctChoice)}
                             </div>
                           </div>
                           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                             <p className="text-sm font-semibold text-green-800">
-                              Correct Answer: <span className="text-xl">{q.correctChoice}</span>
+                              Correct Answer:{" "}
+                              <span className="text-xl">{q.correctChoice}</span>
                             </p>
                           </div>
                         </div>
@@ -447,8 +465,12 @@ export default function ExamDetails({ params }: any) {
                         {/* Explanation */}
                         {q.correction && (
                           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <h4 className="font-semibold text-blue-900 mb-2">Explanation:</h4>
-                            <div className="text-blue-800">{formatTextToHTML(q.correction)}</div>
+                            <h4 className="font-semibold text-blue-900 mb-2">
+                              Explanation:
+                            </h4>
+                            <div className="text-blue-800">
+                              {formatTextToHTML(q.correction)}
+                            </div>
                           </div>
                         )}
 
@@ -465,9 +487,14 @@ export default function ExamDetails({ params }: any) {
                             <CardContent className="p-4">
                               {q.questionImage && (
                                 <div className="mb-4">
-                                  <img
-                                    src={q.questionImgUrl}
+                                  <Image
+                                    src={
+                                      q.questionImgUrl ||
+                                      "/placeholder-image.png"
+                                    }
                                     alt="Question"
+                                    width={400}
+                                    height={300}
                                     className="w-full rounded-lg border"
                                   />
                                 </div>
@@ -487,9 +514,11 @@ export default function ExamDetails({ params }: any) {
                             <CardContent className="p-4">
                               {q.correctionImage && (
                                 <div className="mb-4">
-                                  <img
-                                    src={q.correctionImageUrl}
+                                  <Image
+                                    src={q.correctionImageUrl || ""}
                                     alt="Explanation"
+                                    width={500}
+                                    height={300}
                                     className="w-full rounded-lg border"
                                   />
                                 </div>
@@ -539,5 +568,3 @@ export default function ExamDetails({ params }: any) {
     </div>
   );
 }
-
-

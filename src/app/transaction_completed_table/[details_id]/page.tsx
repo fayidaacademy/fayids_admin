@@ -51,7 +51,7 @@ export default function CompletedTransactionDetails({ params }: any) {
     };
 
     fetchData();
-  }, []);
+  }, [TransactionId, accessToken]);
 
   if (isLoading) {
     return (

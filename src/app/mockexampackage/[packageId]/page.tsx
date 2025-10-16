@@ -10,7 +10,13 @@ import useMockPackageStore from "@/store/mockpackageStore";
 import Mock_Package_thumbnail_image_manage from "./package_components/package_thumbnail_image_manage";
 import Mock_package_discount_managment from "./package_components/package_discount_managment";
 import DeleteDialog from "@/my_components/delete_dialog";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -131,7 +137,10 @@ export default function MockPackageDetails({ params }: any) {
                 <Settings className="h-4 w-4" />
                 Basic Info
               </TabsTrigger>
-              <TabsTrigger value="thumbnail" className="flex items-center gap-2">
+              <TabsTrigger
+                value="thumbnail"
+                className="flex items-center gap-2"
+              >
                 <ImageIcon className="h-4 w-4" />
                 Thumbnail
               </TabsTrigger>
@@ -146,7 +155,10 @@ export default function MockPackageDetails({ params }: any) {
                 <Tag className="h-4 w-4" />
                 Discount
               </TabsTrigger>
-              <TabsTrigger value="delete" className="flex items-center gap-2 text-red-600 data-[state=active]:text-red-600">
+              <TabsTrigger
+                value="delete"
+                className="flex items-center gap-2 text-red-600 data-[state=active]:text-red-600"
+              >
                 <Trash2 className="h-4 w-4" />
                 Delete
               </TabsTrigger>
@@ -159,7 +171,9 @@ export default function MockPackageDetails({ params }: any) {
               <div className="space-y-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Settings className="h-5 w-5 text-green-600" />
-                  <h2 className="text-xl font-semibold text-gray-900">Basic Information</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    Basic Information
+                  </h2>
                 </div>
                 <MockPackage_basic_components
                   packageId={params?.packageId}
@@ -180,9 +194,13 @@ export default function MockPackageDetails({ params }: any) {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <BookOpen className="h-5 w-5 text-green-600" />
-                    <h2 className="text-xl font-semibold text-gray-900">Connected Exams</h2>
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      Connected Exams
+                    </h2>
                   </div>
-                  <Link href={`/mockexampackage/connectexam/${params.packageId}`}>
+                  <Link
+                    href={`/mockexampackage/connectexam/${params.packageId}`}
+                  >
                     <Button className="bg-green-600 hover:bg-green-700">
                       <Plus className="mr-2 h-4 w-4" />
                       Add Exam to Package
@@ -203,11 +221,15 @@ export default function MockPackageDetails({ params }: any) {
                   <Card className="border-dashed">
                     <CardContent className="p-12 text-center">
                       <BookOpen className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-                      <p className="text-lg font-medium text-gray-900 mb-2">No exams connected</p>
+                      <p className="text-lg font-medium text-gray-900 mb-2">
+                        No exams connected
+                      </p>
                       <p className="text-gray-500 mb-4">
                         Start by adding exams to this package
                       </p>
-                      <Link href={`/mockexampackage/connectexam/${params.packageId}`}>
+                      <Link
+                        href={`/mockexampackage/connectexam/${params.packageId}`}
+                      >
                         <Button variant="outline">
                           <Plus className="mr-2 h-4 w-4" />
                           Add First Exam
@@ -224,7 +246,9 @@ export default function MockPackageDetails({ params }: any) {
               <div className="space-y-6">
                 <div className="flex items-center gap-2 mb-4">
                   <ImageIcon className="h-5 w-5 text-green-600" />
-                  <h2 className="text-xl font-semibold text-gray-900">Package Thumbnail</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    Package Thumbnail
+                  </h2>
                 </div>
                 <Mock_Package_thumbnail_image_manage
                   ThumbnailLocation={data?.thumbnail}
@@ -239,7 +263,9 @@ export default function MockPackageDetails({ params }: any) {
               <div className="space-y-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Tag className="h-5 w-5 text-green-600" />
-                  <h2 className="text-xl font-semibold text-gray-900">Discount Management</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    Discount Management
+                  </h2>
                 </div>
                 <Mock_package_discount_managment
                   discountExpiryDate={data?.discountExpiryDate}
@@ -260,7 +286,8 @@ export default function MockPackageDetails({ params }: any) {
                     Danger Zone
                   </CardTitle>
                   <CardDescription className="text-red-600">
-                    This action cannot be undone. This will permanently delete the package.
+                    This action cannot be undone. This will permanently delete
+                    the package.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -271,11 +298,12 @@ export default function MockPackageDetails({ params }: any) {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 mb-2">
-                          Delete "{data?.title}"
+                          Delete &quot;{data?.title}&quot;
                         </h3>
                         <p className="text-sm text-gray-600 mb-4">
-                          Once you delete this package, there is no going back. Please be certain.
-                          All associated exams, students, and data will be permanently removed.
+                          Once you delete this package, there is no going back.
+                          Please be certain. All associated exams, students, and
+                          data will be permanently removed.
                         </p>
                         <DeleteDialog
                           type="mockexampackage"

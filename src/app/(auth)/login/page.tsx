@@ -2,6 +2,7 @@
 //import { apiUrl } from "@/apiConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
+import Image from "next/image";
 
 import { signInInfoSchema } from "../../configFiles/validation/signinValidation";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -10,7 +11,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiUrl } from "@/api_config";
 
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../../lib/tokenManager";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../../lib/tokenManager";
 
 type zodInputs = {
   email: string;
@@ -91,15 +96,15 @@ export default function LoginPage() {
     // const { confirmPassword, ...formData } = data;
     console.log(data);
     const formData = new FormData();
-    formData.append('email', data.email);
-    formData.append('password', data.password);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
     // Use Next.js rewrite to avoid CORS while still targeting production API
     fetch(`/api/newlogin/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      mode: 'cors',
+      mode: "cors",
       body: JSON.stringify(data),
     })
       .then((response) => {
@@ -115,7 +120,7 @@ export default function LoginPage() {
         // Handle the response data
         console.log(responseData);
         setAccessToken(responseData.accessToken);
-console.log("Token: "+ responseData.accessToken)
+        console.log("Token: " + responseData.accessToken);
         toast({
           title: `Success!`,
           description: `Login Successful`,
@@ -137,10 +142,18 @@ console.log("Token: "+ responseData.accessToken)
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-center">
           <div className="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
-            <img src="/common_files/main/fayida_logo.png" alt="Fayida Logo" className="w-12 h-12" />
+            <Image
+              src="/common_files/main/fayida_logo.png"
+              alt="Fayida Logo"
+              width={48}
+              height={48}
+              className="w-12 h-12"
+            />
           </div>
           <h1 className="text-2xl font-bold text-white">Welcome Back</h1>
-          <p className="text-blue-100 mt-2">Sign in to your Fayida Academy account</p>
+          <p className="text-blue-100 mt-2">
+            Sign in to your Fayida Academy account
+          </p>
         </div>
 
         {/* Form */}
@@ -153,7 +166,10 @@ console.log("Token: "+ responseData.accessToken)
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email Address
               </label>
               <input
@@ -164,12 +180,17 @@ console.log("Token: "+ responseData.accessToken)
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Password
               </label>
               <input
@@ -180,7 +201,9 @@ console.log("Token: "+ responseData.accessToken)
                 placeholder="Enter your password"
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -194,7 +217,10 @@ console.log("Token: "+ responseData.accessToken)
           </form>
 
           <div className="mt-6 text-center">
-            <Link href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+            >
               Forgot your password?
             </Link>
           </div>

@@ -5,8 +5,11 @@ import DataTableGenerator from "@/main_components/data-table";
 import { apiUrl } from "@/api_config";
 import axios from "axios";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../lib/tokenManager";
 
 export default function PackageList() {
   const accessToken = getAccessToken();
@@ -26,8 +29,10 @@ export default function PackageList() {
       setData(data);
     };
 
-    getData();
-  }, []);
+    if (accessToken) {
+      getData();
+    }
+  }, [accessToken]);
 
   return (
     <div className="mx-10 my-5">

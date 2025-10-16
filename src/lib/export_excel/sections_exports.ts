@@ -22,7 +22,7 @@ export async function downloadSectionsToExcel() {
     {
       sheet: "fayida export",
       columns: [{ label: "Section Name", value: "sectionName" }],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

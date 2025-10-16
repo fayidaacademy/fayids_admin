@@ -29,8 +29,10 @@ export default function StudentsList() {
       setData(data);
     };
 
-    getData();
-  }, []);
+    if (accessToken) {
+      getData();
+    }
+  }, [accessToken]);
 
   return (
     <div className="mx-3">

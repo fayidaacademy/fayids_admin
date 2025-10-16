@@ -6,8 +6,15 @@ import React, { useEffect, useState } from "react";
 import UploadBlogImage from "./uploadBlogImage";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -120,7 +127,9 @@ export default function BlogDetails({ params }: any) {
             <CardContent>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">Display Status</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Display Status
+                  </h3>
                   <p className="text-sm text-gray-500">
                     {data?.displayOnHome === "true"
                       ? "This blog is visible on the homepage"
@@ -169,7 +178,9 @@ export default function BlogDetails({ params }: any) {
                   <span>Display Order</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <p className="text-lg font-semibold">{data?.blogIndex || "N/A"}</p>
+                  <p className="text-lg font-semibold">
+                    {data?.blogIndex || "N/A"}
+                  </p>
                   <EditCellDialog
                     type="blogs"
                     id={blogId}
@@ -266,12 +277,16 @@ export default function BlogDetails({ params }: any) {
 
               {/* Current Image */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">Current Thumbnail</h3>
+                <h3 className="font-semibold text-gray-900">
+                  Current Thumbnail
+                </h3>
                 {data?.imgUrl ? (
                   <div className="relative inline-block">
-                    <img
+                    <Image
                       src={data.imgUrl}
                       alt={data.title || "Blog Image"}
+                      width={600}
+                      height={400}
                       className="rounded-lg border shadow-sm max-w-2xl w-full object-cover"
                     />
                   </div>
@@ -279,7 +294,9 @@ export default function BlogDetails({ params }: any) {
                   <div className="flex items-center justify-center w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed">
                     <div className="text-center">
                       <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
-                      <p className="mt-2 text-sm text-gray-500">No image uploaded</p>
+                      <p className="mt-2 text-sm text-gray-500">
+                        No image uploaded
+                      </p>
                     </div>
                   </div>
                 )}

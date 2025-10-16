@@ -8,10 +8,16 @@ import {
 import { LogOut, Bell, Menu, User, Settings, Search } from "lucide-react";
 import { apiUrl } from "@/api_config";
 import Link from "next/link";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../lib/tokenManager";
+import { useRouter } from "next/navigation";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../lib/tokenManager";
 
 export default function NavBar() {
   const accessToken = getAccessToken();
+  const router = useRouter();
 
   const [data, setData] = useState(null);
   const [notificationData, setNotificationData] = useState(null);
@@ -21,22 +27,27 @@ export default function NavBar() {
   const [activeMenu, setActiveMenu] = useState("Home");
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetch(`${apiUrl}/notifications/admin/count/`, {  
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        }, 
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setNotificationData(data.message);
-          setNotificationNumber(Object.keys(data).length);
-        });
-    }, 10000);
+    if (accessToken) {
+      const intervalId = setInterval(() => {
+        fetch(`${apiUrl}/notifications/admin/count/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setNotificationData(data.message);
+            setNotificationNumber(Object.keys(data).length);
+          })
+          .catch((error) => {
+            console.error("Error fetching notifications:", error);
+          });
+      }, 10000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+      return () => clearInterval(intervalId);
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     fetch(`${apiUrl}/login_register/profile`, {
@@ -46,37 +57,41 @@ export default function NavBar() {
       .then((data) => {
         setData(data.message);
         setLoading(false);
-        console.log("message: " + data);
+        // Removed console.log for production
+      })
+      .catch((error) => {
+        console.error("Error fetching profile:", error);
+        setLoading(false);
       });
   }, []);
-  
+
   const setTokenLogout = () => {
     setAccessToken("0");
-    window.location.href = "/login";
-  }
+    router.push("/login");
+  };
 
   const toggleMobileMenu = () => {
     // Create custom event to toggle sidebar
-    const event = new CustomEvent('sidebarToggle', { 
-      detail: { collapsed: !isMobileMenuOpen } 
+    const event = new CustomEvent("sidebarToggle", {
+      detail: { collapsed: !isMobileMenuOpen },
     });
     window.dispatchEvent(event);
-    
+
     setMobileMenuOpen(!isMobileMenuOpen);
-  }
+  };
 
   return (
     <header className="fixed w-full glass border-b border-white/20 z-40 shadow-large backdrop-blur-xl">
       <div className="flex justify-between items-center px-4 md:px-6 py-3">
         <div className="flex items-center">
-          <button 
-            className="lg:hidden mr-4 p-2 rounded-xl hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50" 
+          <button
+            className="lg:hidden mr-4 p-2 rounded-xl hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
             <Menu size={24} className="text-gray-700" />
           </button>
-          
+
           <Link href="/" className="flex items-center group">
             <div className="relative">
               <div className="flex h-10 w-10 rounded-2xl bg-gradient-primary items-center justify-center mr-3 shadow-glow group-hover:shadow-glow-lg transition-all duration-300">
@@ -85,7 +100,9 @@ export default function NavBar() {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent-400 rounded-full animate-pulse"></div>
             </div>
             <div className="hidden md:block">
-              <h1 className="text-xl font-bold gradient-text">Fayida Academy</h1>
+              <h1 className="text-xl font-bold gradient-text">
+                Fayida Academy
+              </h1>
               <p className="text-xs text-gray-500 font-medium">Admin Portal</p>
             </div>
           </Link>
@@ -125,13 +142,18 @@ export default function NavBar() {
                   <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
                 </div>
                 <div className="hidden sm:block text-left">
-                  <span className="font-semibold text-sm text-gray-800 block">Admin User</span>
+                  <span className="font-semibold text-sm text-gray-800 block">
+                    Admin User
+                  </span>
                   <span className="text-xs text-gray-500">Administrator</span>
                 </div>
               </button>
             </PopoverTrigger>
 
-            <PopoverContent className="w-64 p-3 glass-card border-white/20 shadow-large" align="end">
+            <PopoverContent
+              className="w-64 p-3 glass-card border-white/20 shadow-large"
+              align="end"
+            >
               <div className="space-y-2">
                 {/* User Info */}
                 <div className="flex items-center space-x-3 p-3 rounded-xl bg-gradient-primary/5 border border-primary-200/20">
@@ -139,35 +161,50 @@ export default function NavBar() {
                     <User className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm text-gray-800">Admin User</p>
+                    <p className="font-semibold text-sm text-gray-800">
+                      Admin User
+                    </p>
                     <p className="text-xs text-gray-500">Administrator</p>
                   </div>
                 </div>
-                
+
                 <div className="h-px bg-gray-200/50 my-2"></div>
-                
+
                 <Link href="/profile">
                   <div className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/50 transition-all duration-200 cursor-pointer group">
-                    <User size={18} className="text-gray-500 group-hover:text-primary-600 transition-colors" />
-                    <span className="text-sm font-medium text-gray-700">Profile Settings</span>
+                    <User
+                      size={18}
+                      className="text-gray-500 group-hover:text-primary-600 transition-colors"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      Profile Settings
+                    </span>
                   </div>
                 </Link>
-                
+
                 <Link href="/settings">
                   <div className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/50 transition-all duration-200 cursor-pointer group">
-                    <Settings size={18} className="text-gray-500 group-hover:text-primary-600 transition-colors" />
-                    <span className="text-sm font-medium text-gray-700">System Settings</span>
+                    <Settings
+                      size={18}
+                      className="text-gray-500 group-hover:text-primary-600 transition-colors"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      System Settings
+                    </span>
                   </div>
                 </Link>
-                
+
                 <div className="h-px bg-gray-200/50 my-2"></div>
-                
+
                 {/* Enhanced Logout Button */}
-                <button 
+                <button
                   onClick={setTokenLogout}
                   className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-red-50/50 text-red-600 transition-all duration-200 cursor-pointer group"
                 >
-                  <LogOut size={18} className="group-hover:text-red-700 transition-colors" />
+                  <LogOut
+                    size={18}
+                    className="group-hover:text-red-700 transition-colors"
+                  />
                   <span className="text-sm font-medium">Sign Out</span>
                 </button>
               </div>

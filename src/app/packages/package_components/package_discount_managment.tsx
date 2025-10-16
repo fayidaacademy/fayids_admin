@@ -47,7 +47,7 @@ export default function Package_discount_managment({
     setDiscontPrice(packageDiscountPrice);
     setDiscontPrice2(packageDiscountPrice2);
     setDiscontPrice3(packageDiscountPrice3);
-  }, [packageDiscountPrice]);
+  }, [packageDiscountPrice, packageDiscountPrice2, packageDiscountPrice3]);
 
   useEffect(() => {
     // This code runs after every render

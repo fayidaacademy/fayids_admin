@@ -1,5 +1,6 @@
 import { apiUrl } from "@/api_config";
 import React from "react";
+import Image from "next/image";
 import UploadPackageThumbnail from "../uploadPackackeThumbnail";
 
 export default function Mock_Package_thumbnail_image_manage({
@@ -14,10 +15,12 @@ export default function Mock_Package_thumbnail_image_manage({
       </div>
       <div>
         <div>
-          <img
+          <Image
             //  src={`${apiUrl}/upload_assets/images/mock_package_thumbnails/${ThumbnailLocation}`}
             src={imgUrl}
             alt="ThumbNail Image"
+            width={300}
+            height={200}
           />
         </div>
         <div>

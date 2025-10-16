@@ -44,7 +44,7 @@ export default function VideoDetail({ params }: any) {
     };
 
     getMaterial();
-  }, []);
+  }, [MaterialId]);
 
   const refreshMaterial = async (newVideoId?: string) => {
     if (newVideoId) {

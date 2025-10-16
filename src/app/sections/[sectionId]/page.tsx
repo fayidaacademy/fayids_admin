@@ -83,7 +83,7 @@ export default function SectionDetails({ params }: any) {
               Section not found
             </p>
             <p className="text-gray-500 mb-4">
-              The section you're looking for doesn't exist
+              The section you&apos;re looking for doesn&apos;t exist
             </p>
             <Link href="/sections">
               <Button variant="outline">
@@ -134,9 +134,7 @@ export default function SectionDetails({ params }: any) {
               <FolderOpen className="h-5 w-5 text-indigo-600" />
               Section Information
             </CardTitle>
-            <CardDescription>
-              Basic details about this section
-            </CardDescription>
+            <CardDescription>Basic details about this section</CardDescription>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
             {/* Section Name */}
@@ -230,7 +228,8 @@ export default function SectionDetails({ params }: any) {
                   Delete this section
                 </h3>
                 <p className="text-sm text-gray-600">
-                  This action cannot be undone. All associated data will be removed.
+                  This action cannot be undone. All associated data will be
+                  removed.
                 </p>
               </div>
               <DeleteDialog

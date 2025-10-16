@@ -7,8 +7,15 @@ import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import UploadPrizeImage from "./uploadPrizeImage";
 import EditSwitch from "@/my_components/edit_switch";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -114,17 +121,17 @@ export default function PrizeDetails({ params }: any) {
                 <Gift className="h-5 w-5" />
                 Prize Information
               </CardTitle>
-              <CardDescription>
-                Basic details about this prize
-              </CardDescription>
+              <CardDescription>Basic details about this prize</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Status Control */}
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">Visibility Status</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Visibility Status
+                  </h3>
                   <p className="text-sm text-gray-500">
-                    {data?.visiblity === "active" 
+                    {data?.visiblity === "active"
                       ? "Prize is visible to students"
                       : "Prize is hidden from students"}
                   </p>
@@ -158,7 +165,9 @@ export default function PrizeDetails({ params }: any) {
                     <span>Item Name</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-lg font-semibold">{data?.itemName || "N/A"}</p>
+                    <p className="text-lg font-semibold">
+                      {data?.itemName || "N/A"}
+                    </p>
                     <EditCellDialog
                       type="prizes"
                       id={prizeId}
@@ -175,7 +184,9 @@ export default function PrizeDetails({ params }: any) {
                     <span>Prize Index</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-lg font-semibold">{data?.prizeIndex || "N/A"}</p>
+                    <p className="text-lg font-semibold">
+                      {data?.prizeIndex || "N/A"}
+                    </p>
                     <EditCellDialog
                       type="prizes"
                       id={prizeId}
@@ -254,9 +265,7 @@ export default function PrizeDetails({ params }: any) {
                 <Trash2 className="h-5 w-5" />
                 Danger Zone
               </CardTitle>
-              <CardDescription>
-                Permanently delete this prize
-              </CardDescription>
+              <CardDescription>Permanently delete this prize</CardDescription>
             </CardHeader>
             <CardContent>
               <DeleteDialog
@@ -277,9 +286,7 @@ export default function PrizeDetails({ params }: any) {
                 <ImageIcon className="h-5 w-5" />
                 Prize Image
               </CardTitle>
-              <CardDescription>
-                Upload and manage prize image
-              </CardDescription>
+              <CardDescription>Upload and manage prize image</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Upload Section */}
@@ -292,9 +299,11 @@ export default function PrizeDetails({ params }: any) {
                 <h3 className="font-semibold text-gray-900">Current Image</h3>
                 {data?.imgUrl ? (
                   <div className="relative inline-block">
-                    <img
+                    <Image
                       src={data.imgUrl}
                       alt={data.itemName || "Prize Image"}
+                      width={400}
+                      height={300}
                       className="rounded-lg border shadow-sm max-w-md w-full object-cover"
                     />
                   </div>
@@ -302,7 +311,9 @@ export default function PrizeDetails({ params }: any) {
                   <div className="flex items-center justify-center w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed">
                     <div className="text-center">
                       <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
-                      <p className="mt-2 text-sm text-gray-500">No image uploaded</p>
+                      <p className="mt-2 text-sm text-gray-500">
+                        No image uploaded
+                      </p>
                     </div>
                   </div>
                 )}

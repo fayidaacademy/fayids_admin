@@ -43,8 +43,10 @@ export default function ForumDetail({ params }: any) {
       //console.log("COurses: " + forum.conversation[0].text);
     };
 
-    getCourse();
-  }, []);
+    if (forumId) {
+      getCourse();
+    }
+  }, [forumId]);
 
   const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
   const formSchema = z.object({

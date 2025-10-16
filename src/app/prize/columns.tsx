@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical, Eye, Edit, Trash2, Gift } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,9 +83,11 @@ export const columns: ColumnDef<Prize>[] = [
       return (
         <div className="flex items-center gap-3">
           {imgUrl ? (
-            <img
+            <Image
               src={imgUrl}
               alt={name}
+              width={40}
+              height={40}
               className="h-10 w-10 rounded-md object-cover"
             />
           ) : (

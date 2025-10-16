@@ -28,7 +28,7 @@ export default function LanguageDetails({ params }: any) {
     };
 
     fetchData();
-  }, []);
+  }, [LanguageId]);
 
   return (
     <div className="mx-10 my-5">

@@ -46,7 +46,7 @@ export default function CreteMaterailFileForm() {
       //router.push('/signin');
       push("/courses");
     }
-  }, []);
+  }, [courseId, push]);
 
   //   model MaterialFile {
   //     id              String   @id @unique @default(uuid())

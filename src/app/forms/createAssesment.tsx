@@ -30,8 +30,11 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../lib/tokenManager";
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../lib/tokenManager";
 
 export default function CreteAssesmentForm() {
   const accessToken = getAccessToken();
@@ -49,7 +52,7 @@ export default function CreteAssesmentForm() {
       //router.push('/signin');
       push("/courses");
     }
-  }, []);
+  }, [courseId, push]);
 
   const noSymbolsRegex = /^[a-zA-Z0-9 ]*$/;
   const formSchema = z.object({

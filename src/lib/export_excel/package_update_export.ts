@@ -53,7 +53,7 @@ export async function downloadUpdatePurchaseToExcel() {
         { label: "CreatedAt", value: "createdAt" },
         { label: "Id", value: "id" },
       ],
-      content: data,
+      content: data as any,
     },
   ];
   let settings = {

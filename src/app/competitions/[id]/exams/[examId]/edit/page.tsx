@@ -1,22 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  ArrowLeft,
-  Save,
-  FileText
-} from "lucide-react";
+import { ArrowLeft, Save, FileText } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
 import { apiUrl } from "@/api_config";
 import { getAccessToken } from "@/lib/tokenManager";
 
-export default function EditExam({ params }: { params: { id: string; examId: string } }) {
+export default function EditExam({
+  params,
+}: {
+  params: { id: string; examId: string };
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,14 +34,10 @@ export default function EditExam({ params }: { params: { id: string; examId: str
     scheduledDateTime: "",
     duration: 30,
     totalQuestions: 10,
-    status: "locked" as "locked" | "active" | "completed"
+    status: "locked" as "locked" | "active" | "completed",
   });
 
-  useEffect(() => {
-    fetchExamData();
-  }, [params.id, params.examId]);
-
-  const fetchExamData = async () => {
+  const fetchExamData = useCallback(async () => {
     try {
       setLoading(true);
       const token = getAccessToken();
@@ -44,7 +46,7 @@ export default function EditExam({ params }: { params: { id: string; examId: str
         `${apiUrl}/admin/competitions/${params.id}/exams/${params.examId}`,
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           credentials: "include",
@@ -57,7 +59,7 @@ export default function EditExam({ params }: { params: { id: string; examId: str
 
       const data = await response.json();
       const exam = data.exam;
-      
+
       // Convert ISO date to datetime-local format
       let scheduledDateTime = "";
       if (exam.scheduledDateTime) {
@@ -72,7 +74,7 @@ export default function EditExam({ params }: { params: { id: string; examId: str
         scheduledDateTime: scheduledDateTime,
         duration: exam.duration || 30,
         totalQuestions: exam.totalQuestions || 10,
-        status: exam.status || "locked"
+        status: exam.status || "locked",
       });
     } catch (error) {
       console.error("Error fetching exam data:", error);
@@ -80,7 +82,11 @@ export default function EditExam({ params }: { params: { id: string; examId: str
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id, params.examId]);
+
+  useEffect(() => {
+    fetchExamData();
+  }, [params.id, params.examId, fetchExamData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +104,7 @@ export default function EditExam({ params }: { params: { id: string; examId: str
       // Convert datetime-local back to ISO format for API
       const submitData = {
         ...examData,
-        scheduledDateTime: new Date(examData.scheduledDateTime).toISOString()
+        scheduledDateTime: new Date(examData.scheduledDateTime).toISOString(),
       };
 
       const response = await fetch(
@@ -106,11 +112,11 @@ export default function EditExam({ params }: { params: { id: string; examId: str
         {
           method: "PUT",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify(submitData)
+          body: JSON.stringify(submitData),
         }
       );
 
@@ -142,7 +148,7 @@ export default function EditExam({ params }: { params: { id: string; examId: str
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -168,9 +174,7 @@ export default function EditExam({ params }: { params: { id: string; examId: str
             <FileText className="h-5 w-5 mr-2 text-blue-600" />
             Exam Details
           </CardTitle>
-          <CardDescription>
-            Update the exam information below
-          </CardDescription>
+          <CardDescription>Update the exam information below</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -182,7 +186,9 @@ export default function EditExam({ params }: { params: { id: string; examId: str
                   type="number"
                   min={1}
                   value={examData.day}
-                  onChange={(e) => setExamData({ ...examData, day: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setExamData({ ...examData, day: parseInt(e.target.value) })
+                  }
                   required
                 />
               </div>
@@ -192,7 +198,9 @@ export default function EditExam({ params }: { params: { id: string; examId: str
                 <select
                   id="status"
                   value={examData.status}
-                  onChange={(e) => setExamData({ ...examData, status: e.target.value as any })}
+                  onChange={(e) =>
+                    setExamData({ ...examData, status: e.target.value as any })
+                  }
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="locked">Locked</option>
@@ -207,7 +215,9 @@ export default function EditExam({ params }: { params: { id: string; examId: str
               <Input
                 id="title"
                 value={examData.title}
-                onChange={(e) => setExamData({ ...examData, title: e.target.value })}
+                onChange={(e) =>
+                  setExamData({ ...examData, title: e.target.value })
+                }
                 placeholder="e.g., Day 1 Mathematics Exam"
                 required
               />
@@ -218,7 +228,9 @@ export default function EditExam({ params }: { params: { id: string; examId: str
               <Textarea
                 id="description"
                 value={examData.description}
-                onChange={(e) => setExamData({ ...examData, description: e.target.value })}
+                onChange={(e) =>
+                  setExamData({ ...examData, description: e.target.value })
+                }
                 placeholder="Brief description of the exam..."
                 rows={3}
               />
@@ -226,12 +238,19 @@ export default function EditExam({ params }: { params: { id: string; examId: str
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="scheduledDateTime">Scheduled Date & Time *</Label>
+                <Label htmlFor="scheduledDateTime">
+                  Scheduled Date & Time *
+                </Label>
                 <Input
                   id="scheduledDateTime"
                   type="datetime-local"
                   value={examData.scheduledDateTime}
-                  onChange={(e) => setExamData({ ...examData, scheduledDateTime: e.target.value })}
+                  onChange={(e) =>
+                    setExamData({
+                      ...examData,
+                      scheduledDateTime: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>
@@ -243,7 +262,12 @@ export default function EditExam({ params }: { params: { id: string; examId: str
                   type="number"
                   min={1}
                   value={examData.duration}
-                  onChange={(e) => setExamData({ ...examData, duration: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setExamData({
+                      ...examData,
+                      duration: parseInt(e.target.value),
+                    })
+                  }
                   required
                 />
               </div>
@@ -256,11 +280,17 @@ export default function EditExam({ params }: { params: { id: string; examId: str
                 type="number"
                 min={1}
                 value={examData.totalQuestions}
-                onChange={(e) => setExamData({ ...examData, totalQuestions: parseInt(e.target.value) })}
+                onChange={(e) =>
+                  setExamData({
+                    ...examData,
+                    totalQuestions: parseInt(e.target.value),
+                  })
+                }
                 required
               />
               <p className="text-sm text-gray-600">
-                Note: This is the target number of questions. Actual questions are managed separately.
+                Note: This is the target number of questions. Actual questions
+                are managed separately.
               </p>
             </div>
 
@@ -298,10 +328,12 @@ export default function EditExam({ params }: { params: { id: string; examId: str
           <div className="flex items-start space-x-3">
             <FileText className="h-5 w-5 text-blue-600 mt-1" />
             <div>
-              <h3 className="font-semibold text-blue-900 mb-1">Managing Questions</h3>
+              <h3 className="font-semibold text-blue-900 mb-1">
+                Managing Questions
+              </h3>
               <p className="text-sm text-blue-800">
-                To add, edit, or delete questions for this exam, go back to the exam detail page 
-                where you can manage questions individually.
+                To add, edit, or delete questions for this exam, go back to the
+                exam detail page where you can manage questions individually.
               </p>
             </div>
           </div>

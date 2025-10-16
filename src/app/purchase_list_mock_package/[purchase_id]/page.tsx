@@ -36,7 +36,7 @@ export default function PurchaseInfo({ params }: any) {
     };
 
     fetchData();
-  }, []);
+  }, [purchaseId]);
 
   if (isLoading) {
     return <p>Loading...</p>;

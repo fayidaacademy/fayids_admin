@@ -5,18 +5,24 @@ import DataTableGenerator from "@/main_components/data-table";
 import { apiUrl } from "@/api_config";
 import axios from "axios";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  ShoppingCart, 
-  Users, 
-  Package, 
-  TrendingUp, 
+import {
+  ShoppingCart,
+  Users,
+  Package,
+  TrendingUp,
   Filter,
   Download,
   RefreshCw,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -33,7 +39,7 @@ export default function PurchaseList() {
     total: 0,
     pending: 0,
     completed: 0,
-    active: 0
+    active: 0,
   });
 
   const accessToken = getAccessToken();
@@ -55,9 +61,15 @@ export default function PurchaseList() {
 
         // Calculate stats
         const total = responseData.length;
-        const pending = responseData.filter(item => item.paymentStatus === 'pending').length;
-        const completed = responseData.filter(item => item.paymentStatus === 'done').length;
-        const active = responseData.filter(item => item.paymentStatus === 'active').length;
+        const pending = responseData.filter(
+          (item: any) => item.paymentStatus === "pending"
+        ).length;
+        const completed = responseData.filter(
+          (item: any) => item.paymentStatus === "done"
+        ).length;
+        const active = responseData.filter(
+          (item: any) => item.paymentStatus === "active"
+        ).length;
 
         setStats({ total, pending, completed, active });
       } catch (error) {
@@ -67,8 +79,10 @@ export default function PurchaseList() {
       }
     };
 
-    getData();
-  }, []);
+    if (accessToken) {
+      getData();
+    }
+  }, [accessToken]);
 
   const handleRefresh = () => {
     window.location.reload();
@@ -77,7 +91,7 @@ export default function PurchaseList() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <LoadProfileAuth />
-      
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -89,18 +103,24 @@ export default function PurchaseList() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Course Purchases</h1>
-              <p className="text-gray-600">Manage course package purchases and subscriptions</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Course Purchases
+              </h1>
+              <p className="text-gray-600">
+                Manage course package purchases and subscriptions
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={handleRefresh}
               disabled={isLoading}
               className="flex items-center"
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+              />
               Refresh
             </Button>
             <Badge variant="outline" className="px-3 py-1">
@@ -116,8 +136,12 @@ export default function PurchaseList() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Purchases</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Purchases
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.total}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-blue-100">
                 <ShoppingCart className="h-6 w-6 text-blue-600" />
@@ -130,8 +154,12 @@ export default function PurchaseList() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Pending</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Pending
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.pending}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-yellow-100">
                 <Package className="h-6 w-6 text-yellow-600" />
@@ -144,8 +172,12 @@ export default function PurchaseList() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.completed}</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Completed
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.completed}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-green-100">
                 <TrendingUp className="h-6 w-6 text-green-600" />
@@ -159,7 +191,9 @@ export default function PurchaseList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Active</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.active}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.active}
+                </p>
               </div>
               <div className="p-3 rounded-xl bg-purple-100">
                 <Users className="h-6 w-6 text-purple-600" />

@@ -4,6 +4,7 @@ import DeleteDialog from "@/my_components/delete_dialog";
 import EditCellDialog from "@/my_components/edit_cell_dialog";
 import EditSwitch from "@/my_components/edit_switch";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import UploadPaymentMethodImage from "./uploadpaymentmethodImage";
 
 export default function PaymentMethodDetail({ params }: any) {
@@ -34,7 +35,7 @@ export default function PaymentMethodDetail({ params }: any) {
     };
 
     fetchData();
-  }, []);
+  }, [PayemtMethodId]);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -50,9 +51,12 @@ export default function PaymentMethodDetail({ params }: any) {
         <div className="flex space-x-4">
           <div>
             <div>
-              <img
+              <Image
                 // src={`${apiUrl}/upload_assets/images/paymentmethod_images/${data?.image}`}
                 src={data?.imgUrl}
+                alt="Payment method image"
+                width={200}
+                height={200}
               />
             </div>
 

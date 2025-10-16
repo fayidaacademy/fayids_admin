@@ -5,8 +5,11 @@ import { apiUrl } from "@/api_config";
 import { DropdownComponent } from "./dropdowncomponent";
 import { useEffect, useState } from "react";
 import LoadProfileAuth from "@/main_components/loadProfileAuth";
-import { setAccessToken, getAccessToken, clearAccessToken } from "../../../../lib/tokenManager";
-
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../../../../lib/tokenManager";
 
 export default function ConnectCourse({ params }: any) {
   const accessToken = getAccessToken();
@@ -29,19 +32,21 @@ export default function ConnectCourse({ params }: any) {
         next: {
           revalidate: 0,
         },
-      
-headers: {
-"Content-Type": "application/json",
-Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
-},
+
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the accessToken in the Authorization header
+        },
         credentials: "include", // Include credentials in the request
       })
         .then((res) => res.json())
         .then((mydatas) => setMydatas(mydatas));
     };
 
-    getData();
-  }, []);
+    if (accessToken) {
+      getData();
+    }
+  }, [accessToken]);
 
   //mydatas[0].courseName
   const datas = mydatas?.map((item: any) => ({
